@@ -1,0 +1,32 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="PowerShell workstation deployment script and output">
+  <rect width="640" height="360" fill="#0d1117"/>
+  <rect x="0" y="0" width="640" height="30" fill="#161b22"/>
+  <circle cx="18" cy="15" r="5" fill="#ff5f56"/><circle cx="38" cy="15" r="5" fill="#ffbd2e"/><circle cx="58" cy="15" r="5" fill="#27c93f"/>
+  <text x="320" y="19" text-anchor="middle" font-family="ui-monospace,monospace" font-size="11" fill="#8b949e">deploy-workstation.ps1 — PowerShell</text>
+  <rect x="0" y="30" width="34" height="330" fill="#0b0f14"/>
+  <g font-family="ui-monospace,monospace" font-size="11.5" fill="#4b5563" text-anchor="end">
+    <text x="26" y="58">1</text><text x="26" y="76">2</text><text x="26" y="94">3</text><text x="26" y="112">4</text><text x="26" y="130">5</text><text x="26" y="148">6</text><text x="26" y="166">7</text><text x="26" y="184">8</text><text x="26" y="202">9</text><text x="26" y="220">10</text>
+  </g>
+  <g font-family="ui-monospace,monospace" font-size="11.5">
+    <text x="44" y="58"><tspan fill="#8b949e"># Provision a new workstation: rename, join domain, baseline</tspan></text>
+    <text x="44" y="76"><tspan fill="#ff7b72">param</tspan><tspan fill="#c9d1d9">(</tspan><tspan fill="#79c0ff">[string]</tspan><tspan fill="#c9d1d9">$Name, </tspan><tspan fill="#79c0ff">[string]</tspan><tspan fill="#c9d1d9">$OU)</tspan></text>
+    <text x="44" y="94"><tspan fill="#ff7b72">$cred</tspan><tspan fill="#c9d1d9"> = </tspan><tspan fill="#d2a8ff">Get-Credential</tspan><tspan fill="#c9d1d9"> -Message </tspan><tspan fill="#a5d6ff">"Domain join"</tspan></text>
+    <text x="44" y="112"><tspan fill="#d2a8ff">Rename-Computer</tspan><tspan fill="#c9d1d9"> -NewName </tspan><tspan fill="#ff7b72">$Name</tspan><tspan fill="#c9d1d9"> -Force</tspan></text>
+    <text x="44" y="130"><tspan fill="#d2a8ff">Add-Computer</tspan><tspan fill="#c9d1d9"> -DomainName </tspan><tspan fill="#a5d6ff">"sirvantes.local"</tspan><tspan fill="#c9d1d9"> `</tspan></text>
+    <text x="62" y="148"><tspan fill="#c9d1d9">-OUPath </tspan><tspan fill="#ff7b72">$OU</tspan><tspan fill="#c9d1d9"> -Credential </tspan><tspan fill="#ff7b72">$cred</tspan></text>
+    <text x="44" y="166"><tspan fill="#ff7b72">foreach</tspan><tspan fill="#c9d1d9"> (</tspan><tspan fill="#ff7b72">$app</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#ff7b72">in</tspan><tspan fill="#c9d1d9"> $Baseline) {</tspan></text>
+    <text x="62" y="184"><tspan fill="#d2a8ff">winget install</tspan><tspan fill="#c9d1d9"> --silent </tspan><tspan fill="#ff7b72">$app</tspan></text>
+    <text x="44" y="202"><tspan fill="#c9d1d9">}</tspan></text>
+    <text x="44" y="220"><tspan fill="#d2a8ff">Write-Host</tspan><tspan fill="#c9d1d9"> </tspan><tspan fill="#a5d6ff">"Done."</tspan><tspan fill="#c9d1d9"> -Foreground Green</tspan></text>
+  </g>
+  <rect x="34" y="236" width="606" height="124" fill="#010409"/>
+  <line x1="34" y1="236" x2="640" y2="236" stroke="#30363d"/>
+  <g font-family="ui-monospace,monospace" font-size="11.5">
+    <text x="44" y="256"><tspan fill="#58a6ff">PS C:\Scripts></tspan><tspan fill="#c9d1d9"> .\deploy-workstation.ps1 -Name WKS-IT-07 -OU "OU=IT,..."</tspan></text>
+    <text x="44" y="276"><tspan fill="#3fb950">✓</tspan><tspan fill="#c9d1d9"> Renamed computer → WKS-IT-07</tspan></text>
+    <text x="44" y="294"><tspan fill="#3fb950">✓</tspan><tspan fill="#c9d1d9"> Joined domain sirvantes.local</tspan></text>
+    <text x="44" y="312"><tspan fill="#3fb950">✓</tspan><tspan fill="#c9d1d9"> Installed baseline apps (7-Zip, Chrome, Defender policy)</tspan></text>
+    <text x="44" y="330"><tspan fill="#3fb950">✓</tspan><tspan fill="#c9d1d9"> Reboot scheduled in 60s</tspan></text>
+    <text x="44" y="350"><tspan fill="#58a6ff">PS C:\Scripts></tspan><tspan fill="#c9d1d9"> _</tspan></text>
+  </g>
+</svg>

@@ -1,0 +1,42 @@
+/* Tailwind's three layers. Tailwind injects all of its utility classes here. */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Base element styles. We keep this minimal — most styling is done with
+ * Tailwind utility classes directly in the components. These rules just set a
+ * pleasant default for the whole page and enable smooth anchor scrolling.
+ */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    /* Offsets anchor jumps so the fixed navbar doesn't cover section headings. */
+    scroll-padding-top: 5rem;
+  }
+
+  body {
+    @apply bg-white text-slate-800 antialiased;
+    @apply dark:bg-slate-950 dark:text-slate-200;
+  }
+
+  /* A nicer text-selection color that matches the brand. */
+  ::selection {
+    @apply bg-brand-500/20;
+  }
+}
+
+@layer utilities {
+  /*
+   * .glass — a frosted, translucent panel used by the navbar and some cards.
+   * Falls back gracefully if backdrop-blur isn't supported.
+   */
+  .glass {
+    @apply bg-white/70 backdrop-blur-md dark:bg-slate-900/70;
+  }
+
+  /* Constrains content width and centers it with consistent side padding. */
+  .container-page {
+    @apply mx-auto w-full max-w-6xl px-5 sm:px-8;
+  }
+}

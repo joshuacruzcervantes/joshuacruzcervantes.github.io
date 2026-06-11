@@ -1,0 +1,50 @@
+<svg viewBox="0 0 640 360" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Packet Tracer multi-VLAN network topology">
+  <rect width="640" height="360" fill="#eef2f7"/>
+  <g stroke="#dde4ee" stroke-width="1">
+    <path d="M0 40H640M0 80H640M0 120H640M0 160H640M0 200H640M0 240H640M0 280H640M0 320H640"/>
+    <path d="M40 0V360M80 0V360M120 0V360M160 0V360M200 0V360M240 0V360M280 0V360M320 0V360M360 0V360M400 0V360M440 0V360M480 0V360M520 0V360M560 0V360M600 0V360"/>
+  </g>
+  <rect x="0" y="0" width="640" height="26" fill="#2b3a52"/>
+  <circle cx="14" cy="13" r="4" fill="#7f8fa6"/><circle cx="28" cy="13" r="4" fill="#7f8fa6"/>
+  <text x="44" y="17" font-family="system-ui,sans-serif" font-size="11" fill="#cdd6e4">Cisco Packet Tracer — campus-vlans.pkt</text>
+  <g stroke="#6b7a90" stroke-width="2.5">
+    <line x1="320" y1="92" x2="320" y2="150"/>
+    <line x1="320" y1="178" x2="170" y2="248"/>
+    <line x1="320" y1="178" x2="470" y2="248"/>
+    <line x1="150" y1="276" x2="90" y2="320" stroke="#16a34a"/>
+    <line x1="170" y1="276" x2="170" y2="320" stroke="#2563eb"/>
+    <line x1="190" y1="276" x2="250" y2="320" stroke="#9333ea"/>
+    <line x1="450" y1="276" x2="390" y2="320" stroke="#16a34a"/>
+    <line x1="470" y1="276" x2="470" y2="320" stroke="#2563eb"/>
+    <line x1="490" y1="276" x2="550" y2="320" stroke="#9333ea"/>
+  </g>
+  <g>
+    <rect x="288" y="56" width="64" height="36" rx="8" fill="#1d4ed8" stroke="#16348f" stroke-width="1.5"/>
+    <path d="M300 74h26m0 0-6-5m6 5-6 5M340 74h-26m0 0 6-5m-6 5 6 5" stroke="#cfe0ff" stroke-width="2" fill="none"/>
+    <text x="320" y="106" text-anchor="middle" font-family="system-ui" font-size="11" font-weight="600" fill="#1f2937">Router R1</text>
+  </g>
+  <g>
+    <rect x="284" y="150" width="72" height="30" rx="5" fill="#0f766e" stroke="#0b524c" stroke-width="1.5"/>
+    <path d="M296 165h20m0 0-5-4m5 4-5 4M344 165h-20m0 0 5-4m-5 4 5 4" stroke="#bdeae5" stroke-width="1.8" fill="none"/>
+    <text x="320" y="146" text-anchor="middle" font-family="system-ui" font-size="10" fill="#334155">Core-SW (L3)</text>
+  </g>
+  <rect x="138" y="248" width="64" height="28" rx="5" fill="#0f766e" stroke="#0b524c" stroke-width="1.5"/>
+  <text x="170" y="266" text-anchor="middle" font-family="system-ui" font-size="9" fill="#e6fffb">Access-SW1</text>
+  <rect x="438" y="248" width="64" height="28" rx="5" fill="#0f766e" stroke="#0b524c" stroke-width="1.5"/>
+  <text x="470" y="266" text-anchor="middle" font-family="system-ui" font-size="9" fill="#e6fffb">Access-SW2</text>
+  <g font-family="system-ui" font-size="8" fill="#475569" text-anchor="middle">
+    <g transform="translate(78,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#16a34a"/><rect x="-9" y="3" width="18" height="9" fill="#dcfce7"/><rect x="-6" y="20" width="12" height="3" fill="#15803d"/><text y="32">PC-S1</text></g>
+    <g transform="translate(170,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#2563eb"/><rect x="-9" y="3" width="18" height="9" fill="#dbeafe"/><rect x="-6" y="20" width="12" height="3" fill="#1d4ed8"/><text y="32">PC-IT1</text></g>
+    <g transform="translate(250,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#9333ea"/><rect x="-9" y="3" width="18" height="9" fill="#f3e8ff"/><rect x="-6" y="20" width="12" height="3" fill="#7e22ce"/><text y="32">PC-H1</text></g>
+    <g transform="translate(390,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#16a34a"/><rect x="-9" y="3" width="18" height="9" fill="#dcfce7"/><rect x="-6" y="20" width="12" height="3" fill="#15803d"/><text y="32">PC-S2</text></g>
+    <g transform="translate(470,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#2563eb"/><rect x="-9" y="3" width="18" height="9" fill="#dbeafe"/><rect x="-6" y="20" width="12" height="3" fill="#1d4ed8"/><text y="32">PC-IT2</text></g>
+    <g transform="translate(550,320)"><rect x="-13" y="0" width="26" height="18" rx="2" fill="#9333ea"/><rect x="-9" y="3" width="18" height="9" fill="#f3e8ff"/><rect x="-6" y="20" width="12" height="3" fill="#7e22ce"/><text y="32">PC-H2</text></g>
+  </g>
+  <g font-family="system-ui" font-size="10">
+    <rect x="466" y="40" width="158" height="74" rx="6" fill="#ffffff" stroke="#cbd5e1"/>
+    <text x="476" y="56" font-weight="700" fill="#334155">VLANs</text>
+    <rect x="476" y="64" width="12" height="8" fill="#16a34a"/><text x="494" y="72" fill="#475569">10 · Sales</text>
+    <rect x="476" y="80" width="12" height="8" fill="#2563eb"/><text x="494" y="88" fill="#475569">20 · IT</text>
+    <rect x="476" y="96" width="12" height="8" fill="#9333ea"/><text x="494" y="104" fill="#475569">30 · HR</text>
+  </g>
+</svg>
