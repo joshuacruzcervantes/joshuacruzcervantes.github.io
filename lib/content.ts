@@ -130,6 +130,27 @@ export const content = {
     heading: "Teaching",
     intro:
       "I teach the subjects I've lived. Every topic below comes with field stories, live demos, and the context that turns memorization into understanding — delivered bilingually in English and Tagalog.",
+    // Photos from a live teaching demo. Drop images in /public/teaching/ and
+    // update the src/alt below. Keep alt text descriptive for accessibility.
+    gallery: {
+      heading: "Live teaching demo",
+      caption:
+        "Delivering live IT lessons — slides, whiteboard, and a full class.",
+      images: [
+        {
+          src: "/teaching/teaching-demo-1.jpg",
+          alt: "Joshua Cervantes presenting an IT lesson with slides to a class in a computer lab",
+        },
+        {
+          src: "/teaching/teaching-demo-2.jpg",
+          alt: "Joshua Cervantes explaining a concept at the whiteboard during a live teaching demo",
+        },
+        {
+          src: "/teaching/teaching-demo-3.jpg",
+          alt: "Joshua Cervantes teaching a full class of students in a computer lab",
+        },
+      ],
+    },
     // Subjects/courses you teach. icon is an emoji for a light visual touch.
     subjects: [
       {

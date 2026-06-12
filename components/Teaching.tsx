@@ -46,6 +46,34 @@ export default function Teaching() {
           ))}
         </div>
 
+        {/* Teaching demo gallery */}
+        <Reveal delay={0.1}>
+          <div className="mt-12">
+            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
+              {teaching.gallery.heading}
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+              {teaching.gallery.caption}
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+              {teaching.gallery.images.map((img) => (
+                <div
+                  key={img.src}
+                  className="group overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-brand-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700"
+                >
+                  {/* Plain <img> (not next/image) — the site is statically exported. */}
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    loading="lazy"
+                    className="aspect-video w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+
         {/* YouTube call-out */}
         <Reveal delay={0.1}>
           <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
