@@ -239,7 +239,7 @@ export const content = {
   projects: {
     heading: "Projects & Labs",
     intro:
-      "Hands-on labs and projects — the kind of work I both do and teach. Replace these placeholders with your own screenshots and write-ups.",
+      "Hands-on labs and projects — the kind of work I both do and teach.",
     // Put images at /public/projects/<file> (see README). Set link to "" to
     // hide the link button on a card.
     items: [
