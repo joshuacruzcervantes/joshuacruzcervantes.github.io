@@ -16,7 +16,7 @@ export default function About() {
 
   return (
     <section id="about" className="container-page py-20 sm:py-28">
-      <SectionHeading title={about.heading} />
+      <SectionHeading title={about.heading} kicker={about.kicker} />
 
       <div className="mt-12 grid items-start gap-10 md:grid-cols-5">
         {/* Photo column */}
@@ -31,6 +31,8 @@ export default function About() {
             <img
               src={about.photo}
               alt={about.photoAlt}
+              loading="lazy"
+              decoding="async"
               className="relative z-10 aspect-[4/5] w-full rounded-2xl object-cover shadow-xl"
             />
           </div>

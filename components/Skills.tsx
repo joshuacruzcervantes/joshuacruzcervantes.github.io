@@ -16,7 +16,7 @@ export default function Skills() {
 
   return (
     <section id="skills" className="container-page py-20 sm:py-28">
-      <SectionHeading title={skills.heading} intro={skills.intro} />
+      <SectionHeading title={skills.heading} kicker={skills.kicker} intro={skills.intro} />
 
       {/* Metrics strip — concrete, credible numbers */}
       <Reveal delay={0.05}>

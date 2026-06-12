@@ -30,7 +30,7 @@ export const content = {
       "IT professional with 6 years of hands-on Support & Operations experience, now teaching networking, security, and systems as an IT instructor.",
     // Used by the logo/brand in the navbar. "Sir Vantes" is the teaching brand.
     brandShort: "Sir Vantes",
-    url: "https://example.com", // change to your real domain when you deploy
+    url: "https://joshuacruzcervantes.github.io", // the live GitHub Pages address
   },
 
   /* ------------------------------------------------------------------ */
@@ -105,6 +105,8 @@ export const content = {
   /* ------------------------------------------------------------------ */
   about: {
     heading: "About",
+    // The small accent label above the big heading (adds variety per section).
+    kicker: "Who I am",
     // Your photo lives at /public/profile.png.
     photo: "/profile.png",
     photoAlt: "Portrait of Joshua Cervantes",
@@ -128,6 +130,7 @@ export const content = {
   /* ------------------------------------------------------------------ */
   teaching: {
     heading: "Teaching",
+    kicker: "What I teach",
     intro:
       "I teach the subjects I've lived. Every topic below comes with field stories, live demos, and the context that turns memorization into understanding — delivered bilingually in English and Tagalog.",
     // Photos from a live teaching demo. Drop images in /public/teaching/ and
@@ -151,28 +154,30 @@ export const content = {
         },
       ],
     },
-    // Subjects/courses you teach. icon is an emoji for a light visual touch.
+    // Subjects/courses you teach. `icon` picks one of the line icons drawn in
+    // components/Teaching.tsx — valid values: "network", "hardware",
+    // "security", "code". (If you add a new subject, reuse one of these.)
     subjects: [
       {
-        icon: "🌐",
+        icon: "network",
         title: "Networking",
         detail:
           "OSI & TCP/IP models, subnetting, routing & switching, VLANs — with hands-on labs in Cisco Packet Tracer.",
       },
       {
-        icon: "🛠️",
+        icon: "hardware",
         title: "Hardware & Computer Systems Servicing",
         detail:
           "PC assembly, troubleshooting, and maintenance aligned to CompTIA A+ competencies.",
       },
       {
-        icon: "🔐",
+        icon: "security",
         title: "Security Fundamentals",
         detail:
           "Core security concepts, threats, hardening, and safe operations practices for everyday IT.",
       },
       {
-        icon: "💻",
+        icon: "code",
         title: "Intro to Programming",
         detail:
           "Foundations of programming and problem solving in C, C++, C#, Java, PHP, and SQL.",
@@ -196,6 +201,7 @@ export const content = {
   /* ------------------------------------------------------------------ */
   skills: {
     heading: "Technical Skills",
+    kicker: "What I work with",
     intro:
       "Six years of doing, not just knowing. Grouped by domain — these are tools and systems I've worked with hands-on in production environments.",
     // Headline metrics shown as a stat strip.
@@ -238,6 +244,7 @@ export const content = {
   /* ------------------------------------------------------------------ */
   projects: {
     heading: "Projects & Labs",
+    kicker: "What I build",
     intro:
       "Hands-on labs and projects — the kind of work I both do and teach.",
     // Put images at /public/projects/<file> (see README). Set link to "" to
@@ -275,6 +282,7 @@ export const content = {
   /* ------------------------------------------------------------------ */
   certifications: {
     heading: "Certifications & Education",
+    kicker: "Credentials",
     intro: "Credentials that back the experience.",
     // status: "done" shows a checkmark, "progress" shows an in-progress badge.
     items: [

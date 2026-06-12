@@ -17,13 +17,19 @@
  *   whoami            one-line bio
  *   skills            summary of technical skills
  *   certs             list certifications
+ *   ping <host>       fake-but-believable ping replies
+ *   echo <text>       prints the text back
+ *   date              current date & time
+ *   history           commands typed this session
  *   clear             clear the screen
+ *   sudo …            (easter egg — try it)
  *
  * How the typing works:
  *   We keep a `lines` array (everything printed so far) and a single text
  *   <input> for the current command. Pressing Enter runs the command, appends
  *   the prompt+command and its output to `lines`, and clears the input.
- *   Up/Down arrows walk through previously-entered commands (command history).
+ *   Up/Down arrows walk through previously-entered commands (command history),
+ *   and Tab autocompletes command names and file names, like a real shell.
  */
 import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
@@ -38,6 +44,24 @@ type Line = {
 
 // The prompt string shown before each command, e.g. "joshua@sirvantes:~$".
 const PROMPT = "joshua@sirvantes:~$";
+
+// Every command the terminal understands — used by Tab autocompletion.
+// ("sudo" is deliberately left out of `help` but still completes, like a
+// little secret for people who try it.)
+const COMMANDS = [
+  "help",
+  "ls",
+  "cat",
+  "whoami",
+  "skills",
+  "certs",
+  "ping",
+  "echo",
+  "date",
+  "history",
+  "clear",
+  "sudo",
+];
 
 export default function Terminal() {
   const isDesktop = useIsDesktop();
@@ -103,7 +127,13 @@ function TerminalInner() {
           { kind: "output", text: "  whoami          who am I?" },
           { kind: "output", text: "  skills          technical skills summary" },
           { kind: "output", text: "  certs           certifications" },
+          { kind: "output", text: "  ping <host>     check if something is up" },
+          { kind: "output", text: "  echo <text>     say it back" },
+          { kind: "output", text: "  date            current date & time" },
+          { kind: "output", text: "  history         what you've typed so far" },
           { kind: "output", text: "  clear           clear the screen" },
+          { kind: "output", text: "" },
+          { kind: "output", text: "Tab autocompletes. And like any real shell, help doesn't list everything." },
         ];
 
       case "ls": {
@@ -149,6 +179,62 @@ function TerminalInner() {
           text: `${c.status === "done" ? "[x]" : "[~]"} ${c.name}${c.year ? ` (${c.year})` : ""}`,
         }));
 
+      case "ping": {
+        if (!arg) {
+          return [{ kind: "error", text: "usage: ping <host>   (try: ping google.com)" }];
+        }
+        // Believable-looking replies with small random latencies. A wink for
+        // anyone who pings the site owner.
+        if (arg.toLowerCase().includes("joshua") || arg.toLowerCase().includes("sirvantes")) {
+          return [
+            { kind: "output", text: `PING ${arg}: 56 data bytes` },
+            { kind: "output", text: "64 bytes from joshua: always_up=true time=0.001 ms" },
+            { kind: "output", text: `--- ${arg} ping statistics ---` },
+            { kind: "output", text: "1 packets transmitted, 1 received, 0% packet loss. He responds fast — try email." },
+          ];
+        }
+        const times = [0, 1, 2].map(() => (Math.random() * 20 + 8).toFixed(1));
+        return [
+          { kind: "output", text: `PING ${arg}: 56 data bytes` },
+          ...times.map((t, i) => ({
+            kind: "output" as const,
+            text: `64 bytes from ${arg}: icmp_seq=${i} ttl=57 time=${t} ms`,
+          })),
+          { kind: "output", text: `--- ${arg} ping statistics ---` },
+          { kind: "output", text: "3 packets transmitted, 3 received, 0.0% packet loss" },
+        ];
+      }
+
+      case "echo":
+        return [{ kind: "output", text: arg || "" }];
+
+      case "date":
+        return [{ kind: "output", text: new Date().toString() }];
+
+      case "history":
+        if (history.length === 0) {
+          return [{ kind: "output", text: "history: empty (this is your first command — bold choice)" }];
+        }
+        return history.map((h, i) => ({
+          kind: "output" as const,
+          text: `  ${String(i + 1).padStart(3)}  ${h}`,
+        }));
+
+      case "sudo": {
+        // The classic sysadmin joke — with a recruiting twist.
+        if (arg.replace(/[\s-]+/g, " ").toLowerCase().includes("hire joshua")) {
+          return [
+            { kind: "system", text: "[sudo] permission granted." },
+            { kind: "output", text: "Excellent decision. Initiating onboarding..." },
+            { kind: "output", text: `  -> ${content.contact.email}` },
+          ];
+        }
+        return [
+          { kind: "error", text: "visitor is not in the sudoers file. This incident will be reported." },
+          { kind: "output", text: "(Reported to whom? Try: sudo hire joshua)" },
+        ];
+      }
+
       case "clear":
         // Special-cased by the caller; return a sentinel we recognize.
         return [{ kind: "system", text: "__CLEAR__" }];
@@ -158,9 +244,47 @@ function TerminalInner() {
     }
   }
 
-  // Handle Enter (run), and Up/Down (history navigation).
+  /**
+   * Tab autocompletion, like a real shell:
+   *   - First word  → complete a command name ("he" + Tab → "help ").
+   *   - After "cat" → complete a file name ("cat ab" + Tab → "cat about.txt").
+   * One match completes it; several matches prints them, just like bash.
+   */
+  function autocomplete() {
+    const parts = input.split(/\s+/);
+    const isFirstWord = parts.length <= 1;
+    const partial = parts[parts.length - 1] ?? "";
+    if (partial === "") return;
+
+    // Decide which list of candidates applies here.
+    const candidates = isFirstWord
+      ? COMMANDS
+      : parts[0].toLowerCase() === "cat"
+      ? [...content.terminal.directories, ...content.terminal.files.map((f) => f.name)]
+      : [];
+
+    const matches = candidates.filter((c) => c.startsWith(partial.toLowerCase()));
+    if (matches.length === 1) {
+      // Exactly one match — fill it in (plus a trailing space after commands).
+      const completed = [...parts.slice(0, -1), matches[0]].join(" ");
+      setInput(isFirstWord ? `${completed} ` : completed);
+    } else if (matches.length > 1) {
+      // Several matches — print the options like bash does.
+      print([
+        { kind: "prompt", text: `${PROMPT} ${input}` },
+        { kind: "output", text: matches.join("    ") },
+      ]);
+    }
+  }
+
+  // Handle Enter (run), Tab (autocomplete), and Up/Down (history navigation).
   function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
-    if (e.key === "Enter") {
+    if (e.key === "Tab" && input.trim() !== "") {
+      // Only hijack Tab while typing a command — when the line is empty, Tab
+      // still moves focus normally so keyboard users aren't trapped here.
+      e.preventDefault();
+      autocomplete();
+    } else if (e.key === "Enter") {
       const entered = input;
       const output = runCommand(entered);
 

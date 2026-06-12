@@ -6,14 +6,89 @@
  * The first thing visitors see. It's intentionally clean and professional:
  *   - An eyebrow label, your name, the dual-audience tagline, and supporting text.
  *   - Two CTAs: "View CV" (downloads the PDF) and "Watch me teach" (YouTube).
- *   - A subtle, tasteful animated background: two soft, slowly-drifting color
- *     blobs behind a faint dotted grid. No "hacker" vibes — just polish.
- *
- * The animation is GPU-friendly (transform/opacity only) so it stays smooth and
- * doesn't hurt performance scores.
+ *   - A subtle animated background: a faint NETWORK TOPOLOGY diagram — a hub
+ *     with links to nodes, and little "packets" traveling along the links.
+ *     It's a quiet nod to what Joshua actually teaches, instead of a generic
+ *     gradient. The packets use SVG's built-in animation (no JS), and CSS in
+ *     globals.css hides them for visitors who prefer reduced motion.
  */
 import { motion } from "framer-motion";
 import { content } from "@/lib/content";
+
+/**
+ * The topology drawing: one central node (the "router") linked to outer nodes
+ * ("switches/hosts"), defined once here so the lines, nodes, and packet paths
+ * all stay in sync if you ever move a node.
+ */
+const HUB = { x: 300, y: 220 };
+const NODES = [
+  { x: 110, y: 90 },
+  { x: 330, y: 60 },
+  { x: 520, y: 130 },
+  { x: 560, y: 330 },
+  { x: 380, y: 420 },
+  { x: 140, y: 390 },
+  { x: 60, y: 250 },
+];
+
+function NetworkDiagram() {
+  return (
+    <svg
+      viewBox="0 0 620 480"
+      aria-hidden="true"
+      className="absolute right-[-4rem] top-1/2 hidden h-[34rem] w-[44rem] -translate-y-1/2 text-brand-500 opacity-[0.16] dark:opacity-[0.22] md:block"
+    >
+      {/* Links: hub → every node */}
+      {NODES.map((n, i) => (
+        <line
+          key={i}
+          x1={HUB.x}
+          y1={HUB.y}
+          x2={n.x}
+          y2={n.y}
+          stroke="currentColor"
+          strokeWidth="1.5"
+        />
+      ))}
+
+      {/* Outer nodes */}
+      {NODES.map((n, i) => (
+        <g key={i}>
+          <circle cx={n.x} cy={n.y} r="7" fill="none" stroke="currentColor" strokeWidth="2" />
+          <circle cx={n.x} cy={n.y} r="2.5" fill="currentColor" />
+        </g>
+      ))}
+
+      {/* Hub (drawn last so it sits on top of the links) */}
+      <circle cx={HUB.x} cy={HUB.y} r="13" fill="none" stroke="currentColor" strokeWidth="2.5" />
+      <circle cx={HUB.x} cy={HUB.y} r="4.5" fill="currentColor" />
+      {/* A slow "radar" pulse ring around the hub */}
+      <circle cx={HUB.x} cy={HUB.y} r="13" fill="none" stroke="currentColor" strokeWidth="1.5" className="hero-packet">
+        <animate attributeName="r" values="13;34" dur="3.5s" repeatCount="indefinite" />
+        <animate attributeName="opacity" values="0.8;0" dur="3.5s" repeatCount="indefinite" />
+      </circle>
+
+      {/* Packets: dots that travel hub → node → hub on a few of the links.
+          `keyPoints/keyTimes` makes each one go out and come back. */}
+      {[0, 2, 4, 6].map((idx, i) => {
+        const n = NODES[idx];
+        return (
+          <circle key={idx} r="3.5" fill="currentColor" className="hero-packet">
+            <animateMotion
+              dur="5s"
+              begin={`${i * 1.3}s`}
+              repeatCount="indefinite"
+              path={`M${HUB.x},${HUB.y} L${n.x},${n.y}`}
+              keyPoints="0;1;0"
+              keyTimes="0;0.5;1"
+              calcMode="linear"
+            />
+          </circle>
+        );
+      })}
+    </svg>
+  );
+}
 
 export default function Hero() {
   const { hero } = content;
@@ -40,18 +115,11 @@ export default function Hero() {
           }}
         />
 
-        {/* Soft drifting blob #1 (brand blue) */}
-        <motion.div
-          className="absolute -left-24 top-[-6rem] h-[28rem] w-[28rem] rounded-full bg-brand-400/30 blur-3xl dark:bg-brand-600/20"
-          animate={{ x: [0, 40, 0], y: [0, 30, 0] }}
-          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
-        />
-        {/* Soft drifting blob #2 (cool indigo) */}
-        <motion.div
-          className="absolute -right-24 bottom-[-6rem] h-[26rem] w-[26rem] rounded-full bg-indigo-400/25 blur-3xl dark:bg-indigo-600/20"
-          animate={{ x: [0, -30, 0], y: [0, -20, 0] }}
-          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
-        />
+        {/* One soft, stationary glow behind the text for a little warmth */}
+        <div className="absolute -left-24 top-[-6rem] h-[28rem] w-[28rem] rounded-full bg-brand-400/20 blur-3xl dark:bg-brand-600/15" />
+
+        {/* The animated network topology (desktop only, very faint) */}
+        <NetworkDiagram />
       </div>
 
       {/* ---------- Foreground content ---------- */}

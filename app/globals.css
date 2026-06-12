@@ -11,8 +11,41 @@
 @layer base {
   html {
     scroll-behavior: smooth;
-    /* Offsets anchor jumps so the fixed navbar doesn't cover section headings. */
-    scroll-padding-top: 5rem;
+  }
+
+  /*
+   * Anchor-jump landing position (nav clicks like "About").
+   *
+   * Every section carries generous top padding (5rem on phones, 7rem on
+   * larger screens), so if the browser lands exactly on the section's top
+   * edge there's a huge empty gap under the fixed navbar (4rem tall).
+   * A NEGATIVE scroll-margin lets the jump scroll slightly PAST the section
+   * top, eating most of that padding so the heading sits ~28px below the
+   * navbar instead. The two values differ because the padding grows at the
+   * `sm` breakpoint (640px) — both work out to the same visual gap.
+   */
+  section[id] {
+    scroll-margin-top: 0.75rem; /* phones: sections use py-20 (5rem) */
+  }
+  @media (min-width: 640px) {
+    section[id] {
+      scroll-margin-top: -1.25rem; /* sm+: sections grow to py-28 (7rem) */
+    }
+  }
+
+  /*
+   * Respect the visitor's "reduce motion" OS setting: jump (don't glide) on
+   * anchor clicks, and hide the animated packets in the hero diagram.
+   * Framer Motion animations are handled separately by <MotionConfig
+   * reducedMotion="user"> in app/layout.tsx.
+   */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    .hero-packet {
+      display: none;
+    }
   }
 
   body {

@@ -16,6 +16,10 @@ export default function Footer() {
         <p>
           © {year} {content.site.name}. {content.footer.tagline}
         </p>
+        {/* A last wink at the terminal theme. */}
+        <p className="font-mono text-xs text-slate-400 dark:text-slate-500">
+          exit 0 — session ended cleanly
+        </p>
         <a
           href="#top"
           className="font-medium transition hover:text-brand-600 dark:hover:text-brand-400"

@@ -20,7 +20,7 @@ export default function Projects() {
       className="border-y border-slate-100 bg-slate-50/60 py-20 dark:border-slate-800/60 dark:bg-slate-900/40 sm:py-28"
     >
       <div className="container-page">
-        <SectionHeading title={projects.heading} intro={projects.intro} />
+        <SectionHeading title={projects.heading} kicker={projects.kicker} intro={projects.intro} />
 
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {projects.items.map((project, i) => (
@@ -31,6 +31,8 @@ export default function Projects() {
                   <img
                     src={project.image}
                     alt={project.title}
+                    loading="lazy"
+                    decoding="async"
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
                 </div>

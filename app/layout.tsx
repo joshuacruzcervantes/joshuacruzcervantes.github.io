@@ -12,6 +12,7 @@ import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { content } from "@/lib/content";
+import MotionProvider from "@/components/MotionProvider";
 
 // next/font downloads & self-hosts the fonts at build time (fast, no layout shift).
 // They expose CSS variables that Tailwind reads (see tailwind.config.ts).
@@ -29,13 +30,53 @@ const mono = JetBrains_Mono({
 
 // SEO metadata, pulled from the content config.
 export const metadata: Metadata = {
+  // Makes relative URLs below (like the canonical "/") resolve to the live site.
+  metadataBase: new URL(content.site.url),
   title: content.site.title,
   description: content.site.description,
+  alternates: { canonical: "/" },
+  authors: [{ name: content.site.name, url: content.site.url }],
+  keywords: [
+    "IT instructor",
+    "networking",
+    "cybersecurity",
+    "CompTIA",
+    "IT education",
+    "Joshua Cervantes",
+    "Sir Vantes",
+  ],
   openGraph: {
     title: content.site.title,
     description: content.site.description,
+    url: "/",
+    siteName: content.site.name,
     type: "website",
   },
+  twitter: {
+    card: "summary",
+    title: content.site.title,
+    description: content.site.description,
+  },
+};
+
+/**
+ * Structured data (JSON-LD) describing Joshua as a Person. Search engines read
+ * this to show richer results (name, job title, profiles). It's built from the
+ * same content config, so it never goes out of sync with the page.
+ */
+const personJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  name: content.site.name,
+  alternateName: content.site.brandShort,
+  jobTitle: "IT Instructor",
+  description: content.site.description,
+  url: content.site.url,
+  email: `mailto:${content.contact.email}`,
+  knowsLanguage: ["English", "Filipino"],
+  sameAs: content.contact.socials
+    .map((s) => s.href)
+    .filter((href) => href.startsWith("http")),
 };
 
 /**
@@ -70,9 +111,17 @@ export default function RootLayout({
       <head>
         {/* Runs before paint to avoid a theme flash. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        {/* Structured data for search engines. JSON.stringify of our own static
+            config (no user input), with "<" escaped as a standard precaution. */}
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(personJsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
       </head>
       <body className={`${sans.variable} ${mono.variable} font-sans`}>
-        {children}
+        <MotionProvider>{children}</MotionProvider>
       </body>
     </html>
   );
