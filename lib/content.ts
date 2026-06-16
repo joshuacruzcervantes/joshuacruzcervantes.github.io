@@ -46,6 +46,14 @@ export const content = {
   ],
 
   /* ------------------------------------------------------------------ */
+  /*  LABS  —  interactive trainers / study tools surfaced in the navbar */
+  /*  Add a new entry here and it appears in the "Labs" dropdown.        */
+  /* ------------------------------------------------------------------ */
+  labs: [
+    { label: "Net+ Trainer (N10-009)", href: "/netplus-trainer.html" },
+  ],
+
+  /* ------------------------------------------------------------------ */
   /*  1. HERO                                                            */
   /* ------------------------------------------------------------------ */
   hero: {
@@ -267,10 +275,10 @@ export const content = {
         link: "",
       },
       {
-        title: "Automation Scripts & Configs",
+        title: "Network+ N10-009 Diagnostic Trainer",
         description:
-          "A collection of PowerShell and Bash scripts for provisioning, backups, and routine maintenance — refined over years of operations work.",
-        tags: ["PowerShell", "Bash", "Automation"],
+          "A single-page CompTIA Network+ (N10-009) diagnostic trainer with 45 curated high-miss items, eight scaffolded modules, and adaptive drills with a two-correct-in-a-row mastery rule. Built as a classroom-ready review tool.",
+        tags: ["CompTIA", "Network+", "Diagnostic", "Single-page App"],
         image: "/projects/placeholder-3.svg",
         link: "",
       },

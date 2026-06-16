@@ -2,7 +2,13 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "dev",
+      "name": "netplus-lab",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "8941", "--directory", "/Users/joshuacervantesnew/Desktop/Claude/PKM/Project_01-Projects/netplus-lab"],
+      "port": 8941
+    },
+    {
+      "name": "portfolio",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "dev"],
       "port": 3000

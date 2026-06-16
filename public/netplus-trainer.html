@@ -1,0 +1,1622 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Net+ Lab — N10-009 Diagnostic Trainer</title>
+<style>
+/* ============ THEME & LAYOUT ============
+   Dark, laptop-first. Everything hangs off CSS variables so the
+   palette can be retuned in one place. */
+:root{
+  --bg:#0d1117; --panel:#161d27; --panel2:#1d2735; --line:#2b3a4d;
+  --txt:#dbe4ee; --dim:#8aa0b6; --acc:#53c1f0; --acc2:#7ee0c3;
+  --good:#5fd38a; --bad:#f07178; --warn:#f2c14e;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--txt);
+  font:16px/1.55 -apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:1000px;margin:0 auto;padding:24px 20px 80px}
+h1{font-size:26px;margin:6px 0 2px} h2{font-size:21px;margin:8px 0}
+h3{font-size:17px;margin:14px 0 6px;color:var(--acc)}
+p{margin:8px 0}
+a{color:var(--acc)}
+.dim{color:var(--dim)} .good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)}
+.small{font-size:13.5px}
+.mono{font-family:ui-monospace,Menlo,Consolas,monospace}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:12px;
+  padding:18px 20px;margin:14px 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media (max-width:760px){.grid2{grid-template-columns:1fr}}
+
+/* buttons */
+.btn{background:var(--panel2);color:var(--txt);border:1px solid var(--line);
+  border-radius:9px;padding:9px 16px;font:inherit;cursor:pointer}
+.btn:hover{border-color:var(--acc)}
+.btn.acc{background:var(--acc);border-color:var(--acc);color:#04141f;font-weight:600}
+.btn.ghost{background:transparent}
+.btn.sm{padding:5px 11px;font-size:14px}
+.btn:disabled{opacity:.45;cursor:default}
+
+/* tabs inside a module */
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.tab{padding:6px 15px;border:1px solid var(--line);border-radius:20px;cursor:pointer;
+  font-size:14.5px;color:var(--dim);background:transparent}
+.tab.on{background:var(--acc);border-color:var(--acc);color:#04141f;font-weight:600}
+
+/* multiple-choice options */
+.q{font-weight:600;font-size:16.5px}
+.opt{display:block;width:100%;text-align:left;margin:7px 0;padding:10px 14px;
+  background:var(--panel2);border:1px solid var(--line);border-radius:9px;
+  color:var(--txt);font:inherit;cursor:pointer}
+.opt:hover:not(:disabled){border-color:var(--acc)}
+.opt.right{border-color:var(--good);background:rgba(95,211,138,.10)}
+.opt.wrong{border-color:var(--bad);background:rgba(240,113,120,.10)}
+.opt:disabled{cursor:default}
+.explain{margin-top:10px}
+.explain details{margin-top:8px;border:1px solid var(--line);border-radius:9px;padding:8px 12px}
+.explain summary{cursor:pointer;color:var(--dim)}
+
+/* inputs */
+.field{background:#0a0f15;border:1px solid var(--line);color:var(--txt);
+  padding:8px 11px;border-radius:8px;font:inherit;width:100%}
+.field.ok{border-color:var(--good)} .field.err{border-color:var(--bad)}
+label.f{display:block;margin:8px 0 2px;font-size:14px;color:var(--dim)}
+
+/* progress bars */
+.bar{height:9px;background:#0a0f14;border-radius:5px;overflow:hidden;flex:1}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:5px}
+
+/* dashboard rows */
+.modrow{display:flex;gap:16px;align-items:center;background:var(--panel);
+  border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin:10px 0;cursor:pointer}
+.modrow:hover{border-color:var(--acc)}
+.modnum{font-size:22px;font-weight:700;color:var(--acc);min-width:34px;text-align:center}
+.modbody{flex:1}
+.modbody b{font-size:16.5px}
+.mright{min-width:150px;display:flex;align-items:center;gap:10px}
+.mpct{min-width:42px;text-align:right;font-size:14px;color:var(--dim)}
+
+/* analogy callout */
+.anchor{border-left:3px solid var(--warn);background:rgba(242,193,78,.06);
+  padding:10px 14px;border-radius:0 10px 10px 0;margin:12px 0;font-size:15px}
+.anchor b{color:var(--warn)}
+
+/* fake terminal */
+.term{background:#05080c;border:1px solid var(--line);border-radius:10px 10px 0 0;
+  padding:14px;height:340px;overflow-y:auto;font:13.5px/1.5 ui-monospace,Menlo,Consolas,monospace;
+  white-space:pre-wrap;color:#9fd6a0}
+.term .cmd{color:#e8eef5;font-weight:600}
+.term .hdr{color:var(--dim)}
+.termline{display:flex;align-items:center;background:#05080c;border:1px solid var(--line);
+  border-top:none;border-radius:0 0 10px 10px;padding:6px 14px;gap:8px}
+.termline span{color:var(--acc2);font-family:ui-monospace,Menlo,monospace}
+.termline input{flex:1;background:transparent;border:none;outline:none;color:#e8eef5;
+  font:14px ui-monospace,Menlo,Consolas,monospace}
+
+/* binary visualisation */
+.binrow{margin:4px 0;white-space:nowrap;overflow-x:auto}
+.bit{display:inline-block;width:19px;text-align:center;font-family:ui-monospace,Menlo,monospace;
+  font-size:14px;border-radius:4px;margin:1px 0}
+.bit.n{color:#04141f;background:var(--acc)}
+.bit.h{color:#04141f;background:var(--warn)}
+.octdot{display:inline-block;width:12px;text-align:center;color:var(--dim)}
+
+/* DHCP scope cells */
+.cells{display:flex;gap:3px;flex-wrap:wrap;margin:10px 0;user-select:none}
+.cell{width:40px;height:34px;border:1px solid var(--line);border-radius:6px;
+  display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;
+  background:var(--panel2)}
+.cell.ex{background:var(--bad);border-color:var(--bad);color:#1a0507}
+.cell.res{background:var(--acc);border-color:var(--acc);color:#04141f;font-weight:700}
+
+/* the-45 dots */
+.dots{display:grid;grid-template-columns:repeat(15,1fr);gap:6px;margin:10px 0}
+.dot{height:22px;border-radius:5px;background:var(--panel2);border:1px solid var(--line);
+  font-size:10px;display:flex;align-items:center;justify-content:center;color:var(--dim)}
+.dot.s1{border-color:var(--warn);color:var(--warn)}
+.dot.closed{background:var(--good);border-color:var(--good);color:#04141f;font-weight:700}
+
+/* cloud builder */
+.tray{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.comp{padding:8px 14px;border:1px solid var(--acc);border-radius:9px;cursor:pointer;
+  background:rgba(83,193,240,.08);font-size:14.5px}
+.comp.sel{background:var(--acc);color:#04141f;font-weight:600}
+.comp.used{opacity:.35;pointer-events:none}
+.vpcbox{border:2px solid var(--acc);border-radius:12px;padding:14px;position:relative;margin-top:26px}
+.vpclabel{position:absolute;top:-12px;left:14px;background:var(--panel);padding:0 8px;color:var(--acc);font-size:13px}
+.subnet{border:1px dashed var(--dim);border-radius:10px;padding:12px;margin:10px 0}
+.subnet h4{margin:0 0 8px;font-size:14px;color:var(--dim)}
+.slot{border:2px dashed var(--line);border-radius:9px;padding:9px 12px;margin:6px 0;
+  font-size:14px;color:var(--dim);cursor:pointer;min-height:40px}
+.slot:hover{border-color:var(--acc)}
+.slot.filled{border-style:solid;border-color:var(--acc);color:var(--txt)}
+.slot.okv{border-color:var(--good)} .slot.badv{border-color:var(--bad)}
+
+/* matrix toggles */
+.mrow{display:flex;align-items:center;gap:12px;margin:7px 0}
+.mrow .lab{width:200px}
+.tog{display:flex;border:1px solid var(--line);border-radius:8px;overflow:hidden}
+.tog button{border:none;padding:6px 14px;background:transparent;color:var(--dim);cursor:pointer;font:inherit;font-size:14px}
+.tog button.p.on{background:var(--acc);color:#04141f;font-weight:600}
+.tog button.y.on{background:var(--warn);color:#04141f;font-weight:600}
+
+/* flashcards */
+.fcard{height:230px;perspective:900px;cursor:pointer;margin:12px 0}
+.fcin{position:relative;width:100%;height:100%;transition:transform .45s;transform-style:preserve-3d}
+.fcard.flip .fcin{transform:rotateY(180deg)}
+.fface{position:absolute;inset:0;backface-visibility:hidden;border-radius:14px;
+  display:flex;align-items:center;justify-content:center;padding:22px;text-align:center;
+  border:1px solid var(--line)}
+.ffront{background:var(--panel2);font-size:18px;font-weight:600}
+.fback{background:#13202b;transform:rotateY(180deg);font-size:15.5px}
+.fcat{position:absolute;top:10px;left:14px;font-size:12px;color:var(--dim)}
+
+/* reorder list */
+.steps li{list-style:none;display:flex;align-items:center;gap:10px;background:var(--panel2);
+  border:1px solid var(--line);border-radius:9px;padding:9px 13px;margin:7px 0;cursor:grab}
+.steps li.right{border-color:var(--good)} .steps li.wrongpos{border-color:var(--bad)}
+.steps li .mv{margin-left:auto;display:flex;gap:5px}
+.steps{padding:0;margin:10px 0}
+
+/* misc */
+svg text{fill:var(--txt);font-family:inherit}
+.statline{display:flex;gap:18px;align-items:center;flex-wrap:wrap;margin:10px 0}
+.bigip{font-size:34px;text-align:center;margin:18px 0;font-family:ui-monospace,Menlo,monospace}
+.timerbar{height:7px;background:#0a0f14;border-radius:4px;overflow:hidden;margin:8px 0}
+.timerbar i{display:block;height:100%;background:var(--warn)}
+.pillrow{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
+.pill{padding:7px 14px;border:1px solid var(--line);border-radius:18px;cursor:pointer;font-size:14px}
+.pill:hover{border-color:var(--acc)}
+.pill.on{background:var(--acc);border-color:var(--acc);color:#04141f;font-weight:600}
+table.adt{border-collapse:collapse;margin:10px 0}
+table.adt td,table.adt th{border:1px solid var(--line);padding:7px 14px;text-align:left}
+.topbar{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+kbd{background:var(--panel2);border:1px solid var(--line);border-radius:5px;padding:1px 7px;font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<script>
+/* =====================================================================
+   NET+ LAB — CompTIA Network+ N10-009 weak-spot trainer (single file)
+
+   HOW THIS FILE IS ORGANIZED
+   1. Utilities        — DOM shorthand, shuffle, HTML escaping, timers
+   2. State            — one localStorage blob: per-module history,
+                         per-question streaks for "The 45", best streaks
+   3. Router/Dashboard — go(key) wipes #app and renders one screen;
+                         each module is one render function
+   4. Shared MCQ engine— every multiple-choice drill in the app funnels
+                         through renderMCQ() so behaviour is identical
+   5. Data             — the 45 missed questions, DNS zone, flashcards
+   6. Modules 1–8      — one section per module, in study-plan order
+
+   Design choice: everything is rendered from JS (the HTML body is just
+   an empty #app div). One screen exists at a time, so element ids can
+   be reused per screen without collisions.
+   ===================================================================== */
+
+/* ============ 1. UTILITIES ============ */
+const $  = s => document.querySelector(s);
+const $$ = s => [...document.querySelectorAll(s)];
+const rnd = n => Math.floor(Math.random()*n);
+function shuffle(a){            // Fisher–Yates on a copy: unbiased shuffle
+  const b=a.slice();
+  for(let i=b.length-1;i>0;i--){const j=rnd(i+1);[b[i],b[j]]=[b[j],b[i]];}
+  return b;
+}
+const esc = s => String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+// Screens with countdowns register intervals here; go() kills them all
+// so a timer never keeps firing after you leave the screen.
+let timers=[];
+function every(fn,ms){const t=setInterval(fn,ms);timers.push(t);return t;}
+
+/* ============ 2. STATE (localStorage) ============
+   S.hist  — per module, last 30 results (1/0). Mastery = % of that window,
+             so the bar reflects how you're doing NOW, not your lifetime average.
+   S.q45   — per missed-question id: {s: current correct streak, c: closed}
+             A question "closes" when answered right twice in a row.
+   S.best  — best RFC1918 quick-fire streak, AD-table perfect rounds.   */
+const KEY='netplus-lab-v1';
+let S=loadState();
+function loadState(){
+  try{const s=JSON.parse(localStorage.getItem(KEY)); if(s&&s.hist) return s;}catch(e){}
+  return {hist:{},q45:{},best:{rfc:0,ad:0}};
+}
+function save(){localStorage.setItem(KEY,JSON.stringify(S));}
+function rec(m,ok){
+  (S.hist[m]=S.hist[m]||[]).push(ok?1:0);
+  if(S.hist[m].length>30)S.hist[m].shift();
+  save();
+}
+function mastery(m){
+  if(m==='m8') return Math.round(closedCount()/45*100);
+  const h=S.hist[m];
+  if(!h||!h.length) return null;
+  return Math.round(h.reduce((a,b)=>a+b,0)/h.length*100);
+}
+function closedCount(){return Object.values(S.q45).filter(x=>x.c).length;}
+
+/* ============ 3. ROUTER & DASHBOARD ============ */
+const MODULES=[
+ {k:'m1',n:1,t:'Subnetting Trainer',d:'CIDR math · VLSM · summarization · RFC1918 quick-fire',r:renderM1},
+ {k:'m2',n:2,t:'DNS Record Lab',d:'Fake dig terminal · record-type matching',r:renderM2},
+ {k:'m3',n:3,t:'Routing: AD vs Metric',d:'Route battles · AD table drill · protocol ID',r:renderM3},
+ {k:'m4',n:4,t:'Cloud Concepts',d:'VPC builder · IaaS/PaaS/SaaS matrix · NSG & IaC',r:renderM4},
+ {k:'m5',n:5,t:'Switching: VLANs & STP',d:'STP loop sim · access vs trunk playground',r:renderM5},
+ {k:'m6',n:6,t:'Wireless',d:'2.4 GHz channel visualizer · antennas & network types',r:renderM6},
+ {k:'m7',n:7,t:'Ops Grab Bag',d:'Flashcards · DHCP scope lab · 7-step reorder',r:renderM7},
+ {k:'m8',n:8,t:'Mastery Review — The 45',d:'High-miss item bank, drilled until each is closed',r:renderM8},
+];
+function go(k){
+  timers.forEach(clearInterval); timers=[];
+  const app=$('#app'); app.innerHTML=''; window.scrollTo(0,0);
+  if(k==='home') return renderHome(app);
+  const m=MODULES.find(x=>x.k===k);
+  if(m) m.r(app);
+}
+// Standard module header: back link, title, and the analogy anchor box.
+function header(title,anchorHtml){
+  return `<div class="topbar"><button class="btn sm ghost" onclick="go('home')">← Dashboard</button></div>
+    <h2>${title}</h2>${anchorHtml?`<div class="anchor">${anchorHtml}</div>`:''}`;
+}
+function renderHome(app){
+  const closed=closedCount();
+  app.innerHTML=`
+   <h1>Net+ Lab</h1>
+   <p class="dim">N10-009 diagnostic trainer — 45 high-miss items curated from three full-length practice exams, scaffolded into eight focused modules. Adaptive drills close each gap using a two-correct-in-a-row rule. Progress saves automatically in this browser. <span class="warn">${closed}/45 items closed.</span></p>
+   ${MODULES.map(m=>{
+     const p=mastery(m.k);
+     return `<div class="modrow" onclick="go('${m.k}')">
+       <div class="modnum">${m.n}</div>
+       <div class="modbody"><b>${m.t}</b><div class="dim small">${m.d}</div></div>
+       <div class="mright"><div class="bar"><i style="width:${p===null?0:p}%"></i></div>
+       <div class="mpct">${p===null?'—':p+'%'}</div></div>
+     </div>`;}).join('')}
+   <div class="card small">
+     <h3 style="margin-top:0">60-second quick-recall (memorize cold)</h3>
+     <ul class="dim" style="margin:6px 0;padding-left:20px">
+      <li><b class="warn">RFC1918:</b> 10.0.0.0/8 · 172.16.0.0/12 · 192.168.0.0/16</li>
+      <li><b class="warn">Admin Distance:</b> Connected 0 · Static 1 · eBGP 20 · OSPF 110 · RIP 120</li>
+      <li><b class="warn">DNS:</b> A · AAAA · CNAME(alias) · MX(mail) · PTR(reverse) · TXT(SPF/verify) · NS · SOA</li>
+      <li><b class="warn">2.4 GHz non-overlap:</b> 1, 6, 11</li>
+      <li><b class="warn">STP states:</b> Blocking → Listening → Learning → Forwarding</li>
+      <li><b class="warn">Troubleshooting:</b> Identify → Theory → Test → Plan → Implement → Verify → Document</li>
+      <li><b class="warn">TACACS+</b> TCP, encrypts all · <b class="warn">RADIUS</b> UDP, encrypts password only</li>
+      <li><b class="warn">RPO</b> data-loss tolerance · <b class="warn">RTO</b> recovery-time target</li>
+      <li><b class="warn">SAN</b> block-level · <b class="warn">NAS</b> file-level</li>
+     </ul>
+     <button class="btn sm ghost bad" onclick="if(confirm('Wipe all saved progress?')){localStorage.removeItem(KEY);S=loadState();go('home');}">Reset all progress</button>
+   </div>`;
+}
+
+/* ============ 4. SHARED MCQ ENGINE ============
+   item = {q, o:[4 options], a:index of correct, e:[4 explanations]}
+   Options are shuffled on every render so you learn the answer, not the
+   letter. cb(ok) fires once after the user picks.                    */
+function renderMCQ(box,item,cb){
+  const order=shuffle(item.o.map((_,i)=>i));
+  box.dataset.done='';
+  box.innerHTML=`<p class="q">${esc(item.q)}</p>`+
+    order.map((oi,pos)=>`<button class="opt" data-oi="${oi}">${'ABCD'[pos]}. ${esc(item.o[oi])}</button>`).join('')+
+    `<div class="explain"></div>`;
+  box.querySelectorAll('.opt').forEach(b=>b.onclick=()=>{
+    if(box.dataset.done)return; box.dataset.done='1';
+    const oi=+b.dataset.oi, ok=oi===item.a;
+    if(!ok)b.classList.add('wrong');
+    box.querySelectorAll('.opt').forEach(x=>{
+      if(+x.dataset.oi===item.a)x.classList.add('right');
+      x.disabled=true;
+    });
+    box.querySelector('.explain').innerHTML=
+      `<p class="${ok?'good':'bad'}"><b>${ok?'✔ Correct.':'✘ Not quite.'}</b> ${esc(item.e[item.a])}</p>
+       <details><summary>Why the others are wrong</summary>
+       ${item.o.map((o,i)=>i===item.a?'':`<p class="small"><b>${esc(o)}</b> — ${esc(item.e[i])}</p>`).join('')}
+       </details>`;
+    cb&&cb(ok);
+  });
+}
+
+/* ============ 5a. DATA — THE 45 MISSED QUESTIONS ============
+   Exact wording from "Network+ Weak Spots (Complete Set).md".
+   d = exam domain (1 Concepts, 2 Implementation, 3 Operations,
+   4 Security, 5 Troubleshooting). a = index of the correct option.
+   e[i] = explanation for option i (the correct one holds the "why"). */
+const Q45=[
+{id:"R1Q1",d:5,q:"A technician is dispatched to a user who reports they \"can't get to the internet.\" According to the CompTIA troubleshooting methodology, which of the following should the technician do FIRST?",
+ o:["Establish a theory of probable cause","Identify the problem by gathering information and questioning the user","Test the theory to determine the cause","Document findings, actions, and lessons learned"],a:1,
+ e:["Establishing a theory of probable cause is the second step, performed only after the problem has been clearly identified.",
+    "The first step of the methodology is to identify the problem. This includes gathering information, questioning users, identifying symptoms, and determining if anything has changed.",
+    "Testing the theory is the third step and cannot happen before a theory exists.",
+    "Documenting findings is the final step of the process, performed after the issue is resolved."]},
+{id:"R1Q3",d:2,q:"A technician is deploying three access points operating in the 2.4 GHz band within the same coverage area. Which set of channels should be used to avoid overlapping (co-channel) interference in North America?",
+ o:["1, 6, 11","1, 2, 3","2, 7, 10","1, 5, 9"],a:0,
+ e:["In the 2.4 GHz band, channels 1, 6, and 11 are the only standard set spaced far enough apart (5 channels) to be non-overlapping.",
+    "Channels 1, 2, and 3 are directly adjacent and overlap heavily.",
+    "Channels 2, 7, and 10 are not the standard non-overlapping set and will overlap with one another.",
+    "Channels 1, 5, and 9 are spaced only 4 apart, which still causes overlap; non-overlap requires 5 channels of separation."]},
+{id:"R1Q7",d:2,q:"A router learns a route to the same destination network from both OSPF and EIGRP. Which value does the router use to decide which protocol's route to install in the routing table?",
+ o:["Administrative distance","Maximum transmission unit","Hop count","Time to live"],a:0,
+ e:["Administrative distance ranks the trustworthiness of each routing source. When the same prefix is learned from multiple protocols, the route with the lower administrative distance is installed.",
+    "MTU is the largest packet size an interface will forward; it is not used to choose between routing sources.",
+    "Hop count is a metric used within RIP and does not arbitrate between two different protocols.",
+    "TTL limits how many hops a packet may traverse before being discarded; it is not used for route selection."]},
+{id:"R1Q9",d:1,q:"A company wants to rent virtual machines, storage, and networking from a cloud provider while keeping full control over the operating systems and applications it installs. Which cloud service model is this?",
+ o:["SaaS","IaaS","PaaS","On-premises"],a:1,
+ e:["SaaS delivers a finished application (such as webmail) with no OS-level control for the customer.",
+    "Infrastructure as a Service (IaaS) provides fundamental compute, storage, and network resources, leaving the customer responsible for managing the OS and applications.",
+    "PaaS provides a managed platform for developing applications; the provider manages the underlying OS.",
+    "On-premises is not a cloud service model - the equipment would be owned and hosted by the company itself."]},
+{id:"R1Q10",d:3,q:"After a disaster, management states the business can tolerate losing at most one hour of data. Which disaster recovery metric does this define?",
+ o:["Recovery point objective (RPO)","Recovery time objective (RTO)","Mean time between failures (MTBF)","Mean time to repair (MTTR)"],a:0,
+ e:["The RPO is the maximum acceptable amount of data loss measured as a point in time - effectively how recent the last usable backup must be.",
+    "RTO is how quickly a system must be restored to service, not how much data can be lost.",
+    "MTBF is a reliability metric predicting the average time between failures of a component.",
+    "MTTR is the average time required to repair a failed component."]},
+{id:"R1Q17",d:2,q:"An internet service provider needs to exchange routing information with other autonomous systems across the internet. Which routing protocol is designed for this purpose?",
+ o:["RIP","OSPF","EIGRP","BGP"],a:3,
+ e:["RIP is a legacy interior distance-vector protocol limited to small internal networks.",
+    "OSPF is an interior link-state protocol used within an autonomous system.",
+    "EIGRP is a Cisco interior gateway protocol used within an organization, not between ASes.",
+    "BGP is the path-vector protocol used to route between autonomous systems and is effectively the routing protocol of the internet."]},
+{id:"R1Q20",d:2,q:"Which device should be installed so that critical network equipment keeps running and can shut down gracefully during a brief power outage?",
+ o:["Uninterruptible power supply (UPS)","Power distribution unit (PDU)","Patch panel","Power over Ethernet injector"],a:0,
+ e:["A UPS provides battery-backed power that keeps equipment running during short outages and allows a controlled shutdown.",
+    "A PDU distributes power to multiple devices in a rack but does not provide battery backup.",
+    "A patch panel organizes and terminates cabling; it has no power function.",
+    "A PoE injector adds electrical power to an Ethernet cable for devices like APs, not outage protection."]},
+{id:"R1Q34",d:3,q:"A network team wants to see summarized conversations - source, destination, ports, protocol, and byte counts - to understand traffic patterns, without storing full packet payloads. Which monitoring method should they use?",
+ o:["Full packet capture","SNMP trap","Flow data (such as NetFlow)","Syslog"],a:2,
+ e:["Full packet capture stores entire payloads, far more data than the team wants.",
+    "An SNMP trap is an event-driven alert, not a summary of traffic flows.",
+    "Flow data records metadata about each conversation (addresses, ports, protocol, byte/packet counts) for traffic analysis without capturing the payload.",
+    "Syslog aggregates device log messages, not conversation statistics."]},
+{id:"R1Q67",d:1,q:"A technician needs a small, push-pull fiber connector that holds two fibers in one compact housing and is commonly used on SFP transceivers. Which connector type is this?",
+ o:["ST","BNC","LC","RJ45"],a:2,
+ e:["ST is a larger, bayonet-style fiber connector.",
+    "BNC is a bayonet coaxial connector, not fiber.",
+    "The LC (local connector) is a small form-factor push-pull fiber connector, frequently used in a duplex pair on SFP modules.",
+    "RJ45 is a copper twisted-pair connector."]},
+{id:"R1Q73",d:1,q:"Which of the following address ranges is reserved for private use by RFC 1918?",
+ o:["8.8.8.0/24","172.16.0.0/12","169.254.0.0/16","224.0.0.0/4"],a:1,
+ e:["8.8.8.0/24 is public address space (it includes a well-known public DNS resolver).",
+    "RFC 1918 reserves 10.0.0.0/8, 172.16.0.0/12, and 192.168.0.0/16 for private internal use; these are not routable on the public internet.",
+    "169.254.0.0/16 is APIPA link-local addressing, not an RFC 1918 private range.",
+    "224.0.0.0/4 is the Class D multicast range."]},
+{id:"R1Q77",d:1,q:"At the Transport layer (Layer 4) of the OSI model, a large stream of application data is broken into smaller pieces for delivery. What are these Layer 4 pieces called when using TCP?",
+ o:["Frames","Segments","Bits","Packets"],a:1,
+ e:["Frames are the protocol data unit at Layer 2 (Data link).",
+    "At Layer 4, TCP divides data into segments (UDP uses datagrams). This is the protocol data unit at the Transport layer.",
+    "Bits are the protocol data unit at Layer 1 (Physical).",
+    "Packets are the protocol data unit at Layer 3 (Network)."]},
+{id:"R2Q9",d:1,q:"In a public cloud, an administrator creates a logically isolated section of the provider's network where they define their own IP ranges, subnets, and routing. What is this called?",
+ o:["Content delivery network (CDN)","Network-attached storage (NAS)","Virtual private cloud (VPC)","VLAN trunk"],a:2,
+ e:["A CDN caches content at edge locations closer to users.",
+    "NAS provides shared file storage over the network.",
+    "A VPC is a logically isolated portion of a public cloud where the customer controls their own address space, subnets, and routing.",
+    "A VLAN trunk carries multiple VLANs over a switch link; it is not a cloud construct."]},
+{id:"R2Q19",d:1,q:"Which storage technology presents block-level storage to servers over a dedicated high-speed network, so the storage appears to the server as a locally attached disk?",
+ o:["Network-attached storage (NAS)","Storage area network (SAN)","Content delivery network (CDN)","Proxy server"],a:1,
+ e:["NAS provides file-level storage shared over the existing LAN, not block-level disk access.",
+    "A SAN provides block-level storage over a dedicated network; servers access it as if it were a local disk.",
+    "A CDN caches web content at edge locations closer to users.",
+    "A proxy forwards and filters client requests; it is not storage."]},
+{id:"R2Q27",d:1,q:"In which topology is every node directly connected to every other node, maximizing redundancy at the cost of many links?",
+ o:["Full mesh","Star / hub-and-spoke","Bus","Point to point"],a:0,
+ e:["In a full mesh, every node has a direct link to every other node, providing maximum redundancy but requiring a large number of connections.",
+    "A star connects all nodes to a central device, not directly to each other.",
+    "A bus topology shares a single backbone segment.",
+    "Point to point connects exactly two nodes."]},
+{id:"R2Q28",d:5,q:"On a Linux server with no graphical interface, a technician wants to capture and inspect packets arriving on an interface directly from the command line. Which tool should be used?",
+ o:["ping","ipconfig","tcpdump","show vlan"],a:2,
+ e:["ping tests reachability with ICMP; it does not capture packets.",
+    "ipconfig is a Windows command to display IP settings, not a capture tool (and not present on Linux).",
+    "tcpdump is a command-line packet capture and analysis tool, well suited to capturing traffic on a headless Linux host.",
+    "show vlan is a switch command that lists VLANs, not a packet capture tool."]},
+{id:"R2Q29",d:1,q:"A provider needs to extend Layer 2 segments between two data centers across a routed Layer 3 network by encapsulating Ethernet frames for transport. Which technology does this?",
+ o:["OSPF","VXLAN","Spanning tree","NAT64"],a:1,
+ e:["OSPF is a routing protocol, not a Layer 2 encapsulation overlay.",
+    "VXLAN encapsulates Layer 2 Ethernet frames in UDP so Layer 2 segments can be extended across a routed Layer 3 network, commonly for data center interconnect.",
+    "Spanning tree prevents Layer 2 loops within a switched network.",
+    "NAT64 translates between IPv6 and IPv4 hosts; it does not extend Layer 2 segments."]},
+{id:"R2Q31",d:3,q:"A mail server performs a reverse DNS lookup to find the hostname associated with a connecting IP address. Which DNS record type provides this mapping?",
+ o:["A","MX","PTR","TXT"],a:2,
+ e:["An A record maps a hostname to an IPv4 address (a forward lookup).",
+    "An MX record identifies the mail server for a domain.",
+    "A PTR (pointer) record maps an IP address back to a hostname and is used for reverse DNS lookups.",
+    "A TXT record holds arbitrary text such as SPF data, not reverse mappings."]},
+{id:"R2Q33",d:2,q:"On each floor of a building, a wiring closet houses the switches that connect that floor's endpoints back to the building's main equipment room. What is each of these floor closets called?",
+ o:["Main distribution frame (MDF)","Intermediate distribution frame (IDF)","Demarcation point","Cold aisle"],a:1,
+ e:["The MDF is the single primary equipment room where external circuits terminate, not a per-floor closet.",
+    "An IDF is a per-floor or per-area distribution closet that connects local endpoints back to the building's MDF.",
+    "The demarc is where the service provider's responsibility ends and the customer's begins.",
+    "A cold aisle is an airflow-management area in a data center, not a wiring closet."]},
+{id:"R2Q37",d:1,q:"A video server streams a single feed that is delivered only to the group of hosts that have subscribed to it, rather than to every host on the network. Which traffic type is this?",
+ o:["Broadcast","Unicast","Anycast","Multicast"],a:3,
+ e:["Broadcast sends to all hosts on a segment whether or not they want the data.",
+    "Unicast is one-to-one delivery to a single specific host.",
+    "Anycast delivers to the nearest one of several hosts that share an address.",
+    "Multicast delivers a single stream to a group of subscribed receivers, conserving bandwidth compared with sending an individual copy to everyone."]},
+{id:"R2Q39",d:2,q:"A technician needs to provide wireless coverage evenly in all horizontal directions around a single access point in an open office. Which antenna type is appropriate?",
+ o:["Directional (Yagi) antenna","Parabolic dish antenna","Omnidirectional antenna","Patch panel"],a:2,
+ e:["A directional antenna focuses signal in one direction for point-to-point links, not even all-around coverage.",
+    "A parabolic dish is highly directional for long-distance links.",
+    "An omnidirectional antenna radiates roughly equally in all horizontal directions, suited to covering the area around a centrally placed AP.",
+    "A patch panel is a cabling termination point, not an antenna."]},
+{id:"R2Q64",d:3,q:"A company wants 'www.example.com' to resolve to the same host as 'example.com' without duplicating the IP address in two separate records. Which DNS record type should be used?",
+ o:["A","MX","PTR","CNAME"],a:3,
+ e:["An A record maps a name directly to an IPv4 address, requiring separate maintenance for each name.",
+    "An MX record identifies mail servers, not web aliases.",
+    "A PTR record maps an IP address back to a name for reverse lookups.",
+    "A CNAME record creates an alias that points one name to another canonical name, so changing the target's address automatically applies to both names."]},
+{id:"R2Q73",d:1,q:"In a cloud VPC, private instances without public IPs need outbound internet access for updates, but must not be directly reachable from the internet. Which component provides this?",
+ o:["A NAT gateway","An internet gateway with public IPs on each instance","A VPN concentrator","A load balancer"],a:0,
+ e:["A NAT gateway lets private instances initiate outbound internet connections (for example, to fetch updates) while blocking unsolicited inbound connections from the internet.",
+    "Assigning public IPs and an internet gateway would make the instances directly reachable, which is not wanted.",
+    "A VPN concentrator terminates VPN tunnels; it is not the cloud egress mechanism.",
+    "A load balancer distributes inbound traffic to servers, not outbound NAT for private instances."]},
+{id:"R2Q78",d:3,q:"A DR team gathers in a conference room to walk through their disaster recovery plan step by step in discussion, without actually failing over any systems. Which type of test is this?",
+ o:["A validation (failover) test","Tabletop exercise","A hot site cutover","A penetration test"],a:1,
+ e:["A validation test actually exercises failover of systems, unlike a discussion-only tabletop.",
+    "A tabletop exercise is a discussion-based walkthrough of the DR plan to validate roles and steps without disrupting production systems.",
+    "A cutover moves live operations to the DR site; it is not a discussion.",
+    "A penetration test probes for security vulnerabilities, not DR plan rehearsal."]},
+{id:"R2Q79",d:5,q:"On a switch running spanning tree, a port that is receiving BPDUs but not forwarding user traffic in order to prevent a loop is in which state?",
+ o:["Forwarding","Blocking","Err-disabled","Trunking"],a:1,
+ e:["A forwarding port actively passes user traffic; it is not blocking to prevent a loop.",
+    "A blocking port receives BPDUs but does not forward user frames, which is how STP prevents loops on redundant links.",
+    "Err-disabled is a violation/shutdown state, not a normal STP loop-prevention state.",
+    "Trunking describes carrying multiple VLANs, not an STP port state."]},
+{id:"R2Q81",d:4,q:"A network team wants centralized administrator login to network devices with the ability to separately control authentication, authorization, and accounting, including per-command authorization. Which protocol is best suited?",
+ o:["RADIUS","SNMP","LDAP","TACACS+"],a:3,
+ e:["RADIUS combines authentication and authorization and targets network access (Wi-Fi/VPN), with less granular command control.",
+    "SNMP monitors and manages device data, not interactive login AAA.",
+    "LDAP is a directory access protocol, not a device-administration AAA protocol with per-command control.",
+    "TACACS+ separates authentication, authorization, and accounting and supports per-command authorization, making it well suited to network device administration."]},
+{id:"R2Q82",d:1,q:"A smaller campus combines the functions of the core and distribution layers into a single layer to reduce cost and complexity. Which design is this?",
+ o:["Spine and leaf","Full mesh","Point to point","Collapsed core"],a:3,
+ e:["Spine and leaf is a data center fabric, not a collapsed campus core.",
+    "A full mesh directly interconnects every node.",
+    "Point to point connects exactly two nodes.",
+    "A collapsed core merges the core and distribution layers into one, simplifying smaller networks that do not need three distinct tiers."]},
+{id:"R2Q88",d:1,q:"For a point-to-point WAN link that needs exactly two usable host addresses, which subnet mask is the most efficient choice using VLSM?",
+ o:["/24 (255.255.255.0)","/30 (255.255.255.252)","/29 (255.255.255.248)","/28 (255.255.255.240)"],a:1,
+ e:["A /24 provides 254 usable hosts, wasting addresses on a two-host link.",
+    "A /30 provides 4 addresses, 2 of which are usable hosts - exactly enough for a point-to-point link and the most address-efficient standard choice.",
+    "A /29 gives 6 usable hosts, more than needed for a point-to-point link.",
+    "A /28 gives 14 usable hosts, far more than needed."]},
+{id:"R3Q4",d:1,q:"A host is configured on the 192.168.10.0/24 subnet. What is the broadcast address for this subnet?",
+ o:["192.168.10.0","192.168.10.1","192.168.10.255","255.255.255.0"],a:2,
+ e:["192.168.10.0 is the network (subnet) address, not the broadcast address.",
+    "192.168.10.1 is the first usable host address, often used as the gateway.",
+    "For a /24, the broadcast address has all host bits set to 1, which is 192.168.10.255.",
+    "255.255.255.0 is the subnet mask, not a broadcast address."]},
+{id:"R3Q9",d:3,q:"A DHCP scope covers 192.168.1.1-254, but the administrator has statically assigned 192.168.1.1 through .10 to servers and switches. How should DHCP be configured so it never leases those addresses?",
+ o:["Create reservations for .1 through .10","Create a DHCP exclusion range for .1 through .10","Shorten the lease time","Add an IP helper address"],a:1,
+ e:["Reservations bind specific IPs to specific MACs; they are not the way to keep a static range out of the pool.",
+    "A DHCP exclusion removes the specified addresses from the assignable pool so they are never leased, protecting statically assigned devices.",
+    "Lease time does not prevent the server from leasing those addresses.",
+    "An IP helper relays DHCP across subnets; it does not exclude addresses."]},
+{id:"R3Q23",d:2,q:"Which legacy interior routing protocol selects routes solely by hop count and has a maximum of 15 hops, making it unsuitable for large networks?",
+ o:["OSPF","RIP","BGP","EIGRP"],a:1,
+ e:["OSPF is a link-state protocol using cost based on bandwidth, with no 15-hop limit.",
+    "RIP is a distance-vector protocol that uses hop count as its only metric, with 15 hops maximum (16 means unreachable), limiting it to small networks.",
+    "BGP is a path-vector protocol for routing between autonomous systems.",
+    "EIGRP uses a composite metric and scales to large networks."]},
+{id:"R3Q25",d:2,q:"Two laptops connect directly to each other wirelessly with no access point involved. Which wireless network type is this?",
+ o:["Infrastructure mode","Mesh network","Point-to-point bridge","Ad hoc"],a:3,
+ e:["Infrastructure mode connects clients through an access point.",
+    "A mesh uses multiple interconnected nodes/APs to extend coverage.",
+    "A wireless bridge links two networks via dedicated radios, not two peer laptops.",
+    "An ad hoc network is a direct peer-to-peer wireless connection between devices, with no access point or infrastructure."]},
+{id:"R3Q27",d:3,q:"An email administrator wants to publish which mail servers are authorized to send mail for the domain, to reduce spoofing. SPF data for this is stored in which DNS record type?",
+ o:["MX","TXT","A","PTR"],a:1,
+ e:["MX records specify where to deliver inbound mail, not which servers may send.",
+    "SPF (Sender Policy Framework) data is published in a TXT record listing the servers authorized to send email for a domain.",
+    "An A record maps a name to an IPv4 address.",
+    "A PTR record maps an IP address back to a name."]},
+{id:"R3Q38",d:1,q:"A technician needs the correct connector to terminate a 4-pair Cat 6 Ethernet cable for a computer network drop. Which connector is used?",
+ o:["RJ45","RJ11","BNC","LC"],a:0,
+ e:["RJ45 is the 8-position connector used for 4-pair twisted-pair Ethernet (data) cabling.",
+    "RJ11 is a smaller 6-position connector used for analog telephone lines, not Ethernet.",
+    "BNC is a bayonet coaxial connector.",
+    "LC is a small fiber-optic connector, not for copper Ethernet."]},
+{id:"R3Q40",d:1,q:"Which of the following is a public (internet-routable) IPv4 address rather than a private address?",
+ o:["10.50.4.1","172.16.99.5","72.14.205.10","192.168.4.20"],a:2,
+ e:["10.0.0.0/8 is a private RFC 1918 range.",
+    "172.16.0.0/12 is a private RFC 1918 range.",
+    "72.x.x.x falls outside the RFC 1918 private ranges (10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16) and is a public, internet-routable address.",
+    "192.168.0.0/16 is a private RFC 1918 range."]},
+{id:"R3Q42",d:2,q:"An administrator bonds two adjacent 20 MHz channels into a single 40 MHz channel to increase wireless throughput. Which setting was changed?",
+ o:["Band steering","SSID broadcast","Transmit power","Channel width"],a:3,
+ e:["Band steering moves clients between frequency bands, not channel width.",
+    "SSID broadcast controls whether the network name is advertised.",
+    "Transmit power affects coverage range, not channel width.",
+    "Increasing channel width (for example, 20 MHz to 40 or 80 MHz) bonds channels for higher throughput, though it reduces the number of non-overlapping channels available."]},
+{id:"R3Q46",d:3,q:"A company requires that all of a remote worker's internet traffic - including personal browsing - pass through the corporate VPN so it can be inspected and filtered. Which VPN configuration enforces this?",
+ o:["Split tunnel","Clientless VPN","Full tunnel","Site-to-site VPN"],a:2,
+ e:["A split tunnel sends only corporate-bound traffic through the VPN, letting other traffic exit directly.",
+    "A clientless VPN gives browser access to specific resources, not full traffic routing.",
+    "A full tunnel routes all of the client's traffic through the VPN to the corporate network, allowing complete inspection and policy enforcement.",
+    "A site-to-site VPN connects networks, not an individual worker's full traffic."]},
+{id:"R3Q56",d:1,q:"A small business wants central file storage that users access over the existing LAN using file-sharing protocols like SMB, appearing as shared folders. Which appliance provides this?",
+ o:["Network-attached storage (NAS)","Storage area network (SAN)","Load balancer","Proxy server"],a:0,
+ e:["A NAS provides file-level shared storage over the LAN using protocols such as SMB/NFS, presenting shared folders to users.",
+    "A SAN provides block-level storage over a dedicated network, more complex than file shares over the LAN.",
+    "A load balancer distributes traffic across servers.",
+    "A proxy forwards client web requests."]},
+{id:"R3Q58",d:1,q:"A team defines its network and server configuration in version-controlled text files and templates, then deploys them automatically and repeatably. Which practice is this?",
+ o:["Infrastructure as code (IaC)","Zero trust architecture","SD-WAN","VXLAN"],a:0,
+ e:["IaC describes infrastructure in code and templates (playbooks) kept under version control and applied automatically for consistent, repeatable deployments.",
+    "Zero trust is a security model, not configuration automation.",
+    "SD-WAN manages WAN transport and central policy.",
+    "VXLAN is a Layer 2 overlay encapsulation."]},
+{id:"R3Q60",d:2,q:"Within a single routing protocol, when two paths to the same network exist, which value does the protocol use to choose the better path?",
+ o:["Administrative distance","MAC address","TTL","The metric"],a:3,
+ e:["Administrative distance compares routes from different protocols, not paths within one protocol.",
+    "MAC addresses are Layer 2 and not used for route path selection.",
+    "TTL limits packet hops; it does not select routes.",
+    "A protocol's metric (such as OSPF cost or EIGRP's composite value) ranks paths within that protocol; the lower metric is preferred."]},
+{id:"R3Q61",d:2,q:"A switch port connects to a single end-user PC that should belong to exactly one VLAN with untagged frames. How should the port be configured?",
+ o:["As an access port","As a trunk port","As an EtherChannel","As an SVI"],a:0,
+ e:["An access port carries untagged traffic for a single VLAN, which is the correct mode for a normal end-user device.",
+    "A trunk carries multiple tagged VLANs and is used between switches, not for a single PC.",
+    "An EtherChannel bundles multiple links into one logical link.",
+    "An SVI is a virtual Layer 3 interface for a VLAN, not an end-device access port."]},
+{id:"R3Q62",d:2,q:"A large outdoor area is covered by multiple access points that wirelessly relay traffic among themselves back to a wired gateway, self-healing if one node fails. Which wireless network type is this?",
+ o:["Ad hoc","Infrastructure with a single AP","Point-to-point bridge","Wireless mesh network"],a:3,
+ e:["Ad hoc is a direct peer-to-peer link between two devices, not a self-healing multi-node mesh.",
+    "A single AP cannot provide mesh relaying or self-healing.",
+    "A point-to-point bridge links exactly two locations, not a multi-node mesh.",
+    "A wireless mesh uses multiple interconnected nodes that relay traffic among themselves and can reroute if a node fails, extending coverage without wiring every AP."]},
+{id:"R3Q65",d:3,q:"An SNMP manager polls a switch and is granted read-only access after presenting the shared text value 'public.' What is this shared value called?",
+ o:["A MIB","A trap","An OID","A community string"],a:3,
+ e:["A MIB is the database/definition of manageable objects, not the access secret.",
+    "A trap is an unsolicited alert sent by the agent.",
+    "An OID is the numeric identifier of a specific managed object.",
+    "In SNMPv1/v2c, a community string is the shared secret that grants read or read-write access between the manager and the agent."]},
+{id:"R3Q67",d:4,q:"An employee plugs a personal, unmanaged wireless access point into a wall jack so they can use Wi-Fi, unknowingly creating an unsecured entry point into the corporate network. What is this device?",
+ o:["An evil twin","A honeypot","A rogue access point","A jump box"],a:2,
+ e:["An evil twin impersonates a legitimate SSID to lure clients; here the employee added an unauthorized AP to the wired network.",
+    "A honeypot is a deliberate decoy for attackers.",
+    "A rogue AP is an unauthorized access point connected to the network, creating an unmanaged and often insecure entry point that bypasses security controls.",
+    "A jump box is a hardened administrative access host."]},
+{id:"R3Q73",d:1,q:"An ISP advertises the networks 192.168.0.0/24 through 192.168.3.0/24 as a single summarized route. Which CIDR summary covers exactly these four contiguous /24 networks?",
+ o:["192.168.0.0/23","192.168.0.0/21","192.168.0.0/22","192.168.0.0/24"],a:2,
+ e:["A /23 covers only two /24 networks (.0 and .1), not all four.",
+    "A /21 covers eight /24 networks, more than the four specified.",
+    "A /22 covers four contiguous /24 blocks (192.168.0.0 through 192.168.3.255), summarizing the four networks into one advertisement.",
+    "A /24 is just one of the four networks."]},
+{id:"R3Q75",d:1,q:"In a cloud VPC, an administrator applies a set of stateful inbound and outbound rules to control traffic to and from a group of instances. What is this cloud construct called?",
+ o:["A captive portal","A network security group","A NAT gateway","A content delivery network"],a:1,
+ e:["A captive portal gates guest web access; it is not an instance traffic filter.",
+    "A network security group is a set of stateful allow/deny rules applied to cloud instances to filter inbound and outbound traffic, acting like an instance-level firewall.",
+    "A NAT gateway provides outbound internet access for private instances.",
+    "A CDN caches content at the edge."]}
+];
+const QMAP=Object.fromEntries(Q45.map(q=>[q.id,q]));
+const DOMAINS={1:"1.0 Concepts",2:"2.0 Implementation",3:"3.0 Operations",4:"4.0 Security",5:"5.0 Troubleshooting"};
+
+/* ============ 6. MODULE 1 — SUBNETTING TRAINER ============
+   All IP math is done on unsigned 32-bit integers. The >>>0 trick keeps
+   JavaScript's signed bitwise results unsigned. These six functions are
+   the whole engine — everything else is presentation. */
+// [ipmath-start]
+function ip2int(ip){return ip.split('.').reduce((a,o)=>a*256+(+o),0)>>>0;}
+function int2ip(n){return [n>>>24,(n>>>16)&255,(n>>>8)&255,n&255].join('.');}
+function maskOf(p){return p===0?0:((0xFFFFFFFF<<(32-p))>>>0);}
+function netOf(ipInt,p){return (ipInt&maskOf(p))>>>0;}
+function bcOf(ipInt,p){return (netOf(ipInt,p)|(~maskOf(p)>>>0))>>>0;}
+function hostsOf(p){return Math.pow(2,32-p)-2;}
+// RFC1918: 10.0.0.0/8, 172.16.0.0/12 (0xAC1 = 172.16 >> 20), 192.168.0.0/16
+function isPrivate(ipInt){return (ipInt>>>24)===10||(ipInt>>>20)===0xAC1||(ipInt>>>16)===0xC0A8;}
+// [ipmath-end]
+
+let m1tab='calc', m1p=null, vlq=null, sumq=null;
+function renderM1(app){
+  app.innerHTML=header('Module 1 — Subnetting Trainer',
+   `<b>Analogy:</b> a network is a piece of land; the mask says how it gets subdivided
+    into smaller lots. The <b>broadcast address</b> is the barangay loudspeaker — one
+    announcement reaches every house in that subdivision, and the loudspeaker itself
+    isn't a house anyone can live in (that's why it's not a usable host).`)+
+   `<div class="tabs">
+     <div class="tab ${m1tab==='calc'?'on':''}" data-t="calc">Calc Drill</div>
+     <div class="tab ${m1tab==='vlsm'?'on':''}" data-t="vlsm">VLSM Picker</div>
+     <div class="tab ${m1tab==='sum'?'on':''}" data-t="sum">Summarization</div>
+     <div class="tab ${m1tab==='fire'?'on':''}" data-t="fire">RFC1918 Quick-Fire</div>
+   </div><div id="m1pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m1tab=t.dataset.t;go('m1');});
+  ({calc:m1CalcPane,vlsm:m1VlsmPane,sum:m1SumPane,fire:m1FirePane})[m1tab]();
+}
+
+/* --- 1a. Calc drill: random IP + /24–/30, type all five answers --- */
+function m1NewCalc(){
+  const pools=[[10,rnd(256),rnd(256)],[172,16+rnd(16),rnd(256)],[192,168,rnd(256)]];
+  const o=pools[rnd(3)];
+  m1p={ip:(((o[0]*256+o[1])*256+o[2])*256+rnd(256))>>>0, p:24+rnd(7)};
+}
+function m1CalcPane(){
+  if(!m1p)m1NewCalc();
+  $('#m1pane').innerHTML=`<div class="card">
+    <p class="dim small">Given this host address, work out the rest. Dotted decimal, no spaces.</p>
+    <div class="bigip">${int2ip(m1p.ip)}<span class="warn">/${m1p.p}</span></div>
+    <div class="grid2">
+      <div><label class="f">Network address</label><input class="field mono" id="f_net" autocomplete="off"></div>
+      <div><label class="f">Broadcast address</label><input class="field mono" id="f_bc" autocomplete="off"></div>
+      <div><label class="f">First usable host</label><input class="field mono" id="f_first" autocomplete="off"></div>
+      <div><label class="f">Last usable host</label><input class="field mono" id="f_last" autocomplete="off"></div>
+    </div>
+    <label class="f">Usable host count</label><input class="field mono" id="f_count" style="max-width:160px" autocomplete="off">
+    <p><button class="btn acc" id="m1check">Check</button>
+       <button class="btn" id="m1new">New problem</button></p>
+    <div id="m1fb"></div></div>`;
+  $('#m1check').onclick=m1CalcCheck;
+  $('#m1new').onclick=()=>{m1NewCalc();go('m1');};
+}
+function m1CalcCheck(){
+  const {ip,p}=m1p, net=netOf(ip,p), bc=bcOf(ip,p);
+  const want={f_net:int2ip(net),f_bc:int2ip(bc),f_first:int2ip(net+1),f_last:int2ip(bc-1),f_count:String(hostsOf(p))};
+  let all=true;
+  for(const id in want){
+    const el=$('#'+id), v=el.value.trim();
+    const ok=(id==='f_count')?(+v===hostsOf(p)):(v===want[id]);
+    el.className='field mono '+(ok?'ok':'err');
+    if(!ok)all=false;
+  }
+  rec('m1',all);
+  $('#m1fb').innerHTML= all
+   ? `<p class="good"><b>✔ All five correct.</b> ${int2ip(net)}/${p} → broadcast ${int2ip(bc)}, ${hostsOf(p)} usable hosts. Hit “New problem” and keep the streak going.</p>`
+   : `<p class="bad"><b>✘ Check the red fields.</b> Here's the binary math:</p>`+binViz(ip,p)+answerTable(net,bc,p);
+}
+function binViz(ipInt,p){
+  let bits='';
+  for(let i=0;i<32;i++){
+    if(i>0&&i%8===0)bits+='<span class="octdot">.</span>';
+    bits+=`<span class="bit ${i<p?'n':'h'}">${(ipInt>>>(31-i))&1}</span>`;
+  }
+  return `<div class="card" style="background:var(--panel2)">
+    <div class="binrow">${bits}</div>
+    <p class="small"><span class="bit n">&nbsp;</span> network bits (first ${p}) ·
+       <span class="bit h">&nbsp;</span> host bits (last ${32-p})</p>
+    <p class="small dim">Network = host bits all 0 · Broadcast = host bits all 1 ·
+       Usable hosts = 2<sup>${32-p}</sup> − 2 = ${hostsOf(p)} (subtract the network and broadcast addresses).</p></div>`;
+}
+function answerTable(net,bc,p){
+  return `<table class="adt small">
+   <tr><th>Network</th><td class="mono">${int2ip(net)}</td></tr>
+   <tr><th>First usable</th><td class="mono">${int2ip(net+1)}</td></tr>
+   <tr><th>Last usable</th><td class="mono">${int2ip(bc-1)}</td></tr>
+   <tr><th>Broadcast</th><td class="mono">${int2ip(bc)}</td></tr>
+   <tr><th>Usable hosts</th><td class="mono">${hostsOf(p)}</td></tr></table>`;
+}
+
+/* --- 1b. VLSM picker: smallest mask that fits the host count --- */
+const VLSIZES=[{n:2,p:30},{n:6,p:29},{n:14,p:28},{n:30,p:27},{n:62,p:26},{n:126,p:25}];
+function m1NewVlsm(){
+  const i=rnd(VLSIZES.length), {n,p}=VLSIZES[i];
+  const need=(p===30)?2:(VLSIZES[i-1].n+1+rnd(n-VLSIZES[i-1].n));
+  const scen=(p===30)
+    ? 'A point-to-point WAN link needs exactly 2 usable host addresses.'
+    : ['A branch office segment needs '+need+' devices (PCs, printers, the works).',
+       'A CCTV camera VLAN needs '+need+' addresses for cameras and the NVR.',
+       'A guest Wi-Fi subnet must fit '+need+' simultaneous clients.'][rnd(3)];
+  let cands=[p, p+1<=30?p+1:p-3, p-1, p-2].filter((x,ix,arr)=>arr.indexOf(x)===ix&&x>=23&&x<=30);
+  while(cands.length<4)cands.push(Math.min(...cands)-1);
+  const opts=shuffle(cands);
+  vlq={q:scen+' Using VLSM, which mask is the MOST efficient choice?',
+   o:opts.map(x=>`/${x} (${int2ip(maskOf(x))})`),
+   a:opts.indexOf(p),
+   e:opts.map(x=> x===p
+     ? `A /${p} gives ${hostsOf(p)} usable hosts (2^${32-p} − 2) — the smallest subnet that still fits ${need}. Most efficient = smallest that fits.`
+     : x>p
+     ? `A /${x} gives only ${hostsOf(x)} usable hosts — not enough for ${need}.`
+     : `A /${x} gives ${hostsOf(x)} usable hosts — it fits, but wastes addresses compared with /${p}.`)};
+}
+function m1VlsmPane(){
+  m1NewVlsm();
+  $('#m1pane').innerHTML=`<div class="card"><div id="vlbox"></div>
+    <p><button class="btn" id="vlnext" style="display:none">Next scenario →</button></p></div>`;
+  renderMCQ($('#vlbox'),vlq,ok=>{rec('m1',ok);$('#vlnext').style.display='inline-block';});
+  $('#vlnext').onclick=m1VlsmPane;
+}
+
+/* --- 1c. Route summarization: collapse contiguous /24s into one supernet --- */
+function octBin(n){return n.toString(2).padStart(8,'0');}
+function m1NewSum(){
+  const k=[2,4,8][rnd(3)], sp=24-Math.log2(k);
+  const second=[10,20,50,100,168][rnd(5)];
+  const third=k*rnd(256/k);
+  const nets=[];for(let i=0;i<k;i++)nets.push(`172.${second}.${third+i}.0/24`);
+  const base=`172.${second}.${third}.0`;
+  let cands=[sp,sp-1,sp+1,24].filter((x,ix,a)=>a.indexOf(x)===ix&&x>=20&&x<=24);
+  while(cands.length<4)cands.push(Math.min(...cands)-1);
+  const opts=shuffle(cands);
+  const freeBits=24-sp;
+  sumq={k,sp,third,
+   q:`A router should advertise these ${k} contiguous networks as ONE summary route:\n${nets.join('  ·  ')}\nWhich supernet covers exactly these ${k} networks?`,
+   o:opts.map(x=>`${base}/${x}`),
+   a:opts.indexOf(sp),
+   e:opts.map(x=> x===sp
+     ? `/${sp} frees ${freeBits} bit${freeBits>1?'s':''} of the third octet, covering exactly 2^${freeBits} = ${k} consecutive /24s (.${third} through .${third+k-1}). Third octet: first = ${octBin(third)}, last = ${octBin(third+k-1)} — only the last ${freeBits} bit${freeBits>1?'s':''} differ, and /${sp} masks exactly those.`
+     : x===24
+     ? `/24 is just one of the ${k} networks — it summarizes nothing.`
+     : x<sp
+     ? `/${x} covers ${Math.pow(2,24-x)} consecutive /24s — more than the ${k} listed, so it would wrongly claim networks the router can't actually reach.`
+     : `/${x} covers only ${Math.pow(2,24-x)} /24s — it leaves some of the listed networks out of the summary.`)};
+}
+function m1SumPane(){
+  m1NewSum();
+  $('#m1pane').innerHTML=`<div class="card"><div id="sumbox"></div>
+    <p class="dim small">Rule of thumb: the summary base must sit on a block boundary (third octet divisible by the block size), and the prefix shortens by 1 bit for every doubling of /24s.</p>
+    <p><button class="btn" id="sumnext" style="display:none">Next →</button></p></div>`;
+  renderMCQ($('#sumbox'),sumq,ok=>{rec('m1',ok);$('#sumnext').style.display='inline-block';});
+  $('#sumnext').onclick=m1SumPane;
+}
+
+/* --- 1d. RFC1918 quick-fire: public or private, against the clock --- */
+let fire={on:false,ip:0,streak:0,t:5};
+function fireGen(){
+  const r=rnd(10);let o;
+  if(r<4){ // clearly private
+    o=[[10,rnd(256),rnd(256),1+rnd(254)],[172,16+rnd(16),rnd(256),1+rnd(254)],[192,168,rnd(256),1+rnd(254)]][rnd(3)];
+  }else if(r<7){ // near-miss traps on both sides of the fences
+    o=[[172,15,rnd(256),1+rnd(254)],[172,32,rnd(256),1+rnd(254)],[192,169,rnd(256),1+rnd(254)],
+       [11,rnd(256),rnd(256),1+rnd(254)],[172,16+rnd(16),rnd(256),1+rnd(254)],[192,168,rnd(256),1+rnd(254)]][rnd(6)];
+  }else{ // plain public
+    o=[[8,23,45,52,66,72,98,104,131,151,160,198,200,203][rnd(14)],rnd(256),rnd(256),1+rnd(254)];
+  }
+  return (((o[0]*256+o[1])*256+o[2])*256+o[3])>>>0;
+}
+function fireWhy(ipInt){
+  const a=ipInt>>>24;
+  if((ipInt>>>24)===10)return 'inside 10.0.0.0/8';
+  if((ipInt>>>20)===0xAC1)return 'inside 172.16.0.0/12 (172.16–172.31)';
+  if((ipInt>>>16)===0xC0A8)return 'inside 192.168.0.0/16';
+  if(a===172)return 'looks like 172.x but only 172.16–172.31 is private — this one is outside /12';
+  if(a===192)return 'looks like 192.x but only 192.168.x.x is private';
+  return 'outside all three RFC1918 blocks (10/8, 172.16/12, 192.168/16)';
+}
+function m1FirePane(){
+  fire={on:false,ip:0,streak:0,t:5};
+  $('#m1pane').innerHTML=`<div class="card">
+    <div class="statline">Streak: <b id="fstreak">0</b> · Best ever: <b id="fbest" class="warn">${S.best.rfc}</b>
+      <button class="btn sm acc" id="fstart">Start</button></div>
+    <div class="bigip" id="fip">—</div>
+    <div class="timerbar"><i id="fbar" style="width:0%"></i></div>
+    <p style="text-align:center">
+      <button class="btn" id="fpriv" disabled>Private (RFC1918)</button>
+      <button class="btn" id="fpub" disabled>Public</button></p>
+    <div id="ffb" class="small" style="text-align:center;min-height:40px"></div>
+    <p class="dim small">5 seconds per address. Wrong or too slow resets the streak. Traps included: 172.15 / 172.32 / 192.169 are PUBLIC.</p></div>`;
+  $('#fstart').onclick=fireStart;
+  $('#fpriv').onclick=()=>fireAns(true);
+  $('#fpub').onclick=()=>fireAns(false);
+}
+function fireStart(){
+  fire.on=true;fire.streak=0;
+  $('#fpriv').disabled=$('#fpub').disabled=false;
+  $('#fstart').textContent='Restart';$('#fstreak').textContent='0';
+  fireNext();
+  every(()=>{ if(!fire.on)return;
+    fire.t-=0.1; $('#fbar').style.width=Math.max(0,fire.t/5*100)+'%';
+    if(fire.t<=0)fireAns(null);
+  },100);
+}
+function fireNext(){fire.ip=fireGen();fire.t=5;$('#fip').textContent=int2ip(fire.ip);}
+function fireAns(saidPrivate){
+  if(!fire.on)return;
+  const isP=isPrivate(fire.ip), ok=saidPrivate===isP;
+  rec('m1',ok);
+  if(ok){fire.streak++;$('#ffb').innerHTML=`<span class="good">✔ ${isP?'Private':'Public'} — ${fireWhy(fire.ip)}</span>`;}
+  else{
+    $('#ffb').innerHTML=`<span class="bad">${saidPrivate===null?'⏱ Too slow!':'✘ Wrong!'} ${int2ip(fire.ip)} is <b>${isP?'PRIVATE':'PUBLIC'}</b> — ${fireWhy(fire.ip)}. Streak reset.</span>`;
+    fire.streak=0;
+  }
+  if(fire.streak>S.best.rfc){S.best.rfc=fire.streak;save();$('#fbest').textContent=S.best.rfc;}
+  $('#fstreak').textContent=fire.streak;
+  fireNext();
+}
+
+/* ============ 7. MODULE 2 — DNS RECORD LAB ============
+   A tiny authoritative zone for the fictional domain kapeklub.ph plus a
+   dig-output formatter. The simulator resolves CNAMEs the way real dig
+   does: the alias line is shown, then the target's A/AAAA record. */
+const ZONE={
+ 'kapeklub.ph':{A:['203.0.113.10'],AAAA:['2001:db8:c0fe::10'],MX:['10 mail.kapeklub.ph.'],
+   TXT:['"v=spf1 mx -all"','"klub-verify=8c2f91ab"'],NS:['ns1.kapeklub.ph.','ns2.kapeklub.ph.'],
+   SOA:['ns1.kapeklub.ph. admin.kapeklub.ph. 2026061301 7200 3600 1209600 86400']},
+ 'www.kapeklub.ph':{CNAME:['kapeklub.ph.']},
+ 'tindahan.kapeklub.ph':{CNAME:['kapeklub.ph.']},
+ 'mail.kapeklub.ph':{A:['203.0.113.25'],AAAA:['2001:db8:c0fe::25']},
+ 'ns1.kapeklub.ph':{A:['203.0.113.53']},
+ 'ns2.kapeklub.ph':{A:['203.0.113.54']}
+};
+const PTRMAP={'203.0.113.10':'kapeklub.ph.','203.0.113.25':'mail.kapeklub.ph.',
+ '203.0.113.53':'ns1.kapeklub.ph.','203.0.113.54':'ns2.kapeklub.ph.'};
+const RRTYPES=['A','AAAA','CNAME','MX','PTR','TXT','NS','SOA'];
+
+let m2tab='term';
+function renderM2(app){
+  app.innerHTML=header('Module 2 — DNS Record Lab',
+   `<b>Analogy:</b> a DNS zone is the directory board in a condo lobby. <b>A</b>/<b>AAAA</b>
+    list a name's unit number (IP). A <b>CNAME</b> is a "see unit 4B" note — it points at
+    another <i>name</i>, never directly at a room number. <b>PTR</b> is the reverse board:
+    given a unit number, who lives there?`)+
+   `<div class="tabs">
+     <div class="tab ${m2tab==='term'?'on':''}" data-t="term">dig Terminal</div>
+     <div class="tab ${m2tab==='match'?'on':''}" data-t="match">Record Matching</div>
+   </div><div id="m2pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m2tab=t.dataset.t;go('m2');});
+  (m2tab==='term'?m2TermPane:m2MatchPane)();
+}
+function m2TermPane(){
+  $('#m2pane').innerHTML=`<div class="card">
+    <p class="dim small">A simulated resolver, authoritative for <b class="mono">kapeklub.ph</b>.
+    Try: <kbd>dig A kapeklub.ph</kbd> · <kbd>dig MX kapeklub.ph</kbd> · <kbd>dig TXT kapeklub.ph</kbd> ·
+    <kbd>dig A www.kapeklub.ph</kbd> (watch the CNAME chase) · <kbd>dig -x 203.0.113.25</kbd> ·
+    <kbd>help</kbd></p>
+    <div class="term" id="termOut"><span class="hdr">SimDig 9.18 — fictional zone loaded. Type help for commands.</span>
+</div>
+    <div class="termline"><span>student@lab:~$</span><input id="termIn" autocomplete="off" spellcheck="false"></div></div>`;
+  const inp=$('#termIn');
+  inp.focus();
+  inp.onkeydown=e=>{
+    if(e.key!=='Enter')return;
+    const cmd=inp.value.trim(); inp.value='';
+    if(!cmd)return;
+    termPrint(`<span class="cmd">student@lab:~$ ${esc(cmd)}</span>\n`);
+    digRun(cmd);
+  };
+}
+function termPrint(html){const t=$('#termOut');t.innerHTML+=html;t.scrollTop=t.scrollHeight;}
+function digRun(cmd){
+  const tok=cmd.split(/\s+/);
+  const c0=tok[0].toLowerCase();
+  if(c0==='clear'){$('#termOut').innerHTML='';return;}
+  if(c0==='help'){
+    termPrint(`<span class="hdr">Commands:
+  dig &lt;TYPE&gt; &lt;name&gt;     query a record (TYPE: ${RRTYPES.join(' ')})
+  dig &lt;name&gt;            defaults to an A query
+  dig -x &lt;ip&gt;           reverse (PTR) lookup
+  clear                 wipe the screen
+Names in this zone: kapeklub.ph, www, tindahan, mail, ns1, ns2 (.kapeklub.ph)
+IPs with PTR records: 203.0.113.10 .25 .53 .54</span>\n`);
+    return;
+  }
+  if(c0!=='dig'){termPrint(`<span class="hdr">command not found: ${esc(tok[0])} — this lab only speaks dig (and help/clear)</span>\n`);return;}
+  // reverse lookup: dig -x <ip>
+  if(tok[1]==='-x'){
+    const ip=(tok[2]||'').replace(/\.$/,'');
+    if(!/^\d+\.\d+\.\d+\.\d+$/.test(ip)){termPrint(`<span class="hdr">usage: dig -x &lt;ipv4&gt;</span>\n`);return;}
+    const rev=ip.split('.').reverse().join('.')+'.in-addr.arpa.';
+    const target=PTRMAP[ip];
+    digOut('PTR',rev,target?[[rev,'PTR',target]]:[],target?'NOERROR':'NXDOMAIN');
+    return;
+  }
+  // forward: figure out which token is the type and which is the name
+  let type='A',name='';
+  for(const t of tok.slice(1)){
+    if(RRTYPES.includes(t.toUpperCase()))type=t.toUpperCase();
+    else name=t.replace(/\.$/,'').toLowerCase();
+  }
+  if(!name){termPrint(`<span class="hdr">usage: dig &lt;TYPE&gt; &lt;name&gt;</span>\n`);return;}
+  if(type==='PTR'){termPrint(`<span class="hdr">tip: reverse lookups use  dig -x &lt;ip&gt;  — dig builds the .in-addr.arpa name for you</span>\n`);return;}
+  const rrs=ZONE[name];
+  if(!rrs){digOut(type,name+'.',[],'NXDOMAIN');return;}
+  const ans=[];
+  if(rrs.CNAME&&type!=='CNAME'){
+    ans.push([name+'.','CNAME',rrs.CNAME[0]]);            // alias first…
+    const tgt=rrs.CNAME[0].replace(/\.$/,'');
+    (ZONE[tgt]&&ZONE[tgt][type]||[]).forEach(v=>ans.push([tgt+'.',type,v])); // …then the target's record
+  }else{
+    (rrs[type]||[]).forEach(v=>ans.push([name+'.',type,v]));
+  }
+  digOut(type,name+'.',ans,'NOERROR');
+}
+function digOut(type,qname,answers,status){
+  let s=`<span class="hdr">; &lt;&lt;&gt;&gt; SimDig 9.18 &lt;&lt;&gt;&gt; ${esc(type)} ${esc(qname)}
+;; status: ${status}, ANSWER: ${answers.length}</span>
+;; QUESTION SECTION:
+;${esc(qname.padEnd(28))} IN  ${esc(type)}
+`;
+  if(answers.length){
+    s+=`\n;; ANSWER SECTION:\n`;
+    answers.forEach(a=>{s+=`${esc(a[0].padEnd(28))} 3600  IN  ${esc(a[1].padEnd(6))} ${esc(a[2])}\n`;});
+  }else{
+    s+=`\n;; ${status==='NXDOMAIN'?'that name does not exist in this zone':'the name exists but has no '+esc(type)+' record'}\n`;
+  }
+  s+=`<span class="hdr">;; Query time: ${3+rnd(40)} msec</span>\n\n`;
+  termPrint(s);
+}
+
+/* --- 2b. Scenario → record type matching --- */
+const DNS_SCEN=[
+ {s:'A mail server does a reverse lookup on a connecting IP to find its hostname before accepting mail.',a:'PTR',w:'PTR maps IP → name (reverse). It lives in the in-addr.arpa tree.'},
+ {s:'"www.kapeklub.ph" should follow wherever "kapeklub.ph" points, without repeating the IP anywhere.',a:'CNAME',w:'CNAME aliases one name to another NAME — change the target once, every alias follows.'},
+ {s:'Publish which servers are allowed to SEND email for the domain (SPF), to fight spoofing.',a:'TXT',w:'SPF/DKIM/verification strings all ride in TXT records — arbitrary text attached to a name.'},
+ {s:'Other mail servers need to know where to DELIVER mail addressed to @kapeklub.ph.',a:'MX',w:'MX = mail exchanger: which host receives inbound mail, with a priority number.'},
+ {s:'A browser needs the IPv4 address for a hostname.',a:'A',w:'A = name → IPv4. The bread-and-butter forward lookup.'},
+ {s:'A dual-stack client wants the IPv6 address of a host.',a:'AAAA',w:'AAAA = name → IPv6 (four times wider than an A record, hence 4 As).'},
+ {s:'A resolver needs to know which name servers are authoritative for the zone.',a:'NS',w:'NS lists the zone’s authoritative name servers.'},
+ {s:'You need the zone’s serial number and refresh timers to debug replication between name servers.',a:'SOA',w:'SOA = Start of Authority: primary NS, admin contact, serial, refresh/retry/expire timers.'},
+ {s:'A SaaS vendor says: "prove you own the domain by publishing the string klub-verify=8c2f91ab".',a:'TXT',w:'Domain-verification strings go in TXT — same record type as SPF.'},
+ {s:'You changed a server’s IP and every alias pointing at its name updated automatically. Which record made the aliases possible?',a:'CNAME',w:'That’s the point of CNAME: aliases chase the canonical name, never a hard-coded IP.'}
+];
+let m2si=0,m2order=null;
+function m2MatchPane(){
+  if(!m2order)m2order=shuffle(DNS_SCEN.map((_,i)=>i));
+  const sc=DNS_SCEN[m2order[m2si%m2order.length]];
+  $('#m2pane').innerHTML=`<div class="card">
+    <p class="dim small">Scenario ${m2si%m2order.length+1} of ${m2order.length} — click the record type.</p>
+    <p class="q">${esc(sc.s)}</p>
+    <div class="pillrow">${RRTYPES.map(r=>`<div class="pill" data-r="${r}">${r}</div>`).join('')}</div>
+    <div id="m2fb" style="min-height:48px"></div>
+    <button class="btn" id="m2next" style="display:none">Next scenario →</button></div>`;
+  $$('.pill').forEach(p=>p.onclick=()=>{
+    if($('#m2next').style.display!=='none')return;
+    const ok=p.dataset.r===sc.a;
+    p.classList.add('on');
+    rec('m2',ok);
+    $('#m2fb').innerHTML=ok
+      ? `<p class="good"><b>✔ ${sc.a}.</b> ${esc(sc.w)}</p>`
+      : `<p class="bad"><b>✘ It's ${sc.a}, not ${p.dataset.r}.</b> ${esc(sc.w)}</p>`;
+    $('#m2next').style.display='inline-block';
+  });
+  $('#m2next').onclick=()=>{m2si++;m2MatchPane();};
+}
+
+/* ============ 8. MODULE 3 — ROUTING: AD vs METRIC ============
+   The exam trap: AD picks between SOURCES (protocols), metric picks
+   between PATHS within one source. The battle generator deliberately
+   gives the losing protocol a tempting lower metric most of the time. */
+const ADTAB=[['Connected',0],['Static',1],['eBGP',20],['OSPF',110],['RIP',120]];
+const ADOF=Object.fromEntries(ADTAB);
+let m3tab='battle', battle=null, m3qi=0;
+function renderM3(app){
+  app.innerHTML=header('Module 3 — Routing: AD vs Metric',
+   `<b>Analogy:</b> <b>AD</b> = which news source you trust more (a static route is dad's
+    first-hand word, RIP is neighborhood chismis). Only once you've picked the source does
+    <b>metric</b> matter: of the roads that source suggests, which is shorter?`)+
+   `<div class="tabs">
+     <div class="tab ${m3tab==='battle'?'on':''}" data-t="battle">Route Battle</div>
+     <div class="tab ${m3tab==='ad'?'on':''}" data-t="ad">AD Table Drill</div>
+     <div class="tab ${m3tab==='id'?'on':''}" data-t="id">Protocol ID</div>
+   </div><div id="m3pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m3tab=t.dataset.t;go('m3');});
+  ({battle:m3BattlePane,ad:m3AdPane,id:m3IdPane})[m3tab]();
+}
+function battleGen(){
+  const prefix=`10.${rnd(200)+1}.0.0/16`;
+  if(rnd(3)===0){ // same protocol → METRIC decides
+    const proto=rnd(2)?'OSPF':'RIP', unit=proto==='RIP'?'hop count':'cost';
+    let a=proto==='RIP'?1+rnd(10):5+rnd(60), b;
+    do{b=proto==='RIP'?1+rnd(10):5+rnd(60);}while(b===a);
+    battle={mode:'metric',prefix,unit,
+      cards:[{src:proto,ad:ADOF[proto],m:a,unit},{src:proto,ad:ADOF[proto],m:b,unit}],
+      win:a<b?0:1};
+  }else{ // different sources → AD decides, metrics are bait
+    const pair=shuffle(ADTAB.slice(1)).slice(0,2); // skip Connected (it would be a giveaway)
+    const lo=pair[0][1]<pair[1][1]?0:1;
+    const mk=s=>s==='RIP'?{m:1+rnd(10),unit:'hop count'}:s==='OSPF'?{m:5+rnd(60),unit:'cost'}:s==='eBGP'?{m:1+rnd(5),unit:'AS-path length'}:{m:0,unit:'metric'};
+    const cards=pair.map(p=>({src:p[0],ad:p[1],...mk(p[0])}));
+    if(rnd(10)<7){cards[lo].m=Math.max(cards[lo].m,cards[1-lo].m+1+rnd(20));} // bait: winner gets the UGLIER metric
+    battle={mode:'ad',prefix,cards,win:lo};
+  }
+}
+function m3BattlePane(){
+  battleGen();
+  const b=battle;
+  $('#m3pane').innerHTML=`<div class="card">
+    <p class="q">Two candidate routes to <span class="mono warn">${b.prefix}</span>. Which one does the router install?</p>
+    <div class="grid2">${b.cards.map((c,i)=>`
+      <button class="opt" style="text-align:center" data-i="${i}">
+        <b style="font-size:18px">${c.src}</b><br>
+        <span class="dim">AD ${c.ad}${c.unit!=='metric'?` · ${c.unit} ${c.m}`:''}</span>
+      </button>`).join('')}</div>
+    <div id="m3fb"></div>
+    <button class="btn" id="m3again" style="display:none">Next battle →</button></div>`;
+  $$('#m3pane .opt').forEach(btn=>btn.onclick=()=>{
+    if($('#m3again').style.display!=='none')return;
+    const i=+btn.dataset.i, ok=i===b.win, w=b.cards[b.win], l=b.cards[1-b.win];
+    btn.classList.add(ok?'right':'wrong');
+    $$('#m3pane .opt')[b.win].classList.add('right');
+    rec('m3',ok);
+    $('#m3fb').innerHTML= b.mode==='ad'
+     ? `<p class="${ok?'good':'bad'}"><b>${ok?'✔':'✘'} ${w.src} wins.</b> Different sources → compare <b>administrative distance</b>: ${w.src} (AD ${w.ad}) beats ${l.src} (AD ${l.ad}). ${w.m>l.m?`Note the bait: ${l.src}'s metric looked better (${l.m} vs ${w.m}) — irrelevant, because metrics are never compared ACROSS protocols.`:'The metric never enters a cross-protocol comparison.'}</p>`
+     : `<p class="${ok?'good':'bad'}"><b>${ok?'✔':'✘'} The ${w.unit} ${w.m} path wins.</b> Same protocol (${w.src}, AD ${w.ad} on both) → AD is a tie by definition, so the <b>metric</b> decides: ${w.m} &lt; ${l.m}.</p>`;
+    $('#m3again').style.display='inline-block';
+  });
+  $('#m3again').onclick=m3BattlePane;
+}
+function m3AdPane(){
+  $('#m3pane').innerHTML=`<div class="card">
+    <p class="q">Fill in the administrative distances. Goal: 3 perfect rounds in a row = you know it cold.</p>
+    <table class="adt">${ADTAB.map((r,i)=>`<tr><th>${r[0]}</th><td><input class="field mono" style="width:90px" id="ad${i}" autocomplete="off"></td></tr>`).join('')}</table>
+    <p><button class="btn acc" id="adcheck">Check</button>
+       <button class="btn" id="adretry">Clear & retry</button>
+       <span style="margin-left:14px">Perfect rounds in a row: <b class="warn" id="adrounds">${S.best.ad}</b> / 3</span></p>
+    <div id="adfb"></div></div>`;
+  $('#adcheck').onclick=()=>{
+    let all=true;
+    ADTAB.forEach((r,i)=>{
+      const el=$('#ad'+i), ok=+el.value.trim()===r[1]&&el.value.trim()!=='';
+      el.className='field mono '+(ok?'ok':'err'); if(!ok)all=false;
+    });
+    rec('m3',all);
+    S.best.ad=all?S.best.ad+1:0; save();
+    $('#adrounds').textContent=S.best.ad;
+    $('#adfb').innerHTML= all
+      ? `<p class="good"><b>✔ Perfect.</b> ${S.best.ad>=3?'Three in a row — that’s cold. 🧊':'Clear it and do it again from memory.'}</p>`
+      : `<p class="bad"><b>✘ Streak reset.</b> Connected 0 · Static 1 · eBGP 20 · OSPF 110 · RIP 120. (Lower = more trusted.)</p>`;
+  };
+  $('#adretry').onclick=m3AdPane;
+}
+const M3IDS=['R1Q7','R1Q17','R3Q23','R3Q60'];
+function m3IdPane(){
+  const item=QMAP[M3IDS[m3qi%M3IDS.length]];
+  $('#m3pane').innerHTML=`<div class="card">
+    <p class="dim small">Question ${m3qi%M3IDS.length+1} of ${M3IDS.length} — drawn from the high-miss bank.</p>
+    <div id="m3idbox"></div>
+    <button class="btn" id="m3idnext" style="display:none">Next →</button></div>`;
+  renderMCQ($('#m3idbox'),item,ok=>{rec('m3',ok);updateQ45(item.id,ok);$('#m3idnext').style.display='inline-block';});
+  $('#m3idnext').onclick=()=>{m3qi++;m3IdPane();};
+}
+
+/* ============ 9. MODULE 4 — CLOUD CONCEPTS ============ */
+let m4tab='vpc', m4sel=null, m4placed={edge:null,pub:null,priv:null};
+const M4COMPS=['Internet Gateway','NAT Gateway','Network Security Group'];
+const M4RIGHT={edge:'Internet Gateway',pub:'NAT Gateway',priv:'Network Security Group'};
+function renderM4(app){
+  app.innerHTML=header('Module 4 — Cloud Concepts',
+   `<b>Analogy:</b> <b>IaaS</b> = renting a bare unit (you furnish everything from the OS up) ·
+    <b>PaaS</b> = serviced apartment (just bring your app and data) · <b>SaaS</b> = hotel room
+    (show up and use it). A <b>NAT gateway</b> is a one-way courier: your private servers can
+    send parcels out, but strangers can't walk in.`)+
+   `<div class="tabs">
+     <div class="tab ${m4tab==='vpc'?'on':''}" data-t="vpc">VPC Builder</div>
+     <div class="tab ${m4tab==='matrix'?'on':''}" data-t="matrix">IaaS/PaaS/SaaS Matrix</div>
+     <div class="tab ${m4tab==='drill'?'on':''}" data-t="drill">One-liner Drills</div>
+   </div><div id="m4pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m4tab=t.dataset.t;go('m4');});
+  ({vpc:m4VpcPane,matrix:m4MatrixPane,drill:m4DrillPane})[m4tab]();
+}
+function m4VpcPane(){
+  $('#m4pane').innerHTML=`<div class="card">
+    <p class="dim small">Click a component, then click where it belongs. Then hit Validate.</p>
+    <div class="tray" id="m4tray">${M4COMPS.map(c=>`<div class="comp ${m4placed.edge===c||m4placed.pub===c||m4placed.priv===c?'used':''}" data-c="${c}">${c}</div>`).join('')}</div>
+    <div class="vpcbox"><div class="vpclabel">VPC 10.0.0.0/16</div>
+      <div class="slot ${m4placed.edge?'filled':''}" data-s="edge">${m4placed.edge||'⬚ VPC internet edge — what connects the VPC to the internet?'}</div>
+      <div class="subnet"><h4>Public subnet 10.0.1.0/24 (has a route to the internet)</h4>
+        <div class="slot ${m4placed.pub?'filled':''}" data-s="pub">${m4placed.pub||'⬚ lives here so private subnets can reach OUT'}</div>
+      </div>
+      <div class="subnet"><h4>Private subnet 10.0.2.0/24 — [DB-1] [DB-2] instances, no public IPs</h4>
+        <div class="slot ${m4placed.priv?'filled':''}" data-s="priv">${m4placed.priv||'⬚ stateful firewall rules attached to the instances'}</div>
+      </div>
+    </div>
+    <p><button class="btn acc" id="m4check">Validate</button>
+       <button class="btn" id="m4reset">Reset</button></p>
+    <div id="m4fb"></div><div id="m4follow"></div></div>`;
+  $$('#m4tray .comp').forEach(c=>c.onclick=()=>{
+    m4sel=c.dataset.c;
+    $$('#m4tray .comp').forEach(x=>x.classList.toggle('sel',x.dataset.c===m4sel));
+  });
+  $$('#m4pane .slot').forEach(s=>s.onclick=()=>{
+    if(!m4sel)return;
+    for(const k in m4placed)if(m4placed[k]===m4sel)m4placed[k]=null; // moving a piece
+    m4placed[s.dataset.s]=m4sel; m4sel=null; m4VpcPane();
+  });
+  $('#m4reset').onclick=()=>{m4placed={edge:null,pub:null,priv:null};m4sel=null;m4VpcPane();};
+  $('#m4check').onclick=()=>{
+    let all=true;
+    $$('#m4pane .slot').forEach(s=>{
+      const k=s.dataset.s, ok=m4placed[k]===M4RIGHT[k];
+      s.classList.add(ok?'okv':'badv'); if(!ok)all=false;
+    });
+    rec('m4',all);
+    $('#m4fb').innerHTML= all
+     ? `<p class="good"><b>✔ Textbook VPC.</b> Internet Gateway at the VPC edge (the only door to the internet) · NAT Gateway in the PUBLIC subnet (it needs that door) · NSG attached to the instances (stateful, instance-level firewall).</p>`
+     : `<p class="bad"><b>✘ Not quite.</b> Correct layout: Internet Gateway → VPC edge · NAT Gateway → public subnet · Network Security Group → attached to the instances. The NAT gateway must sit in the public subnet because it relays the private instances' outbound traffic through the internet gateway.</p>`;
+    $('#m4follow').innerHTML='<h3>Follow-up</h3><div id="m4fq"></div>';
+    renderMCQ($('#m4fq'),QMAP['R2Q73'],ok=>{rec('m4',ok);updateQ45('R2Q73',ok);});
+  };
+}
+/* --- 4b. shared-responsibility matrix --- */
+const MROWS=['Hardware & virtualization','Operating system','Runtime / middleware','Application','Your data'];
+const MPAT={'On-premises':'YYYYY','IaaS':'PYYYY','PaaS':'PPPYY','SaaS':'PPPPP'};
+const MNOTE={'On-premises':'You own and run the whole stack — not a cloud model at all.',
+ 'IaaS':'Bare unit: provider hands you virtual hardware; the OS and up is your furniture.',
+ 'PaaS':'Serviced apartment: provider runs hardware, OS, and runtime; you bring app + data.',
+ 'SaaS':'Hotel room: provider runs everything; you just use the application.'};
+let mwho=['P','Y','Y','Y','Y'], mquiz=null;
+function m4MatrixPane(){
+  const sig=mwho.join('');
+  const model=Object.keys(MPAT).find(k=>MPAT[k]===sig);
+  $('#m4pane').innerHTML=`<div class="card">
+    <p class="dim small">Toggle who manages each layer — the app names the model live.${mquiz?` <b class="warn">QUIZ: set the toggles for ${mquiz}, then Check.</b>`:''}</p>
+    ${MROWS.map((r,i)=>`<div class="mrow"><div class="lab">${r}</div>
+      <div class="tog">
+        <button class="p ${mwho[i]==='P'?'on':''}" data-i="${i}" data-v="P">Provider</button>
+        <button class="y ${mwho[i]==='Y'?'on':''}" data-i="${i}" data-v="Y">You</button>
+      </div></div>`).join('')}
+    <div class="card" style="background:var(--panel2);margin-top:14px">
+      ${model?`<b class="warn" style="font-size:18px">${model}</b> — ${MNOTE[model]}`
+             :`<b class="dim">Not a standard model.</b> <span class="small dim">Hint: the provider's share always grows from the BOTTOM of the stack up — there's no model where you run the OS but the provider runs your app.</span>`}
+    </div>
+    <p>${mquiz?`<button class="btn acc" id="mqcheck">Check</button>`:`<button class="btn" id="mqstart">Quiz me</button>`}</p>
+    <div id="mqfb"></div></div>`;
+  $$('#m4pane .tog button').forEach(b=>b.onclick=()=>{mwho[+b.dataset.i]=b.dataset.v;m4MatrixPane();});
+  const qs=$('#mqstart'); if(qs)qs.onclick=()=>{mquiz=['IaaS','PaaS','SaaS'][rnd(3)];mwho=['Y','Y','Y','Y','Y'];m4MatrixPane();};
+  const qc=$('#mqcheck'); if(qc)qc.onclick=()=>{
+    const ok=mwho.join('')===MPAT[mquiz];
+    rec('m4',ok);
+    $('#mqfb').innerHTML=ok?`<p class="good"><b>✔ That's ${mquiz}.</b> ${MNOTE[mquiz]}</p>`
+      :`<p class="bad"><b>✘ Not ${mquiz} yet.</b> ${mquiz} = ${MPAT[mquiz].split('').map((v,i)=>`${MROWS[i].split(' ')[0]}:${v==='P'?'provider':'you'}`).join(' · ')}.</p>`;
+    mquiz=null;
+  };
+}
+const M4IDS=['R3Q75','R3Q58','R2Q9','R1Q9'];
+let m4qi=0;
+function m4DrillPane(){
+  const item=QMAP[M4IDS[m4qi%M4IDS.length]];
+  $('#m4pane').innerHTML=`<div class="card">
+    <p class="dim small">One-liners to anchor: <b>NSG</b> = stateful instance firewall · <b>IaC</b> = version-controlled templates → repeatable deploys.</p>
+    <div id="m4dbox"></div>
+    <button class="btn" id="m4dnext" style="display:none">Next →</button></div>`;
+  renderMCQ($('#m4dbox'),item,ok=>{rec('m4',ok);updateQ45(item.id,ok);$('#m4dnext').style.display='inline-block';});
+  $('#m4dnext').onclick=()=>{m4qi++;m4DrillPane();};
+}
+
+/* ============ 10. MODULE 5 — SWITCHING: VLANs & STP ============
+   The STP sim is a guided stepper over a fixed 3-switch triangle:
+   the topology never changes, only which links are highlighted and the
+   caption — that keeps the SVG dumb and the lesson focused. */
+const STP_STEPS=[
+ {t:'The problem: a loop',links:['a','a','a'],labels:[],
+  d:'Three switches in a triangle = a Layer 2 loop. Ethernet frames have no TTL, so one broadcast would circle forever, multiplying into a broadcast storm that melts the network. Something must break the loop — that is STP\'s entire job.'},
+ {t:'Step 1 — Elect the root bridge',links:['a','a','a'],labels:[],root:true,
+  d:'All switches exchange BPDUs (hello packets). The lowest bridge ID — priority, then MAC address — wins. SW1 becomes the ROOT: the rotunda where the traffic enforcer stands. Everything else orients itself relative to the root.'},
+ {t:'Step 2 — Root ports (RP)',links:['f','f','a'],labels:[{x:175,y:238,t:'RP',c:'good'},{x:525,y:238,t:'RP',c:'good'}],
+  d:'Every NON-root switch marks its lowest-cost port toward the root as its Root Port. SW2 and SW3 each pick their direct link to SW1 (1 hop beats 2 hops via each other).'},
+ {t:'Step 3 — Designated ports (DP)',links:['f','f','a'],labels:[{x:315,y:108,t:'DP',c:'good'},{x:385,y:108,t:'DP',c:'good'},{x:175,y:238,t:'RP',c:'good'},{x:525,y:238,t:'RP',c:'good'},{x:190,y:256,t:'DP',c:'good'}],
+  d:'Every link segment gets exactly one Designated Port — the port responsible for forwarding on that segment. All of the root\'s ports are automatically DPs. On the SW2–SW3 link, SW2 wins DP (lower bridge ID).'},
+ {t:'Step 4 — Block the leftover',links:['f','f','b'],labels:[{x:510,y:256,t:'BLOCKED',c:'bad'}],
+  d:'SW3\'s port toward SW2 ends up with no role — so STP puts it in BLOCKING. The enforcer closes one road in the rotunda: the loop is broken, and SW2↔SW3 traffic now detours through SW1. Redundancy is still there, just on standby.'},
+ {t:'Port states ① Blocking',links:['f','f','b'],labels:[{x:510,y:256,t:'BLOCKING',c:'bad'}],
+  d:'The blocked port still LISTENS to BPDUs (so it knows if the topology changes) but forwards NO user traffic and learns NO MAC addresses. It can sit here for years. Max-age timer: 20 s without BPDUs means something died.'},
+ {t:'② Listening',links:['x','f','t'],labels:[{x:510,y:256,t:'LISTENING',c:'warn'},{x:230,y:150,t:'✕ link failed',c:'bad'}],
+  d:'Disaster drill: the SW1–SW2 link dies. The blocked port must take over — but carefully. In LISTENING it sends/receives BPDUs to verify that unblocking won\'t re-create a loop. Still no user traffic, no MAC learning. ~15 s.'},
+ {t:'③ Learning',links:['x','f','t'],labels:[{x:510,y:256,t:'LEARNING',c:'warn'}],
+  d:'The port now LEARNS MAC addresses to build its forwarding table — but still forwards no user traffic. Forwarding with an empty table would mean flooding everything everywhere. ~15 s.'},
+ {t:'④ Forwarding',links:['x','f','f'],labels:[{x:510,y:256,t:'FORWARDING',c:'good'}],
+  d:'Finally the port forwards user traffic. Total recovery: 30–50 s with classic STP — painfully slow, which is exactly why Rapid STP (RSTP) was invented. Order to memorize: Blocking → Listening → Learning → Forwarding.'}
+];
+const LINKSTYLE={a:'stroke:#5a6f87;stroke-width:3',f:'stroke:var(--good);stroke-width:4',
+ b:'stroke:var(--bad);stroke-width:4;stroke-dasharray:8 6',t:'stroke:var(--warn);stroke-width:4;stroke-dasharray:8 6',
+ x:'stroke:#39455a;stroke-width:3;stroke-dasharray:3 6'};
+let m5tab='stp', stpI=0, stpQi=0;
+function renderM5(app){
+  app.innerHTML=header('Module 5 — Switching: VLANs & STP',
+   `<b>Analogy:</b> <b>STP</b> = traffic enforcers closing one road in a rotunda so cars don't
+    circle forever — the road still exists, it reopens if another one collapses. An
+    <b>access port</b> is a door into one room; a <b>trunk</b> is the hallway between floors,
+    carrying people tagged with their destination.`)+
+   `<div class="tabs">
+     <div class="tab ${m5tab==='stp'?'on':''}" data-t="stp">STP Loop Sim</div>
+     <div class="tab ${m5tab==='vlan'?'on':''}" data-t="vlan">Access vs Trunk Playground</div>
+   </div><div id="m5pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m5tab=t.dataset.t;go('m5');});
+  (m5tab==='stp'?m5StpPane:m5VlanPane)();
+}
+function m5StpPane(){
+  const st=STP_STEPS[stpI];
+  $('#m5pane').innerHTML=`<div class="card">
+    <svg width="700" height="300" viewBox="0 0 700 300">
+      <line x1="350" y1="88" x2="150" y2="252" style="${LINKSTYLE[st.links[0]]}"/>
+      <line x1="350" y1="88" x2="550" y2="252" style="${LINKSTYLE[st.links[1]]}"/>
+      <line x1="150" y1="270" x2="550" y2="270" style="${LINKSTYLE[st.links[2]]}"/>
+      <rect x="305" y="52" width="90" height="36" rx="8" fill="${st.root?'var(--warn)':'var(--panel2)'}" stroke="var(--acc)"/>
+      <text x="350" y="75" text-anchor="middle" style="font-weight:700;${st.root?'fill:#04141f':''}">SW1${st.root||stpI>0?' ★':''}</text>
+      <rect x="105" y="252" width="90" height="36" rx="8" fill="var(--panel2)" stroke="var(--acc)"/>
+      <text x="150" y="275" text-anchor="middle" style="font-weight:700">SW2</text>
+      <rect x="505" y="252" width="90" height="36" rx="8" fill="var(--panel2)" stroke="var(--acc)"/>
+      <text x="550" y="275" text-anchor="middle" style="font-weight:700">SW3</text>
+      ${st.labels.map(l=>`<text x="${l.x}" y="${l.y}" text-anchor="middle" style="font-size:12px;font-weight:700;fill:var(--${l.c})">${l.t}</text>`).join('')}
+      ${stpI===0?'<text x="350" y="190" text-anchor="middle" style="fill:var(--bad);font-size:13px">⚠ broadcast storm potential: frames loop forever</text>':''}
+    </svg>
+    <h3 style="margin-top:0">${stpI+1}/${STP_STEPS.length} — ${st.t}</h3>
+    <p>${st.d}</p>
+    <p><button class="btn" id="stpPrev" ${stpI===0?'disabled':''}>← Back</button>
+       <button class="btn acc" id="stpNext" ${stpI===STP_STEPS.length-1?'disabled':''}>Next →</button></p>
+  </div>
+  <div class="card"><h3 style="margin-top:0">Check yourself</h3><div id="stpq"></div>
+    <button class="btn" id="stpqnext" style="display:none">Another →</button></div>`;
+  $('#stpPrev').onclick=()=>{stpI--;m5StpPane();};
+  $('#stpNext').onclick=()=>{stpI++;m5StpPane();};
+  const item=QMAP[['R2Q79','R3Q61'][stpQi%2]];
+  renderMCQ($('#stpq'),item,ok=>{rec('m5',ok);updateQ45(item.id,ok);$('#stpqnext').style.display='inline-block';});
+  $('#stpqnext').onclick=()=>{stpQi++;m5StpPane();};
+}
+/* --- 5b. access vs trunk: predict whether the ping survives --- */
+let vp={a:10,b:10,link:'trunk'};
+function m5VlanPane(){
+  $('#m5pane').innerHTML=`<div class="card">
+    <svg width="700" height="150" viewBox="0 0 700 150">
+      <line x1="105" y1="75" x2="195" y2="75" style="stroke:#5a6f87;stroke-width:3"/>
+      <line x1="305" y1="75" x2="395" y2="75" style="stroke:${vp.link==='trunk'?'var(--acc)':'var(--warn)'};stroke-width:5"/>
+      <line x1="505" y1="75" x2="595" y2="75" style="stroke:#5a6f87;stroke-width:3"/>
+      <rect x="45" y="55" width="60" height="40" rx="8" fill="var(--panel2)" stroke="var(--dim)"/>
+      <text x="75" y="80" text-anchor="middle" style="font-size:13px">PC-A</text>
+      <text x="75" y="118" text-anchor="middle" style="font-size:12px;fill:var(--warn)">VLAN ${vp.a}</text>
+      <rect x="195" y="55" width="110" height="40" rx="8" fill="var(--panel2)" stroke="var(--acc)"/>
+      <text x="250" y="80" text-anchor="middle" style="font-weight:700">SW1</text>
+      <text x="350" y="55" text-anchor="middle" style="font-size:12px;fill:${vp.link==='trunk'?'var(--acc)':'var(--warn)'}">${vp.link==='trunk'?'TRUNK (tags VLAN 10 + 20)':'ACCESS — VLAN '+vp.link+' only, untagged'}</text>
+      <rect x="395" y="55" width="110" height="40" rx="8" fill="var(--panel2)" stroke="var(--acc)"/>
+      <text x="450" y="80" text-anchor="middle" style="font-weight:700">SW2</text>
+      <rect x="595" y="55" width="60" height="40" rx="8" fill="var(--panel2)" stroke="var(--dim)"/>
+      <text x="625" y="80" text-anchor="middle" style="font-size:13px">PC-B</text>
+      <text x="625" y="118" text-anchor="middle" style="font-size:12px;fill:var(--warn)">VLAN ${vp.b}</text>
+    </svg>
+    <div class="grid2">
+      <div><label class="f">PC-A's switch port (SW1) — access VLAN</label>
+        <div class="pillrow"><div class="pill ${vp.a===10?'on':''}" data-k="a" data-v="10">VLAN 10</div>
+        <div class="pill ${vp.a===20?'on':''}" data-k="a" data-v="20">VLAN 20</div></div></div>
+      <div><label class="f">PC-B's switch port (SW2) — access VLAN</label>
+        <div class="pillrow"><div class="pill ${vp.b===10?'on':''}" data-k="b" data-v="10">VLAN 10</div>
+        <div class="pill ${vp.b===20?'on':''}" data-k="b" data-v="20">VLAN 20</div></div></div>
+    </div>
+    <label class="f">SW1 ↔ SW2 link mode</label>
+    <div class="pillrow">
+      <div class="pill ${vp.link==='trunk'?'on':''}" data-k="link" data-v="trunk">Trunk</div>
+      <div class="pill ${vp.link===10?'on':''}" data-k="link" data-v="10">Access VLAN 10</div>
+      <div class="pill ${vp.link===20?'on':''}" data-k="link" data-v="20">Access VLAN 20</div>
+    </div>
+    <p class="q" style="margin-top:14px">Will a ping from PC-A reach PC-B?</p>
+    <p><button class="btn" id="vpYes">Yes, it gets through</button>
+       <button class="btn" id="vpNo">No, it's dropped</button></p>
+    <div id="vpfb"></div></div>`;
+  $$('#m5pane .pill').forEach(p=>p.onclick=()=>{
+    const k=p.dataset.k, v=p.dataset.v==='trunk'?'trunk':+p.dataset.v;
+    vp[k]=v; m5VlanPane();
+  });
+  const succeeds = vp.a===vp.b && (vp.link==='trunk'||vp.link===vp.a);
+  const why = vp.a!==vp.b
+    ? `PC-A is in VLAN ${vp.a}, PC-B in VLAN ${vp.b} — different VLANs are different broadcast domains (different rooms). With no router/SVI in this lab, the ping can never cross.`
+    : (vp.link==='trunk'
+      ? `Same VLAN end to end, and the trunk carries VLAN ${vp.a} tagged across the hallway. Delivered.`
+      : (vp.link===vp.a
+        ? `Same VLAN end to end, and the inter-switch link happens to be an access port in that same VLAN ${vp.a} — it works, but only for this one VLAN (that's why switches use trunks).`
+        : `Both PCs sit in VLAN ${vp.a}, but the inter-switch link is an access port for VLAN ${vp.link} only — frames from VLAN ${vp.a} are dropped at the hallway door.`));
+  const judge=ans=>{
+    const ok=ans===succeeds;
+    rec('m5',ok);
+    $('#vpfb').innerHTML=`<p class="${ok?'good':'bad'}"><b>${ok?'✔ Called it.':'✘ Wrong call.'}</b>
+      The ping ${succeeds?'<b class="good">succeeds</b>':'<b class="bad">fails</b>'}. ${why}</p>`;
+  };
+  $('#vpYes').onclick=()=>judge(true);
+  $('#vpNo').onclick=()=>judge(false);
+}
+
+/* ============ 11. MODULE 6 — WIRELESS ============
+   The channel spectrum is an SVG; each AP is a draggable circle whose
+   20/40 MHz energy is drawn as a parabola. Overlap rule of thumb:
+   20 MHz needs >= 5 channels of separation (hence 1/6/11),
+   40 MHz needs >= 9 (hence at most two APs can ever coexist). */
+let wifi={aps:[1,6,9],w:20,drag:-1};
+const CHX=c=>50+(c-1)*51;
+function renderM6(app){
+  app.innerHTML=header('Module 6 — Wireless',
+   `<b>Analogy:</b> 2.4 GHz is a narrow street where only three jeepneys — channels
+    <b>1, 6, 11</b> — can pass abreast without scraping paint. Switching to 40 MHz is
+    sending a wide-load truck down the same street: faster for you, but now almost
+    nobody else fits.`)+
+   `<div class="card">
+    <p class="dim small">Drag the AP circles onto channels. Goal: zero overlap. Then flip to 40 MHz and watch the street shrink.</p>
+    <div class="pillrow">
+      <div class="pill ${wifi.w===20?'on':''}" id="w20">20 MHz</div>
+      <div class="pill ${wifi.w===40?'on':''}" id="w40">40 MHz</div>
+    </div>
+    <svg id="wsvg" width="700" height="232" viewBox="0 0 700 232" style="touch-action:none"></svg>
+    <div id="wstatus"></div></div>
+   <div class="card"><h3 style="margin-top:0">Scenario cards</h3><div id="w6q"></div>
+    <button class="btn" id="w6next" style="display:none">Next →</button></div>`;
+  $('#w20').onclick=()=>{wifi.w=20;go('m6');};
+  $('#w40').onclick=()=>{wifi.w=40;go('m6');};
+  wifiDraw();
+  const svg=$('#wsvg');
+  svg.onpointerdown=e=>{
+    let best=-1,bd=40;
+    wifi.aps.forEach((c,i)=>{const d=Math.abs(e.offsetX-CHX(c));if(d<bd){bd=d;best=i;}});
+    if(best>=0){wifi.drag=best;svg.setPointerCapture(e.pointerId);}
+  };
+  svg.onpointermove=e=>{
+    if(wifi.drag<0)return;
+    const ch=Math.max(1,Math.min(13,Math.round((e.offsetX-50)/51)+1));
+    if(ch!==wifi.aps[wifi.drag]){wifi.aps[wifi.drag]=ch;wifiDraw();}
+  };
+  svg.onpointerup=()=>{wifi.drag=-1;};
+  m6Quiz();
+}
+function wifiDraw(){
+  const w=wifi.w, half=(w===20?2.4:4.6)*51, minSep=w===20?5:9;
+  const conflicts=[];
+  for(let i=0;i<3;i++)for(let j=i+1;j<3;j++)
+    if(Math.abs(wifi.aps[i]-wifi.aps[j])<minSep)conflicts.push([i,j]);
+  const bad=new Set(conflicts.flat());
+  let s='<line x1="30" y1="190" x2="680" y2="190" style="stroke:var(--line);stroke-width:2"/>';
+  for(let c=1;c<=13;c++){
+    const na=c>11;
+    s+=`<line x1="${CHX(c)}" y1="186" x2="${CHX(c)}" y2="194" style="stroke:var(--line)"/>
+        <text x="${CHX(c)}" y="212" text-anchor="middle" style="font-size:12px;${na?'fill:#54657d':''}">${c}</text>`;
+  }
+  s+='<text x="680" y="228" text-anchor="end" style="font-size:11px;fill:#54657d">12–13: not used in North America</text>';
+  wifi.aps.forEach((c,i)=>{
+    const x=CHX(c), col=bad.has(i)?'var(--bad)':'var(--good)';
+    s+=`<path d="M ${x-half} 188 Q ${x} 42 ${x+half} 188" fill="${col}" fill-opacity="0.12" stroke="${col}" stroke-width="2"/>
+        <circle cx="${x}" cy="66" r="14" fill="${col}" style="cursor:grab"/>
+        <text x="${x}" y="70" text-anchor="middle" style="font-size:11px;fill:#04141f;font-weight:700;pointer-events:none">AP${i+1}</text>
+        <text x="${x}" y="38" text-anchor="middle" style="font-size:12px">ch ${c}</text>`;
+  });
+  $('#wsvg').innerHTML=s;
+  const sorted=wifi.aps.slice().sort((a,b)=>a-b).join(',');
+  const overNA=wifi.aps.some(c=>c>11);
+  $('#wstatus').innerHTML= conflicts.length
+   ? `<p class="bad">✘ Overlap: ${conflicts.map(p=>`AP${p[0]+1} ↔ AP${p[1]+1} (ch ${wifi.aps[p[0]]} & ${wifi.aps[p[1]]} — need ≥ ${minSep} apart at ${w} MHz)`).join(' · ')}</p>`
+   : overNA
+   ? `<p class="warn">No overlap, but channels above 11 aren't legal in North America — pull them back.</p>`
+   : (sorted==='1,6,11'&&w===20
+     ? `<p class="good">🏆 <b>1 / 6 / 11 — the textbook answer.</b> The only 3-AP zero-overlap set at 20 MHz.</p>`
+     : `<p class="good">✔ Zero overlap.${w===40?' Notice only TWO 40 MHz APs can ever coexist in 2.4 GHz (e.g. ch 2 and 11) — the wide truck ate the third lane. That\'s the channel-width tradeoff.':' Now try to fit all three with maximum spacing — what set do you land on?'}</p>`);
+}
+const M6EXTRA={q:'Two warehouses 2 km apart need a focused point-to-point wireless link across open air. Which antenna type fits best?',
+ o:['Omnidirectional','Parabolic dish','Rubber-duck omni on the AP','Ceiling-mount omnidirectional'],a:1,
+ e:['Omnis radiate in all directions — energy is wasted everywhere except toward the far building.',
+    'A parabolic dish focuses the beam tightly for long point-to-point shots — a flashlight reflector for radio.',
+    'Rubber-duck antennas are short-range omnidirectionals.',
+    'Ceiling omnis cover the room below them, not a 2 km shot.']};
+let m6qi=0;
+function m6Quiz(){
+  const list=['R1Q3','R2Q39','R3Q25','R3Q42','R3Q62'].map(id=>QMAP[id]).concat([M6EXTRA]);
+  const item=list[m6qi%list.length];
+  renderMCQ($('#w6q'),item,ok=>{
+    rec('m6',ok); if(item.id)updateQ45(item.id,ok);
+    $('#w6next').style.display='inline-block';
+  });
+  $('#w6next').onclick=()=>{m6qi++;$('#w6next').style.display='none';m6Quiz();};
+}
+
+/* ============ 12. MODULE 7 — OPS GRAB BAG ============
+   One flashcard engine (flip + self-grade; missed cards are re-queued
+   3 cards later, like the sari-sari store ledger — unpaid items keep
+   reappearing), plus two hands-on widgets: a DHCP scope painter and
+   the 7-step methodology reorder. */
+const CARDS=[
+ {c:'DHCP',f:'DHCP scope',b:'The pool of addresses a DHCP server may hand out on a subnet (e.g. 192.168.1.100–200), plus options like gateway and DNS servers.'},
+ {c:'DHCP',f:'Exclusion vs reservation',b:'EXCLUSION = IPs inside the scope the server will NEVER lease (protects statically-configured gear). RESERVATION = a specific MAC always receives the same IP via DHCP. Exclusion removes; reservation pins.'},
+ {c:'DHCP',f:'Why exclude (not reserve) for static devices?',b:'Statically configured devices never ask DHCP, so a reservation does nothing for them. You EXCLUDE their range so the server can\'t hand those IPs to someone else and cause a conflict.'},
+ {c:'Monitoring',f:'Flow data (NetFlow / sFlow)',b:'WHO talked to WHOM, when, how much — conversation metadata (IPs, ports, protocol, byte counts). No packet contents. Perfect for traffic patterns.'},
+ {c:'Monitoring',f:'Packet capture vs flow vs syslog vs SNMP',b:'CAPTURE = full contents (tcpdump/Wireshark). FLOW = conversation summaries. SYSLOG = event messages pushed by devices. SNMP = device health metrics, usually polled.'},
+ {c:'Monitoring',f:'SNMP community string · v2c vs v3',b:'Community string = shared plaintext password in v1/v2c ("public" = read, "private" = write). v3 adds real authentication + encryption — that\'s why v3 is preferred.'},
+ {c:'Monitoring',f:'SNMP trap',b:'An unsolicited alert pushed FROM the device agent TO the manager when something happens — the opposite direction from normal polling.'},
+ {c:'DR',f:'RPO',b:'Recovery POINT Objective — how much DATA you can afford to lose, measured back in time. Drives backup frequency. "We can lose at most 1 hour."'},
+ {c:'DR',f:'RTO',b:'Recovery TIME Objective — how fast service must be restored after a failure. Drives your failover design.'},
+ {c:'DR',f:'MTTR vs MTBF',b:'MTTR = Mean Time To Repair (average fix time after a failure). MTBF = Mean Time Between Failures (average reliability of a component).'},
+ {c:'DR',f:'Tabletop vs failover test',b:'TABLETOP = the team talks through the DR plan in a conference room; nothing is touched. FAILOVER/validation test = actually switch production to the DR systems.'},
+ {c:'VPN',f:'Full tunnel vs split tunnel',b:'FULL = ALL traffic (even personal browsing) rides the VPN — inspectable, but slower. SPLIT = only corporate-bound traffic uses the VPN; everything else goes straight out.'},
+ {c:'VPN',f:'When would you pick split tunnel?',b:'To save VPN bandwidth/latency for non-corporate traffic. Tradeoff: the direct traffic is NOT inspected by the company.'},
+ {c:'Security',f:'TACACS+ vs RADIUS',b:'TACACS+: TCP 49, encrypts the WHOLE packet, separates AAA, per-command authorization → device administration. RADIUS: UDP, encrypts only the password, combines auth+authz → network access (Wi-Fi/VPN).'},
+ {c:'Security',f:'Rogue AP vs evil twin',b:'ROGUE AP = any unauthorized AP plugged into the network (even innocently). EVIL TWIN = a rogue AP that impersonates a legitimate SSID to lure clients into connecting.'},
+ {c:'Cabling/Storage',f:'LC connector',b:'Little Connector — small push-pull fiber connector, usually duplex, lives on SFP transceivers.'},
+ {c:'Cabling/Storage',f:'SC connector',b:'Square Connector — bigger push-pull fiber connector ("Stick and Click").'},
+ {c:'Cabling/Storage',f:'ST connector',b:'Bayonet twist-lock fiber connector, older style ("Stick and Twist").'},
+ {c:'Cabling/Storage',f:'RJ45 vs RJ11',b:'RJ45 = 8-position, 4-pair → Ethernet data. RJ11 = 6-position → analog telephone. The phone plug is the skinny one.'},
+ {c:'Cabling/Storage',f:'BNC connector',b:'Bayonet connector for COAX cable — legacy networks, serial links, CCTV. Not fiber, not twisted pair.'},
+ {c:'Cabling/Storage',f:'SAN vs NAS',b:'SAN = BLOCK-level storage over a dedicated network (Fibre Channel / iSCSI); servers see a local disk. NAS = FILE-level storage over the LAN (SMB/NFS); users see a shared folder.'},
+ {c:'Cabling/Storage',f:'VXLAN in one line',b:'Tunnels Layer 2 Ethernet frames inside UDP across a routed Layer 3 network (MAC-in-UDP) — 16 million segments vs VLAN\'s 4096.'}
+];
+const FCATS=['All','DHCP','Monitoring','DR','VPN','Security','Cabling/Storage'];
+let m7tab='cards', fc=null, fcCat='All';
+function renderM7(app){
+  app.innerHTML=header('Module 7 — Ops Grab Bag',
+   `<b>Analogy:</b> this deck works like the sari-sari store utang ledger — anything you
+    miss gets written down and shown to you again a few cards later, until it's paid.`)+
+   `<div class="tabs">
+     <div class="tab ${m7tab==='cards'?'on':''}" data-t="cards">Flashcards</div>
+     <div class="tab ${m7tab==='dhcp'?'on':''}" data-t="dhcp">DHCP Scope Lab</div>
+     <div class="tab ${m7tab==='steps'?'on':''}" data-t="steps">7-Step Reorder</div>
+   </div><div id="m7pane"></div>`;
+  $$('.tab').forEach(t=>t.onclick=()=>{m7tab=t.dataset.t;go('m7');});
+  ({cards:m7CardsPane,dhcp:m7DhcpPane,steps:m7StepsPane})[m7tab]();
+}
+function m7CardsPane(){
+  if(!fc||fc.done){
+    $('#m7pane').innerHTML=`<div class="card">
+      <p>Pick a category (${CARDS.length} cards total):</p>
+      <div class="pillrow">${FCATS.map(c=>`<div class="pill ${c===fcCat?'on':''}" data-c="${c}">${c}</div>`).join('')}</div>
+      <p><button class="btn acc" id="fcgo">Start deck</button></p>
+      ${fc&&fc.done?`<p class="good">Last run: ${fc.first}/${fc.total} right on the first try.</p>`:''}</div>`;
+    $$('#m7pane .pill').forEach(p=>p.onclick=()=>{fcCat=p.dataset.c;m7CardsPane();});
+    $('#fcgo').onclick=()=>{
+      const deck=shuffle(CARDS.filter(c=>fcCat==='All'||c.c===fcCat));
+      fc={deck,i:0,first:0,missed:{},total:deck.length,done:false};
+      m7CardsPane();
+    };
+    return;
+  }
+  if(fc.i>=fc.deck.length){fc.done=true;m7CardsPane();return;}
+  const card=fc.deck[fc.i];
+  $('#m7pane').innerHTML=`<div class="card">
+    <p class="dim small">Card ${fc.i+1} of ${fc.deck.length} — click to flip, then self-grade.</p>
+    <div class="fcard" id="fcard"><div class="fcin">
+      <div class="fface ffront"><span class="fcat">${card.c}</span>${esc(card.f)}</div>
+      <div class="fface fback"><span class="fcat">${card.c}</span><span>${esc(card.b)}</span></div>
+    </div></div>
+    <p style="text-align:center">
+      <button class="btn good" id="fcgot">✔ Got it</button>
+      <button class="btn bad" id="fcmiss">✘ Missed it</button>
+      <button class="btn ghost sm" id="fcquit">End deck</button></p></div>`;
+  $('#fcard').onclick=()=>$('#fcard').classList.toggle('flip');
+  $('#fcgot').onclick=()=>{
+    if(!fc.missed[card.f]){fc.first++;rec('m7',1);}
+    fc.i++;m7CardsPane();
+  };
+  $('#fcmiss').onclick=()=>{
+    if(!fc.missed[card.f]){rec('m7',0);fc.missed[card.f]=1;}
+    fc.deck.splice(Math.min(fc.i+3,fc.deck.length),0,card); // re-queue 3 cards later
+    fc.i++;m7CardsPane();
+  };
+  $('#fcquit').onclick=()=>{fc.done=true;m7CardsPane();};
+}
+/* --- 7b. DHCP scope painter --- */
+let dh=null, dhMode='ex', dhDown=false, dhPaintOn=true;
+function dhNew(){
+  const a=1+rnd(8), b=a+2+rnd(5);
+  let r; do{r=1+rnd(30);}while(r>=a&&r<=b);
+  dh={a,b,r,ex:new Set(),res:null};
+}
+function m7DhcpPane(){
+  if(!dh)dhNew();
+  $('#m7pane').innerHTML=`<div class="card">
+    <p class="q">Scope: 192.168.1.<b>1</b> – .<b>30</b>. Task:
+      <span class="warn">paint an EXCLUSION over .${dh.a}–.${dh.b}</span> (static servers live there), then
+      <span style="color:var(--acc)">pin a RESERVATION on .${dh.r}</span> for the front-desk printer (MAC AA:BB:CC:DD:EE:0F).</p>
+    <div class="pillrow">
+      <div class="pill ${dhMode==='ex'?'on':''}" id="dhEx">🖌 Paint exclusion (drag)</div>
+      <div class="pill ${dhMode==='res'?'on':''}" id="dhRes">📌 Pin reservation (click)</div>
+    </div>
+    <div class="cells" id="dhCells">${Array.from({length:30},(_,k)=>{const n=k+1;
+      return `<div class="cell ${dh.ex.has(n)?'ex':''} ${dh.res===n?'res':''}" data-n="${n}">.${n}</div>`;}).join('')}</div>
+    <p><button class="btn acc" id="dhCheck">Check</button>
+       <button class="btn" id="dhNewBtn">New task</button></p>
+    <div id="dhfb"></div></div>`;
+  $('#dhEx').onclick=()=>{dhMode='ex';m7DhcpPane();};
+  $('#dhRes').onclick=()=>{dhMode='res';m7DhcpPane();};
+  const apply=(cell)=>{
+    const n=+cell.dataset.n;
+    if(dhMode==='res'){
+      if(dh.res!==null){const old=$(`#dhCells .cell[data-n="${dh.res}"]`);old&&old.classList.remove('res');}
+      dh.res=n; dh.ex.delete(n); cell.classList.remove('ex'); cell.classList.add('res');
+    }else{
+      if(dh.res===n)return;
+      if(dhPaintOn){dh.ex.add(n);cell.classList.add('ex');}
+      else{dh.ex.delete(n);cell.classList.remove('ex');}
+    }
+  };
+  $$('#dhCells .cell').forEach(cell=>{
+    cell.onmousedown=e=>{e.preventDefault();dhDown=true;dhPaintOn=!dh.ex.has(+cell.dataset.n);apply(cell);};
+    cell.onmouseenter=()=>{if(dhDown&&dhMode==='ex')apply(cell);};
+  });
+  window.onmouseup=()=>{dhDown=false;};
+  $('#dhCheck').onclick=()=>{
+    let exOk=dh.ex.size===(dh.b-dh.a+1);
+    if(exOk)for(let n=dh.a;n<=dh.b;n++)if(!dh.ex.has(n))exOk=false;
+    const resOk=dh.res===dh.r, all=exOk&&resOk;
+    rec('m7',all);
+    $('#dhfb').innerHTML= all
+     ? `<p class="good"><b>✔ Scope configured.</b> The server now skips .${dh.a}–.${dh.b} entirely (EXCLUSION — those IPs are simply not in the pool), and the printer's MAC always leases .${dh.r} (RESERVATION — pinned, but still served by DHCP). That's the exam distinction.</p>`
+     : `<p class="bad"><b>✘ Not yet.</b> ${exOk?'Exclusion is right.':'Exclusion should cover exactly .'+dh.a+'–.'+dh.b+' — no gaps, no extras.'}
+        ${resOk?'Reservation is right.':'The reservation pin belongs on .'+dh.r+'.'}
+        Remember: exclusion = "never lease these"; reservation = "always lease THIS IP to THIS MAC".</p>`;
+  };
+  $('#dhNewBtn').onclick=()=>{dhNew();m7DhcpPane();};
+}
+/* --- 7c. troubleshooting methodology reorder --- */
+const STEPS7=['Identify the problem','Establish a theory of probable cause','Test the theory to determine the cause',
+ 'Establish a plan of action','Implement the solution (or escalate)','Verify full system functionality','Document findings, actions, and lessons learned'];
+let ord7=null, dragFrom=-1;
+function m7StepsPane(){
+  if(!ord7){do{ord7=shuffle(STEPS7.map((_,i)=>i));}while(ord7.every((v,i)=>v===i));}
+  $('#m7pane').innerHTML=`<div class="card">
+    <p class="q">Drag (or use ▲▼) until the 7 steps are in CompTIA order, then Check.</p>
+    <ul class="steps" id="s7">${ord7.map((si,pos)=>`
+      <li draggable="true" data-pos="${pos}"><span class="dim mono">${pos+1}.</span> ${STEPS7[si]}
+        <span class="mv"><button class="btn sm" data-up="${pos}" ${pos===0?'disabled':''}>▲</button>
+        <button class="btn sm" data-dn="${pos}" ${pos===6?'disabled':''}>▼</button></span></li>`).join('')}</ul>
+    <p><button class="btn acc" id="s7check">Check order</button>
+       <button class="btn" id="s7shuf">Reshuffle</button></p>
+    <div id="s7fb"></div></div>`;
+  $$('#s7 li').forEach(li=>{
+    li.ondragstart=()=>{dragFrom=+li.dataset.pos;};
+    li.ondragover=e=>e.preventDefault();
+    li.ondrop=e=>{e.preventDefault();
+      const to=+li.dataset.pos;
+      const[moved]=ord7.splice(dragFrom,1); ord7.splice(to,0,moved); m7StepsPane();};
+  });
+  $$('#s7 [data-up]').forEach(b=>b.onclick=()=>{const p=+b.dataset.up;[ord7[p-1],ord7[p]]=[ord7[p],ord7[p-1]];m7StepsPane();});
+  $$('#s7 [data-dn]').forEach(b=>b.onclick=()=>{const p=+b.dataset.dn;[ord7[p+1],ord7[p]]=[ord7[p],ord7[p+1]];m7StepsPane();});
+  $('#s7check').onclick=()=>{
+    let all=true;
+    $$('#s7 li').forEach((li,pos)=>{const ok=ord7[pos]===pos;li.classList.add(ok?'right':'wrongpos');if(!ok)all=false;});
+    rec('m7',all);
+    $('#s7fb').innerHTML= all
+     ? `<p class="good"><b>✔ Identify → Theory → Test → Plan → Implement → Verify → Document.</b> Mnemonic: <i>I Tell Tito Pedro It Verifies Documents.</i></p>`
+     : `<p class="bad"><b>✘ Red ones are misplaced.</b> The order is: Identify → Theory → Test → Plan → Implement → Verify → Document. Reshuffle and run it again.</p>`;
+  };
+  $('#s7shuf').onclick=()=>{ord7=null;m7StepsPane();};
+}
+
+/* ============ 13. MODULE 8 — THE 45 (FINAL BOSS) ============
+   Every missed question, exact wording, options shuffled per attempt.
+   A question is "closed" when its current streak hits 2 in a row;
+   missing it reopens it (streak back to 0). The dashboard bar = closed/45. */
+function updateQ45(id,ok){
+  const st=S.q45[id]||(S.q45[id]={s:0,c:false});
+  st.s=ok?st.s+1:0; st.c=st.s>=2; save();
+}
+let run=null, m8dom='all';
+function renderM8(app){
+  const filters=[['all','All 45'],[1,'1.0 ('+Q45.filter(q=>q.d===1).length+')'],[2,'2.0 ('+Q45.filter(q=>q.d===2).length+')'],
+   [3,'3.0 ('+Q45.filter(q=>q.d===3).length+')'],[4,'4.0 ('+Q45.filter(q=>q.d===4).length+')'],
+   [5,'5.0 ('+Q45.filter(q=>q.d===5).length+')'],['open','Still open']];
+  app.innerHTML=header('Module 8 — Mastery Review (The 45)',
+   `<b>House rule:</b> an item is <b>closed</b> only when answered correctly
+    twice in a row. Miss it and it reopens. Clearing all 45 demonstrates mastery
+    of every high-miss item curated from three practice rounds.`)+
+   `<div class="card">
+     <div class="statline"><b style="font-size:19px">${closedCount()}/45 closed</b>
+       <div class="bar" style="max-width:300px"><i style="width:${closedCount()/45*100}%"></i></div></div>
+     <div class="dots">${Q45.map(q=>{const st=S.q45[q.id]||{s:0,c:false};
+       return `<div class="dot ${st.c?'closed':(st.s>0?'s1':'')}" title="${q.id} — ${DOMAINS[q.d]}${st.c?' — closed':st.s>0?' — 1 of 2':''}">${q.id}</div>`;}).join('')}</div>
+     <p class="dim small">Gray = not closed · amber = 1 correct in a row · green = closed.</p>
+     <div class="pillrow">${filters.map(f=>`<div class="pill ${String(m8dom)===String(f[0])?'on':''}" data-d="${f[0]}">${f[1]}</div>`).join('')}</div>
+     <button class="btn acc" id="m8go">Start run</button></div>
+   <div id="m8run"></div>`;
+  $$('#app .pill').forEach(p=>p.onclick=()=>{m8dom=p.dataset.d;go('m8');});
+  $('#m8go').onclick=m8Start;
+}
+function m8Start(){
+  let list=Q45.filter(q=> m8dom==='all'?true: m8dom==='open'?!(S.q45[q.id]&&S.q45[q.id].c): q.d===+m8dom);
+  if(!list.length){$('#m8run').innerHTML='<div class="card good">Nothing left in that filter — every question there is closed. 🎉</div>';return;}
+  run={list:shuffle(list),i:0,right:0};
+  m8Next();
+}
+function m8Next(){
+  if(run.i>=run.list.length){
+    $('#m8run').innerHTML=`<div class="card">
+      <h3 style="margin-top:0">Run complete</h3>
+      <p><b>${run.right}/${run.list.length}</b> correct this run · <b class="good">${closedCount()}/45</b> now closed.</p>
+      <button class="btn acc" onclick="go('m8')">Back to the board</button></div>`;
+    return;
+  }
+  const q=run.list[run.i];
+  $('#m8run').innerHTML=`<div class="card">
+    <p class="dim small">${run.i+1} / ${run.list.length} · <b>${q.id}</b> · ${DOMAINS[q.d]} ·
+      streak ${(S.q45[q.id]||{s:0}).s}/2</p>
+    <div id="m8box"></div>
+    <button class="btn acc" id="m8nextBtn" style="display:none">Next →</button></div>`;
+  $('#m8run').scrollIntoView({behavior:'smooth',block:'start'});
+  renderMCQ($('#m8box'),q,ok=>{
+    if(ok)run.right++;
+    updateQ45(q.id,ok);
+    const st=S.q45[q.id];
+    $('#m8nextBtn').style.display='inline-block';
+    $('#m8nextBtn').textContent= st.c?'Closed! 🔒 Next →':(ok?'1 of 2 — Next →':'Reopened — Next →');
+  });
+  $('#m8nextBtn').onclick=()=>{run.i++;m8Next();};
+}
+
+/* ============ BOOT ============ */
+go('home');
+</script>
+</body>
+</html>
