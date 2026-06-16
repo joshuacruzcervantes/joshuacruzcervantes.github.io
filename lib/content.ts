@@ -37,20 +37,35 @@ export const content = {
   /*  NAVIGATION  —  the links in the top bar (anchor to section ids)    */
   /* ------------------------------------------------------------------ */
   nav: [
-    { label: "About", href: "#about" },
-    { label: "Teaching", href: "#teaching" },
-    { label: "Skills", href: "#skills" },
-    { label: "Projects", href: "#projects" },
-    { label: "Certifications", href: "#certifications" },
-    { label: "Contact", href: "#contact" },
+    { label: "About", href: "/#about" },
+    { label: "Teaching", href: "/#teaching" },
+    { label: "Skills", href: "/#skills" },
+    { label: "Projects", href: "/#projects" },
+    { label: "Labs", href: "/labs/" },
+    { label: "Certifications", href: "/#certifications" },
+    { label: "Contact", href: "/#contact" },
   ],
 
   /* ------------------------------------------------------------------ */
-  /*  LABS  —  interactive trainers / study tools surfaced in the navbar */
-  /*  Add a new entry here and it appears in the "Labs" dropdown.        */
+  /*  LABS  —  the student playground at /labs                           */
+  /*  Each entry becomes a card on the labs page. Add a new lab by       */
+  /*  dropping a self-contained HTML file in /public and appending here. */
   /* ------------------------------------------------------------------ */
+  labsPage: {
+    heading: "Labs Playground",
+    kicker: "Hands-on practice",
+    intro:
+      "Pick a lab and run it in your browser — no sign-in, no installs. Progress saves locally on your device, so you can close the tab and pick up where you left off later.",
+  },
   labs: [
-    { label: "Net+ Trainer (N10-009)", href: "/netplus-trainer.html" },
+    {
+      title: "Network+ N10-009 Trainer",
+      topic: "CompTIA Network+",
+      blurb:
+        "An adaptive single-page trainer covering 45 high-miss concepts across 8 scaffolded modules — subnetting, routing, DNS, cloud, VLANs, wireless, and ops drills. Each item closes when you answer it correctly twice in a row.",
+      tags: ["Network+", "Subnetting", "Routing", "VLANs", "Cloud"],
+      href: "/netplus-trainer.html",
+    },
   ],
 
   /* ------------------------------------------------------------------ */

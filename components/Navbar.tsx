@@ -4,7 +4,7 @@
  * Navbar
  * ------
  * A sticky top navigation bar with:
- *   - Your brand name on the left (clicking it scrolls to the top).
+ *   - Your brand name on the left (clicking it returns to the homepage).
  *   - Section links in the middle (desktop only).
  *   - The theme toggle + a "View CV" button on the right.
  *   - A simple hamburger menu on mobile.
@@ -12,15 +12,13 @@
  * It becomes a frosted-glass bar with a subtle border once you scroll down a
  * little, so it stays readable over any section.
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { content } from "@/lib/content";
 import ThemeToggle from "./ThemeToggle";
 
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
-  const [labsOpen, setLabsOpen] = useState(false);
-  const labsRef = useRef<HTMLDivElement | null>(null);
 
   // Track scroll position to toggle the frosted-glass background.
   useEffect(() => {
@@ -29,25 +27,6 @@ export default function Navbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // Close the Labs dropdown on outside click or Escape.
-  useEffect(() => {
-    if (!labsOpen) return;
-    const onClick = (e: MouseEvent) => {
-      if (labsRef.current && !labsRef.current.contains(e.target as Node)) {
-        setLabsOpen(false);
-      }
-    };
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setLabsOpen(false);
-    };
-    document.addEventListener("mousedown", onClick);
-    document.addEventListener("keydown", onKey);
-    return () => {
-      document.removeEventListener("mousedown", onClick);
-      document.removeEventListener("keydown", onKey);
-    };
-  }, [labsOpen]);
 
   return (
     <header
@@ -60,7 +39,7 @@ export default function Navbar() {
       <nav className="container-page flex h-16 items-center justify-between">
         {/* Brand / logo */}
         <a
-          href="#top"
+          href="/"
           className="flex items-center gap-2 text-base font-bold tracking-tight text-slate-900 dark:text-white"
         >
           <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 font-mono text-sm text-white">
@@ -86,55 +65,6 @@ export default function Navbar() {
         {/* Right side actions */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
-
-          {/* Labs dropdown (desktop) */}
-          {content.labs.length > 0 ? (
-            <div ref={labsRef} className="relative hidden sm:block">
-              <button
-                type="button"
-                onClick={() => setLabsOpen((v) => !v)}
-                aria-haspopup="menu"
-                aria-expanded={labsOpen}
-                className="inline-flex items-center gap-1 rounded-lg border border-brand-500 px-3 py-2 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10"
-              >
-                Labs
-                <svg
-                  aria-hidden
-                  viewBox="0 0 12 12"
-                  className={`h-3 w-3 transition-transform ${labsOpen ? "rotate-180" : ""}`}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <path d="M3 5l3 3 3-3" />
-                </svg>
-              </button>
-              {labsOpen ? (
-                <ul
-                  role="menu"
-                  className="glass absolute right-0 mt-2 min-w-[14rem] overflow-hidden rounded-lg border border-slate-200/70 py-1 shadow-lg dark:border-slate-800/70"
-                >
-                  {content.labs.map((lab) => (
-                    <li key={lab.href} role="none">
-                      <a
-                        role="menuitem"
-                        href={lab.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setLabsOpen(false)}
-                        className="block px-4 py-2 text-sm text-slate-700 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-200 dark:hover:bg-slate-800 dark:hover:text-white"
-                      >
-                        {lab.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              ) : null}
-            </div>
-          ) : null}
-
           <a
             href={content.hero.ctaPrimary.href}
             download
@@ -170,28 +100,6 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
-            {content.labs.length > 0 ? (
-              <li className="mt-2 border-t border-slate-200/70 pt-2 dark:border-slate-800/70">
-                <p className="px-3 pb-1 text-xs font-semibold uppercase tracking-wide text-slate-500 dark:text-slate-400">
-                  Labs
-                </p>
-                <ul>
-                  {content.labs.map((lab) => (
-                    <li key={lab.href}>
-                      <a
-                        href={lab.href}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={() => setMenuOpen(false)}
-                        className="block rounded-md px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
-                      >
-                        {lab.label}
-                      </a>
-                    </li>
-                  ))}
-                </ul>
-              </li>
-            ) : null}
             <li>
               <a
                 href={content.hero.ctaPrimary.href}
