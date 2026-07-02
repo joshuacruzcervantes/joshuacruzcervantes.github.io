@@ -2,4 +2,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://joshuacruzcervantes.github.io/sitemap.xml
+Sitemap: https://joshuacervantes.online/sitemap.xml

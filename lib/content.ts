@@ -30,7 +30,7 @@ export const content = {
       "IT professional with 6 years of hands-on Support & Operations experience, now teaching networking, security, and systems as an IT instructor.",
     // Used by the logo/brand in the navbar. "Sir Vantes" is the teaching brand.
     brandShort: "Sir Vantes",
-    url: "https://joshuacruzcervantes.github.io", // the live GitHub Pages address
+    url: "https://joshuacervantes.online", // the live site (custom domain on GitHub Pages)
   },
 
   /* ------------------------------------------------------------------ */
@@ -42,6 +42,7 @@ export const content = {
     { label: "Skills", href: "/#skills" },
     { label: "Projects", href: "/#projects" },
     { label: "Labs", href: "/labs/" },
+    { label: "Quiz", href: "/it-path-quiz.html", newTab: true },
     { label: "Certifications", href: "/#certifications" },
     { label: "Contact", href: "/#contact" },
   ],
@@ -67,6 +68,328 @@ export const content = {
       href: "/netplus-trainer.html",
     },
   ],
+
+  /* ------------------------------------------------------------------ */
+  /*  GUIDE  —  the paid PDF sales page at /guide                        */
+  /*                                                                    */
+  /*  This is a MANUAL GCash flow (the site is static and can't verify  */
+  /*  payments). A buyer pays via GCash, sends you the receipt, and you */
+  /*  reply with the PDF. Everything below is editable text.            */
+  /*                                                                    */
+  /*  IMPORTANT: do NOT put the paid PDF in /public — the URL would be  */
+  /*  public and anyone could download it for free. Keep the PDF on     */
+  /*  your computer / Google Drive and send it only after payment.      */
+  /*  (A GCash QR image IS fine to place in /public/guide/.)            */
+  /* ------------------------------------------------------------------ */
+  guidePage: {
+    kicker: "Digital guide for BSIT students",
+    heading: "The Incoming BSIT Survival Guide",
+    subheading:
+      "Everything I wish someone told me before first year — from a 6-year IT pro turned instructor. Written in plain Taglish so it actually makes sense.",
+    // Shown as a badge near the top and again in the payment card.
+    price: "₱99",
+    priceNote: "Student price · One-time payment · Lifetime access · PDF download",
+    format: "PDF · viewable on phone or laptop · yours to keep",
+
+    // "What's inside" — each string becomes a checkmarked line.
+    contentsHeading: "What's inside",
+    contents: [
+      "What BSIT really is — and how it differs from CS and IS",
+      "The subjects you'll face year by year, and which ones actually matter",
+      "Gear you need vs. what you can skip on a student budget",
+      "Free tools & accounts to set up before day one",
+      "How to study tech the right way: labs over lectures",
+      "Certs worth chasing while still in school (A+, Network+, cloud)",
+      "Building a portfolio from year 1 — GitHub, home labs, projects",
+      "Common first-year mistakes and how to dodge them",
+      "IT career paths after BSIT — with real Philippine salary ranges",
+      "My go-to free resources: channels, courses, and communities",
+    ],
+
+    // ---- Sneak peek (blurred preview images) -------------------------
+    // These images live in /public/guide/ and are safe to be public —
+    // the teaser page is blurred so the full text can't be read for free.
+    previewHeading: "Silipin muna",
+    previewNote:
+      "Ito ang cover at unang chapter ng guide. Ang buong 14 na pahina — makukuha mo pagkatapos mong mabili.",
+    coverImage: "/guide/guide-cover.png",
+    peekImage: "/guide/guide-peek.png",
+    peekBadge: "🔒 14 pages · buksan lahat sa ₱99",
+
+    // "Who it's for" — each string becomes a bullet.
+    audienceHeading: "Who it's for",
+    audience: [
+      "Incoming first-year BSIT students",
+      "Senior-high grads still deciding on an IT course",
+      "Parents or guardians helping a student get ready",
+    ],
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  PAYMENT  —  ONE shared GCash checkout for ALL paid products        */
+  /*                                                                    */
+  /*  Manual flow: buyer pays via GCash, sends proof, you send the file.*/
+  /*  Used by both the /shop page and each product page. Edit here ONCE */
+  /*  and it updates everywhere.                                        */
+  /*                                                                    */
+  /*  IMPORTANT: never put a paid file (PDF/video) in /public — the URL */
+  /*  would be public and downloadable for free. Keep paid files on     */
+  /*  your computer / Drive and send them only after payment.           */
+  /* ------------------------------------------------------------------ */
+  payment: {
+    heading: "How to buy (GCash)",
+    intro:
+      "Manual muna tayo: bayad via GCash, send mo ang resibo, ipapadala ko agad ang binili mo. Simple lang.",
+    gcashName: "Joshua C. Cervantes",
+    gcashNumber: "0975 966 0475",
+    // Optional: drop a GCash QR image at /public/guide/gcash-qr.png and set
+    // the path here. Leave as "" to hide the QR box.
+    gcashQr: "",
+    steps: [
+      "Send the exact price to the GCash number above (account name: Joshua C. Cervantes).",
+      "Screenshot your GCash receipt / reference number.",
+      "Message me the screenshot (Messenger or email), and tell me which product you bought + the email to send it to.",
+      "I'll reply with your file/access within 24 hours — usually much faster.",
+    ],
+    messengerLabel: "Send proof on Messenger",
+    // Facebook profile — clicking opens your profile so buyers can message you.
+    messengerHref: "https://www.facebook.com/joshuacruzcervantesx/",
+    emailLabel: "Or email your proof to",
+    email: "joshuacruzcervantes@gmail.com",
+    emailSubject: "GCash proof of payment — Sir Vantes",
+    note: "Not sure yet? Message me first — happy to answer questions before you buy.",
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  SHOP  —  the storefront at /shop (all paid products in one place)  */
+  /*                                                                    */
+  /*  Add a product by appending to `products`. status: "available"     */
+  /*  makes the button link to `href`; "coming-soon" shows a disabled   */
+  /*  badge instead. Leave `image` as "" to show a colored placeholder. */
+  /* ------------------------------------------------------------------ */
+  shop: {
+    navLabel: "Shop",
+    kicker: "Learn with Sir Vantes",
+    heading: "Shop",
+    intro:
+      "Practical guides and courses from a real IT pro — hindi textbook theory, kundi real experience. Pay via GCash, instant access.",
+
+    // ---- Coming-soon interest capture --------------------------------
+    // Each "Coming soon" product shows a button that lets people tell you
+    // they want it — so you know what to build next.
+    //
+    // Paste a form link in `interestUrl` (Google Forms recommended: free,
+    // and responses collect in a Google Sheet you can sort by product).
+    // Put the token PRODUCT anywhere in the link and it's replaced with the
+    // product name, so you can pre-fill "which product" automatically.
+    //
+    // Leave interestUrl as "" and the button falls back to a pre-filled
+    // email to you — so it works even before you make the form.
+    interestUrl:
+      "https://docs.google.com/forms/d/e/1FAIpQLScPQ0WkE2NuTvBATLdnt0NvqnwuDoOIK7fjY-zOBDIGPplw-g/viewform",
+    interestLabel: "Notify me",
+
+    // ---- Free downloads (lead magnets) -------------------------------
+    // Genuinely useful free PDFs that each point to a paid product.
+    // These files ARE meant to be public — they live in /public/free/.
+    freebiesHeading: "Start free",
+    freebiesNote:
+      "Free downloads, no sign-up. Genuinely useful on their own — and the paid versions go deeper.",
+    freebies: [
+      {
+        title: "Subnetting Made Simple",
+        kind: "Free · Networking",
+        blurb:
+          "The block-size method that finally makes subnetting click — with worked examples and quick practice. The topic everyone fears, simplified.",
+        file: "/free/Subnetting-Made-Simple-Free.pdf",
+        leadsTo: "Cheat-Sheet & Practice packs",
+      },
+      {
+        title: "Before You Start BSIT",
+        kind: "Free · For students",
+        blurb:
+          "7 things to set up this summer so you walk into first year already ahead — accounts, tools, and how to study tech.",
+        file: "/free/BSIT-Summer-Head-Start-Free.pdf",
+        leadsTo: "BSIT Survival Guide",
+      },
+      {
+        title: "5 IT Resume Mistakes",
+        kind: "Free · Careers",
+        blurb:
+          "The mistakes that get fresh-grad resumes ignored in seconds — and the simple fix for each, from the hiring side.",
+        file: "/free/5-IT-Resume-Mistakes-Free.pdf",
+        leadsTo: "Resume + LinkedIn Guide",
+      },
+    ],
+
+    products: [
+      {
+        title: "The Incoming BSIT Survival Guide",
+        kind: "PDF Guide",
+        price: "₱99",
+        priceNote: "Student price",
+        blurb:
+          "14-page Taglish guide para sa mga papasok na BSIT — subjects year-by-year, gear, certs, portfolio, at career paths na may totoong sahod sa PH.",
+        tags: ["PDF", "14 pages", "Taglish"],
+        slug: "guide",
+        image: "/guide/guide-cover.png",
+        href: "/guide/",
+        cta: "View & buy",
+        status: "available",
+      },
+      {
+        title: "BSIT Head-Start Video Course",
+        kind: "Video Course",
+        price: "₱999",
+        priceNote: "Lifetime access",
+        blurb:
+          "Step-by-step video lessons — from scratch to 1st year ready. Hands-on labs, walkthroughs, and real-world tips from 6 years of experience.",
+        tags: ["Video", "Lifetime", "Beginner"],
+        slug: "",
+        image: "",
+        href: "",
+        cta: "Coming soon",
+        status: "coming-soon",
+      },
+      {
+        title: "Cert Cheat-Sheet & Reviewer Pack",
+        kind: "Reviewer Pack",
+        price: "₱49",
+        priceNote: "Printable + digital",
+        blurb:
+          "Quick-reference reviewers for your cert exams — subnetting, ports & protocols, and flashcards. Printable and phone-friendly.",
+        tags: ["Reviewer", "Cheat sheet", "Certs"],
+        slug: "cheat-sheet",
+        image: "/shop/cheat-sheet-cover.png",
+        href: "/shop/cheat-sheet/",
+        cta: "View & buy",
+        status: "available",
+      },
+      {
+        title: "Resume + LinkedIn Guide for IT Fresh Grads",
+        kind: "PDF Guide",
+        price: "₱129",
+        priceNote: "PDF + templates",
+        blurb:
+          "How to build an IT resume and LinkedIn profile that actually gets callbacks — with templates and real examples.",
+        tags: ["Resume", "LinkedIn", "Fresh grad"],
+        slug: "resume-linkedin",
+        image: "/shop/resume-linkedin-cover.png",
+        href: "/shop/resume-linkedin/",
+        cta: "View & buy",
+        status: "available",
+      },
+      {
+        title: "IT Cert Practice Exam Pack",
+        kind: "Practice Exams",
+        price: "₱149",
+        priceNote: "50 questions + answers",
+        blurb:
+          "50 practice questions with clear explanations to get you exam-ready for CompTIA A+ and Network+.",
+        tags: ["Practice", "A+", "Network+"],
+        slug: "practice-exams",
+        image: "/shop/practice-exams-cover.png",
+        href: "/shop/practice-exams/",
+        cta: "View & buy",
+        status: "available",
+      },
+      {
+        title: "Guide + Video Course Bundle",
+        kind: "Bundle",
+        price: "₱1,099",
+        priceNote: "Save ₱99",
+        blurb:
+          "The BSIT Survival Guide plus the full video course, bundled together at a lower price than buying both.",
+        tags: ["Bundle", "Best value"],
+        slug: "",
+        image: "",
+        href: "",
+        cta: "Coming soon",
+        status: "coming-soon",
+      },
+      {
+        title: "1-on-1 Mentoring Session",
+        kind: "Mentoring",
+        price: "₱500",
+        priceNote: "Per session",
+        blurb:
+          "A private session with Sir Vantes — mock interview, resume review, or career advice. Book a slot and bring your questions.",
+        tags: ["1-on-1", "Career", "Live"],
+        slug: "",
+        image: "",
+        href: "",
+        cta: "Coming soon",
+        status: "coming-soon",
+      },
+      {
+        title: "Monthly Mentorship Community",
+        kind: "Membership",
+        price: "₱149",
+        priceNote: "Per month",
+        blurb:
+          "Join the community — monthly Q&A, guidance, and support while you study or job-hunt. Cancel anytime.",
+        tags: ["Community", "Discord", "Monthly"],
+        slug: "",
+        image: "",
+        href: "",
+        cta: "Coming soon",
+        status: "coming-soon",
+      },
+    ],
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  PRODUCT DETAILS  —  extra copy for each product's own page         */
+  /*  (/shop/<slug>). Keyed by the product's `slug`. Cover/peek images   */
+  /*  are derived from the slug: /shop/<slug>-cover.png & -peek.png.     */
+  /* ------------------------------------------------------------------ */
+  productDetails: {
+    "cheat-sheet": {
+      subheading:
+        "The tables and facts you keep forgetting — subnetting, ports, OSI, commands, and flashcards. Made to review fast, print, or keep on your phone.",
+      format: "PDF · quick-reference · printable & phone-friendly",
+      contentsHeading: "What's inside",
+      contents: [
+        "Subnetting cheat sheet — mask chart, CIDR → hosts, the magic numbers",
+        "Ports & protocols table (the one everyone gets asked)",
+        "OSI model with an easy mnemonic",
+        "Private & special IP ranges (incl. APIPA & loopback)",
+        "Essential Windows/Linux troubleshooting commands",
+        "Rapid-fire flashcards to test yourself",
+      ],
+      peekBadge: "🔒 Full pack · unlock for ₱49",
+    },
+    "resume-linkedin": {
+      subheading:
+        "How to build an IT resume and LinkedIn profile that actually get interviews — even with no work experience yet. Templates and real before/after examples included.",
+      format: "PDF · guide + fill-in template · examples",
+      contentsHeading: "What's inside",
+      contents: [
+        "The resume structure that gets callbacks (with no experience)",
+        "Bullet formulas — weak vs. strong, with real examples",
+        "How to pass the ATS (resume-scanning software)",
+        "A copy-paste fill-in resume template",
+        "LinkedIn profile optimization (headline, about, skills)",
+        "A pre-apply checklist to run every time",
+      ],
+      peekBadge: "🔒 Full guide · unlock for ₱129",
+    },
+    "practice-exams": {
+      subheading:
+        "50 original practice questions with clear explanations across 8 domains — get exam-ready for CompTIA A+ and Network+ by learning the 'why,' not just the answer.",
+      format: "PDF · 50 questions · answers + explanations",
+      contentsHeading: "What's covered",
+      contents: [
+        "Networking fundamentals & the OSI model",
+        "IP addressing & subnetting (IPv4 + IPv6)",
+        "Ports & protocols",
+        "Routing, switching & VLANs",
+        "Wireless & security basics",
+        "Troubleshooting, tools, hardware & cloud",
+      ],
+      peekBadge: "🔒 All 50 questions · unlock for ₱149",
+    },
+  },
 
   /* ------------------------------------------------------------------ */
   /*  1. HERO                                                            */

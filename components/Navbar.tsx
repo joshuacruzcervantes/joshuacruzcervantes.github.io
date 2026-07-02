@@ -54,6 +54,9 @@ export default function Navbar() {
             <li key={item.href}>
               <a
                 href={item.href}
+                {...("newTab" in item && item.newTab
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
               >
                 {item.label}
@@ -65,6 +68,14 @@ export default function Navbar() {
         {/* Right side actions */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
+          {/* Shop — the single storefront for all paid products (cart) */}
+          <a
+            href="/shop/"
+            className="hidden items-center gap-1.5 rounded-lg border border-brand-500/40 px-3 py-2 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 sm:inline-flex dark:text-brand-400 dark:hover:bg-brand-500/10"
+          >
+            <CartIcon />
+            {content.shop.navLabel}
+          </a>
           <a
             href={content.hero.ctaPrimary.href}
             download
@@ -93,6 +104,9 @@ export default function Navbar() {
               <li key={item.href}>
                 <a
                   href={item.href}
+                  {...("newTab" in item && item.newTab
+                    ? { target: "_blank", rel: "noopener noreferrer" }
+                    : {})}
                   onClick={() => setMenuOpen(false)}
                   className="block rounded-md px-3 py-3 text-sm font-medium text-slate-700 transition hover:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-800"
                 >
@@ -100,6 +114,16 @@ export default function Navbar() {
                 </a>
               </li>
             ))}
+            <li>
+              <a
+                href="/shop/"
+                onClick={() => setMenuOpen(false)}
+                className="mt-1 flex items-center justify-center gap-1.5 rounded-md border border-brand-500/40 px-3 py-3 text-sm font-semibold text-brand-600 dark:text-brand-400"
+              >
+                <CartIcon />
+                {content.shop.navLabel}
+              </a>
+            </li>
             <li>
               <a
                 href={content.hero.ctaPrimary.href}
@@ -114,5 +138,25 @@ export default function Navbar() {
         </div>
       ) : null}
     </header>
+  );
+}
+
+/** Small shopping-cart glyph used on the Shop button. */
+function CartIcon() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-4 w-4"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+    >
+      <circle cx="9" cy="21" r="1" />
+      <circle cx="20" cy="21" r="1" />
+      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+    </svg>
   );
 }

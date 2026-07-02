@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anong IT Path ang Bagay Sa'yo? — Sir Vantes</title>
+<meta name="description" content="Sagutin ang 6 na tanong at alamin kung anong sangay ng IT ang bagay sa'yo — Support, Networking, Security, Data, o Web/Dev. Kasama ang totoong sahod sa Pilipinas.">
+<meta name="og:title" content="Anong IT Path ang Bagay Sa'yo? — Sir Vantes">
+<meta name="og:description" content="6 na tanong. Instant result. Alamin kung saan ka bagay sa IT.">
+<meta name="og:type" content="website">
+<style>
+  /* ============================================================
+     Design tokens mirrored from the main site (Tailwind config +
+     globals.css): light-first, blue brand accent, slate palette,
+     rounded-2xl white cards. Dark mode follows the OS setting.
+     ============================================================ */
+  :root{
+    /* brand (from tailwind.config.ts) */
+    --brand-50:#eef6ff; --brand-100:#d9ebff; --brand-400:#59a5ff;
+    --brand-500:#3182f6; --brand-600:#1f66e0; --brand-700:#1a52b8;
+    /* slate */
+    --white:#ffffff;
+    --slate-50:#f8fafc; --slate-100:#f1f5f9; --slate-200:#e2e8f0;
+    --slate-300:#cbd5e1; --slate-400:#94a3b8; --slate-500:#64748b;
+    --slate-600:#475569; --slate-700:#334155; --slate-800:#1e293b;
+    --slate-900:#0f172a; --slate-950:#020617;
+
+    /* semantic — light mode defaults */
+    --bg:var(--slate-50);
+    --panel:var(--white);
+    --panel2:var(--slate-50);
+    --border:var(--slate-200);
+    --heading:var(--slate-900);
+    --text:var(--slate-700);
+    --mute:var(--slate-500);
+    --accent:var(--brand-600);
+    --accent-strong:var(--brand-500);
+    --on-accent:#ffffff;
+    --shadow:0 1px 2px 0 rgba(15,23,42,.06), 0 1px 3px 0 rgba(15,23,42,.08);
+    --shadow-hover:0 8px 24px -6px rgba(15,23,42,.15);
+    --warn:#c2410c;
+
+    --mono:var(--font-mono,ui-monospace),"SFMono-Regular",Menlo,Consolas,monospace;
+    --sans:var(--font-sans,-apple-system),"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:var(--slate-950);
+      --panel:var(--slate-900);
+      --panel2:#0f1a2e;
+      --border:var(--slate-800);
+      --heading:#ffffff;
+      --text:var(--slate-200);
+      --mute:var(--slate-400);
+      --accent:var(--brand-400);
+      --accent-strong:var(--brand-500);
+      --shadow:0 1px 2px 0 rgba(0,0,0,.4);
+      --shadow-hover:0 8px 24px -6px rgba(0,0,0,.6);
+      --warn:#fb923c;
+    }
+  }
+
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--bg);color:var(--text);
+    font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;display:flex;justify-content:center;padding:32px 16px 72px}
+  .wrap{width:100%;max-width:680px}
+
+  /* terminal-style kicker line, matching the site's terminal accent */
+  .term-line{font-family:var(--mono);color:var(--mute);font-size:13px;margin-bottom:24px}
+  .term-line .g{color:var(--accent);font-weight:600}
+
+  .kicker{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+
+  h1{font-size:clamp(30px,6vw,44px);font-weight:700;line-height:1.1;
+    letter-spacing:-.02em;color:var(--heading);margin-bottom:12px}
+  h1 .g{color:var(--accent)}
+  .sub{color:var(--mute);font-size:clamp(15px,3.5vw,18px);line-height:1.6;margin-bottom:28px}
+
+  .card{background:var(--panel);border:1px solid var(--border);
+    border-radius:16px;padding:28px 24px;box-shadow:var(--shadow)}
+
+  /* progress */
+  .progress{display:flex;align-items:center;gap:12px;margin-bottom:22px;
+    font-family:var(--mono);font-size:12.5px;color:var(--mute)}
+  .bar{flex:1;height:6px;background:var(--slate-200);border-radius:99px;overflow:hidden}
+  @media (prefers-color-scheme: dark){.bar{background:var(--slate-800)}}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent-strong);
+    border-radius:99px;transition:width .35s ease}
+
+  .qlabel{font-family:var(--mono);color:var(--accent);font-size:12.5px;
+    font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
+  .qtext{font-size:clamp(19px,4.5vw,24px);font-weight:700;line-height:1.3;
+    color:var(--heading);margin-bottom:24px}
+
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:14px;text-align:left;
+    background:var(--panel2);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;color:var(--text);font-size:16px;font-family:inherit;
+    cursor:pointer;transition:.15s;width:100%}
+  .opt:hover{border-color:var(--accent-strong);
+    box-shadow:0 0 0 3px rgba(49,130,246,.12);transform:translateY(-1px)}
+  .opt .k{display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:8px;background:var(--brand-50);
+    color:var(--accent);font-family:var(--mono);font-weight:700;font-size:14px;flex-shrink:0}
+  @media (prefers-color-scheme: dark){.opt .k{background:rgba(49,130,246,.15)}}
+
+  .nav{display:flex;justify-content:space-between;margin-top:22px}
+  .back{background:none;border:none;color:var(--mute);font-family:var(--mono);
+    font-size:14px;cursor:pointer;padding:8px 4px;transition:.15s}
+  .back:hover{color:var(--accent)}
+  .back[disabled]{opacity:0;pointer-events:none}
+
+  /* result */
+  .rlabel{font-family:var(--sans);color:var(--accent);font-size:13px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .result h2{font-size:clamp(30px,7vw,48px);font-weight:800;letter-spacing:-.02em;
+    margin-bottom:6px;color:var(--accent)}
+  .result .role{color:var(--mute);font-size:16px;line-height:1.55;margin-bottom:22px}
+  .runner-up{font-size:14px;color:var(--mute);margin:-14px 0 22px}
+  .runner-up b{color:var(--heading);font-weight:600}
+
+  .stat{display:flex;justify-content:space-between;align-items:center;
+    background:var(--brand-50);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;margin-bottom:12px}
+  @media (prefers-color-scheme: dark){.stat{background:rgba(49,130,246,.08)}}
+  .stat .lbl{font-size:15px;color:var(--heading);font-weight:600}
+  .stat .val{font-family:var(--mono);color:var(--accent);font-weight:800;font-size:20px}
+
+  .block{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .block h3{font-family:var(--sans);font-size:12px;color:var(--mute);font-weight:700;
+    letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase}
+  .block p{font-size:15px;line-height:1.6;color:var(--text)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;font-weight:500;background:var(--slate-100);border-radius:99px;
+    padding:6px 12px;color:var(--slate-700)}
+  @media (prefers-color-scheme: dark){
+    .chip{background:var(--slate-800);color:var(--slate-300)}
+  }
+
+  .disclaimer{font-size:13.5px;color:var(--mute);margin:18px 0 22px;line-height:1.6}
+  .disclaimer b{color:var(--warn);font-weight:600}
+
+  .cta{display:flex;flex-direction:column;gap:12px}
+  .btn{display:block;text-align:center;text-decoration:none;padding:14px 18px;
+    border-radius:12px;font-weight:600;font-size:16px;font-family:inherit;
+    cursor:pointer;border:1px solid transparent;transition:.15s}
+  .btn.primary{background:var(--accent-strong);color:var(--on-accent);
+    border-color:var(--accent-strong)}
+  .btn.primary:hover{background:var(--accent);transform:translateY(-1px);
+    box-shadow:var(--shadow-hover)}
+  .btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+  .btn.ghost:hover{border-color:var(--accent-strong);color:var(--accent)}
+
+  .footer{text-align:center;color:var(--mute);font-size:12.5px;margin-top:28px}
+  .footer a{color:var(--accent);text-decoration:none}
+  .footer a:hover{text-decoration:underline}
+
+  .hidden{display:none}
+
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto}
+    *{transition:none!important}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="term-line">sirvantes@studio ~ % <span class="g">./anong-it-path-mo.sh</span></div>
+
+  <!-- INTRO / QUIZ -->
+  <div id="quiz">
+    <p class="kicker">Career quiz</p>
+    <h1>Anong IT path ang <span class="g">bagay sa'yo?</span></h1>
+    <p class="sub">6 na tanong. Walang tama o mali. Sa dulo, makikita mo kung aling sangay ng IT ang pinaka-bagay sa'yo — kasama ang totoong sahod sa Pilipinas.</p>
+    <div class="card">
+      <div class="progress">
+        <span id="pcount">01 / 06</span>
+        <span class="bar"><i id="pbar"></i></span>
+      </div>
+      <div class="qlabel" id="qlabel">&gt; TANONG 1</div>
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="back" id="backBtn" disabled>&larr; balik</button>
+        <span></span>
+      </div>
+    </div>
+    <div class="footer">Sir Vantes · Tagalog IT Real Talk</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result hidden">
+    <p class="rlabel">Ang bagay sa'yo</p>
+    <h2 id="rName"></h2>
+    <p class="role" id="rRole"></p>
+    <p class="runner-up" id="rRunner"></p>
+
+    <div class="stat" style="margin-top:18px">
+      <span class="lbl">Totoong sahod (PH 2026)</span>
+      <span class="val" id="rSalary"></span>
+    </div>
+
+    <div class="block">
+      <h3>Bakit ka bagay dito</h3>
+      <p id="rWhy"></p>
+    </div>
+
+    <div class="block">
+      <h3>Ano ang aaralin / kukunin</h3>
+      <div class="chips" id="rCerts"></div>
+    </div>
+
+    <p class="disclaimer"><b>Tandaan:</b> hindi ito final na sagot — starting direction lang 'to base sa sagot mo. Pwede kang magbago habang natututo. Ang mahalaga: may malinaw ka nang unang hakbang.</p>
+
+    <div class="cta">
+      <a class="btn primary" id="ytBtn" href="https://www.youtube.com/channel/UCVltEiWbsqnMqarwjEK7iAw?sub_confirmation=1" target="_blank" rel="noopener">▶ Mag-subscribe kay Sir Vantes</a>
+      <button class="btn ghost" id="restart">↻ Ulitin ang quiz</button>
+    </div>
+    <div class="footer">Sir Vantes · <a href="https://joshuacervantes.online" target="_blank" rel="noopener">joshuacervantes.online</a></div>
+  </div>
+</div>
+
+<script>
+const BRANCHES = {
+  support: {
+    name: "SUPPORT",
+    role: "Ang una mong tinatawagan pag may sira. Dito nagsimula si Sir Vantes.",
+    salary: "₱18K–35K",
+    why: "Mahilig kang mag-ayos, hands-on ka, at kaya mong harapin ang iba't ibang problema araw-araw. Ito ang pinakamadaling pasukan sa IT — at ang training ground papunta sa mas mataas na sangay.",
+    certs: ["CompTIA A+", "CompTIA Network+", "Google IT Support", "Hands-on troubleshooting"]
+  },
+  networking: {
+    name: "NETWORKING",
+    role: "Ang nagpapatakbo ng internet at connection ng buong opisina.",
+    salary: "₱25K–50K",
+    why: "Gusto mong intindihin kung paano nagkakabit-kabit ang malalaking systems. Dito papasok ang certs para mabilis kang umakyat — mula junior role hanggang Network Administrator.",
+    certs: ["Cisco CCNA", "CompTIA Network+", "Packet Tracer labs", "Subnetting"]
+  },
+  security: {
+    name: "SECURITY",
+    role: "Ang nag-iingat sa systems laban sa hackers at threats. Pinakamataas ang sahod — pero HINDI entry level.",
+    salary: "₱68K–78K+",
+    why: "Maingat ka, mahilig mag-isip ng 'paano kung...', at gusto mong ipagtanggol ang systems. Tandaan: karaniwang dadaan ka muna sa Support o Networking (2–5 taon + certs) bago dito.",
+    certs: ["CompTIA Security+", "Google Cybersecurity", "Support/Network muna", "CEH (advanced)"]
+  },
+  data: {
+    name: "DATA",
+    role: "Ang nag-aanalyze ng numero para may basehan ang desisyon ng negosyo.",
+    salary: "₱20K–43K",
+    why: "Mahilig ka sa numbers, sa patterns, at sa 'bakit ganito ang resulta.' Kaya mong hanapin ang kwento sa likod ng datos — 'yan ang hinahanap ng mga kompanya.",
+    certs: ["Excel / SQL", "Google Data Analytics", "Power BI / Tableau", "Python (basics)"]
+  },
+  webdev: {
+    name: "WEB / DEV",
+    role: "Ang gumagawa ng apps at websites. 'Yung coding — isa lang pala sa lima.",
+    salary: "₱25K–43K",
+    why: "Gusto mong gumawa ng bago mula sa wala at makita itong gumana. Mataas ang ceiling dito lalo pag remote o foreign client — pero portfolio ang labanan, hindi diploma.",
+    certs: ["HTML / CSS / JavaScript", "Isang framework (React)", "Git / GitHub", "Portfolio projects"]
+  }
+};
+
+const QUESTIONS = [
+  { q: "Anong mas gusto mong gawin?",
+    a: [
+      ["Ayusin ang sirang gamit o system", "support"],
+      ["I-connect at patakbuhin ang networks", "networking"],
+      ["Protektahan laban sa hackers", "security"],
+      ["Humanap ng pattern sa mga numero", "data"],
+      ["Gumawa ng bagong app o website", "webdev"]
+    ]},
+  { q: "Sa grupo, ikaw yung...",
+    a: [
+      ["Tinatawagan pag may aayusin", "support"],
+      ["Nag-o-organize ng systems at flow", "networking"],
+      ["Maingat, laging may 'paano kung...'", "security"],
+      ["Mahilig sa spreadsheets at numbers", "data"],
+      ["Puno ng ideya, gustong gumawa", "webdev"]
+    ]},
+  { q: "Alin ang pinaka-exciting para sa'yo?",
+    a: [
+      ["Iba't ibang problema kada araw", "support"],
+      ["Malalaking systems na magkakaugnay", "networking"],
+      ["Digital 'cat and mouse' vs threats", "security"],
+      ["Ang kwento sa likod ng datos", "data"],
+      ["Makita ang ginawa mong gumana", "webdev"]
+    ]},
+  { q: "Anong subject mas kinaya mo noon?",
+    a: [
+      ["Hands-on / tech at gadgets", "support"],
+      ["Logic at kung paano gumagana ang bagay", "networking"],
+      ["Rules, analysis, 'what could go wrong'", "security"],
+      ["Math at statistics", "data"],
+      ["Creative at pag-gawa ng projects", "webdev"]
+    ]},
+  { q: "Paano ka pinaka-natututo?",
+    a: [
+      ["Sa paghawak at pag-troubleshoot", "support"],
+      ["Sa pag-intindi kung paano magkakabit", "networking"],
+      ["Sa pag-alam ng weaknesses ng system", "security"],
+      ["Sa pagbabasa at pag-interpret ng numero", "data"],
+      ["Sa aktwal na paggawa ng project", "webdev"]
+    ]},
+  { q: "Long-term, gusto mong maging...",
+    a: [
+      ["Reliable go-to tech ng team", "support"],
+      ["Network / infrastructure specialist", "networking"],
+      ["Cybersecurity professional", "security"],
+      ["Data analyst o data scientist", "data"],
+      ["Developer o software engineer", "webdev"]
+    ]}
+];
+
+const KEYS = ["A","B","C","D","E"];
+let current = 0;
+const answers = [];
+
+const el = id => document.getElementById(id);
+
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  el("qlabel").textContent = "> TANONG " + (current+1);
+  el("qtext").textContent = item.q;
+  el("pcount").textContent = String(current+1).padStart(2,"0") + " / 0" + QUESTIONS.length;
+  el("pbar").style.width = ((current) / QUESTIONS.length * 100) + "%";
+  const opts = el("opts");
+  opts.innerHTML = "";
+  item.a.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = '<span class="k">'+KEYS[i]+'</span><span>'+opt[0]+'</span>';
+    b.onclick = () => choose(opt[1]);
+    opts.appendChild(b);
+  });
+  el("backBtn").disabled = current === 0;
+}
+
+function choose(branch){
+  answers[current] = branch;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+el("backBtn").onclick = () => { if(current>0){ current--; renderQuestion(); } };
+
+function showResult(){
+  const tally = {support:0,networking:0,security:0,data:0,webdev:0};
+  answers.forEach(b => tally[b]++);
+  // rank by score, ties broken by question order (first appearance)
+  const order = ["support","networking","security","data","webdev"];
+  let ranked = order.slice().sort((a,b)=> tally[b]-tally[a]);
+  const win = ranked[0], second = ranked[1];
+  const B = BRANCHES[win];
+
+  el("pbar").style.width = "100%";
+  el("rName").textContent = B.name;
+  el("rRole").textContent = B.role;
+  el("rSalary").textContent = B.salary + " / buwan";
+  el("rWhy").textContent = B.why;
+  const certs = el("rCerts"); certs.innerHTML = "";
+  B.certs.forEach(c => { const s=document.createElement("span"); s.className="chip"; s.textContent=c; certs.appendChild(s); });
+
+  // runner-up line only if it's close (within 1 point and non-zero)
+  if(tally[second] > 0 && (tally[win]-tally[second]) <= 1){
+    el("rRunner").innerHTML = "Malapit-lapit din sa'yo: <b>"+BRANCHES[second].name+"</b>. Pwede mong i-explore pareho.";
+  } else {
+    el("rRunner").textContent = "";
+  }
+
+  el("quiz").classList.add("hidden");
+  el("result").classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+el("restart").onclick = () => {
+  current = 0; answers.length = 0;
+  el("result").classList.add("hidden");
+  el("quiz").classList.remove("hidden");
+  renderQuestion();
+  window.scrollTo({top:0, behavior:"smooth"});
+};
+
+renderQuestion();
+</script>
+</body>
+</html>
