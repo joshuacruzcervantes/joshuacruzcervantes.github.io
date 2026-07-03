@@ -74,7 +74,7 @@ const personJsonLd = {
   url: content.site.url,
   email: `mailto:${content.contact.email}`,
   knowsLanguage: ["English", "Filipino"],
-  sameAs: content.contact.socials
+  sameAs: content.socials
     .map((s) => s.href)
     .filter((href) => href.startsWith("http")),
 };

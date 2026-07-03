@@ -5,6 +5,7 @@
  * link. Nothing fancy — just a clean finish to the page.
  */
 import { content } from "@/lib/content";
+import SocialLinks from "./SocialLinks";
 
 export default function Footer() {
   // Computed at render time, so the year is always current.
@@ -16,6 +17,8 @@ export default function Footer() {
         <p>
           © {year} {content.site.name}. {content.footer.tagline}
         </p>
+        {/* Follow / connect — shared social list. */}
+        <SocialLinks variant="icons" />
         {/* A last wink at the terminal theme. */}
         <p className="font-mono text-xs text-slate-400 dark:text-slate-500">
           exit 0 — session ended cleanly

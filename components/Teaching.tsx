@@ -136,15 +136,28 @@ export default function Teaching() {
                 <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                   {teaching.youtube.blurb}
                 </p>
-                <a
-                  href={teaching.youtube.channelUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-6 inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
-                >
-                  Visit the channel
-                  <span aria-hidden>→</span>
-                </a>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <a
+                    href={teaching.youtube.channelUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
+                  >
+                    Visit the channel
+                    <span aria-hidden>→</span>
+                  </a>
+                  <a
+                    href={teaching.youtube.tiktokUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                      <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+                    </svg>
+                    Follow on TikTok
+                  </a>
+                </div>
               </div>
 
               {/* Right: embedded video OR a branded placeholder. */}

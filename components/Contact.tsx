@@ -9,6 +9,7 @@
  */
 import { content } from "@/lib/content";
 import Reveal from "./Reveal";
+import SocialLinks from "./SocialLinks";
 
 export default function Contact() {
   const { contact } = content;
@@ -45,31 +46,9 @@ export default function Contact() {
             {contact.email}
           </a>
 
-          {/* Action buttons */}
+          {/* Social links (shared list — see components/SocialLinks.tsx) */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <a
-              href={contact.cvHref}
-              download
-              className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition hover:bg-brand-600"
-            >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-              </svg>
-              {contact.cvLabel}
-            </a>
-
-            {/* Social links */}
-            {contact.socials.map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                target={s.href.startsWith("http") ? "_blank" : undefined}
-                rel={s.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
-              >
-                {s.label}
-              </a>
-            ))}
+            <SocialLinks variant="buttons" />
           </div>
         </Reveal>
       </div>

@@ -1,12 +1,13 @@
 /**
- * SHOP PAGE — /shop
- * -----------------
- * The single storefront for every paid product. Products come from
- * `content.shop.products` (lib/content.ts) — add one there and a card appears
+ * SUPPORT PAGE — /support
+ * -----------------------
+ * The single storefront for every paid product. Buying here is how people
+ * support Sir Vantes — a real product in exchange, not a donation. Products
+ * come from `content.support.products` (lib/content.ts) — add one there and a card appears
  * here. Checkout is the shared manual-GCash flow (<PaymentCard />).
  *
  * To add a product:
- *   1. Append an entry to `content.shop.products`.
+ *   1. Append an entry to `content.support.products`.
  *   2. status "available" → the button links to its `href`.
  *      status "coming-soon" → shows a disabled badge instead.
  *   3. Optional: set `image` to a cover in /public (marketing image, safe to
@@ -20,28 +21,28 @@ import Footer from "@/components/Footer";
 import PaymentCard from "@/components/PaymentCard";
 import { content } from "@/lib/content";
 
-const s = content.shop;
+const s = content.support;
 
 export const metadata: Metadata = {
   title: `${s.heading} — ${content.site.name}`,
   description: s.intro,
-  alternates: { canonical: "/shop" },
+  alternates: { canonical: "/support" },
   openGraph: {
     title: `${s.heading} — ${content.site.name}`,
     description: s.intro,
-    url: "/shop",
+    url: "/support",
     siteName: content.site.name,
     type: "website",
   },
 };
 
-type Product = (typeof content.shop.products)[number];
+type Product = (typeof content.support.products)[number];
 
 // Where a "Notify me" click on a coming-soon product goes: your interest
 // form if set (with PRODUCT replaced by the product name), else a pre-filled
 // email so it works even before you make a form.
 function interestLink(product: Product) {
-  const url = content.shop.interestUrl;
+  const url = content.support.interestUrl;
   if (url) {
     return { href: url.replace(/PRODUCT/g, encodeURIComponent(product.title)), external: url.startsWith("http") };
   }
@@ -128,7 +129,7 @@ function ProductCard({ product }: { product: Product }) {
               : {})}
             className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg border border-brand-500/50 px-4 py-2.5 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 dark:text-brand-400 dark:hover:bg-brand-500/10"
           >
-            {content.shop.interestLabel} <span aria-hidden>→</span>
+            {content.support.interestLabel} <span aria-hidden>→</span>
           </a>
         )}
       </div>
@@ -136,7 +137,7 @@ function ProductCard({ product }: { product: Product }) {
   );
 }
 
-export default function ShopPage() {
+export default function SupportPage() {
   const available = s.products.filter((p) => p.status === "available");
   const comingSoon = s.products.filter((p) => p.status !== "available");
 

@@ -42,9 +42,12 @@ export default function Navbar() {
           href="/"
           className="flex items-center gap-2 text-base font-bold tracking-tight text-slate-900 dark:text-white"
         >
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-brand-500 font-mono text-sm text-white">
-            JC
-          </span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/sir-vantes-logo-v2.png"
+            alt={`${content.site.brandShort} logo`}
+            className="h-8 w-8 rounded-lg object-cover"
+          />
           <span className="hidden sm:inline">{content.site.brandShort}</span>
         </a>
 
@@ -68,20 +71,19 @@ export default function Navbar() {
         {/* Right side actions */}
         <div className="flex items-center gap-2">
           <ThemeToggle />
-          {/* Shop — the single storefront for all paid products (cart) */}
+          {/* Support — the single storefront for all paid products */}
           <a
-            href="/shop/"
+            href="/support/"
             className="hidden items-center gap-1.5 rounded-lg border border-brand-500/40 px-3 py-2 text-sm font-semibold text-brand-600 transition hover:bg-brand-50 sm:inline-flex dark:text-brand-400 dark:hover:bg-brand-500/10"
           >
             <CartIcon />
-            {content.shop.navLabel}
+            {content.support.navLabel}
           </a>
           <a
-            href={content.hero.ctaPrimary.href}
-            download
+            href={content.navCta.href}
             className="hidden rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 sm:inline-block"
           >
-            {content.hero.ctaPrimary.label}
+            {content.navCta.label}
           </a>
 
           {/* Mobile hamburger */}
@@ -116,22 +118,21 @@ export default function Navbar() {
             ))}
             <li>
               <a
-                href="/shop/"
+                href="/support/"
                 onClick={() => setMenuOpen(false)}
                 className="mt-1 flex items-center justify-center gap-1.5 rounded-md border border-brand-500/40 px-3 py-3 text-sm font-semibold text-brand-600 dark:text-brand-400"
               >
                 <CartIcon />
-                {content.shop.navLabel}
+                {content.support.navLabel}
               </a>
             </li>
             <li>
               <a
-                href={content.hero.ctaPrimary.href}
-                download
+                href={content.navCta.href}
                 onClick={() => setMenuOpen(false)}
                 className="mt-1 block rounded-md bg-brand-500 px-3 py-3 text-center text-sm font-semibold text-white"
               >
-                {content.hero.ctaPrimary.label}
+                {content.navCta.label}
               </a>
             </li>
           </ul>
@@ -141,7 +142,7 @@ export default function Navbar() {
   );
 }
 
-/** Small shopping-cart glyph used on the Shop button. */
+/** Small heart glyph used on the Support button. */
 function CartIcon() {
   return (
     <svg
@@ -154,9 +155,7 @@ function CartIcon() {
       strokeLinejoin="round"
       aria-hidden
     >
-      <circle cx="9" cy="21" r="1" />
-      <circle cx="20" cy="21" r="1" />
-      <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+      <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 1 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z" />
     </svg>
   );
 }

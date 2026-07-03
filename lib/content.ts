@@ -34,6 +34,18 @@ export const content = {
   },
 
   /* ------------------------------------------------------------------ */
+  /*  SOCIALS  —  one shared list, used by Contact and the Footer.       */
+  /*  `icon` picks the brand glyph (see components/SocialLinks.tsx).     */
+  /*  Add or reorder freely; both places update automatically.           */
+  /* ------------------------------------------------------------------ */
+  socials: [
+    { label: "TikTok", icon: "tiktok", href: "https://www.tiktok.com/@sir.vantes" },
+    { label: "YouTube", icon: "youtube", href: "https://www.youtube.com/@ytsirvantes" },
+    { label: "Facebook", icon: "facebook", href: "https://www.facebook.com/joshuacruzcervantesx/" },
+    { label: "LinkedIn", icon: "linkedin", href: "https://www.linkedin.com/in/joshuacruzcervantes/" },
+  ],
+
+  /* ------------------------------------------------------------------ */
   /*  NAVIGATION  —  the links in the top bar (anchor to section ids)    */
   /* ------------------------------------------------------------------ */
   nav: [
@@ -42,10 +54,13 @@ export const content = {
     { label: "Skills", href: "/#skills" },
     { label: "Projects", href: "/#projects" },
     { label: "Labs", href: "/labs/" },
-    { label: "Quiz", href: "/it-path-quiz.html", newTab: true },
     { label: "Certifications", href: "/#certifications" },
     { label: "Contact", href: "/#contact" },
   ],
+
+  // The prominent button in the navbar (was "View CV"). Sends students to the
+  // quiz hub. The hero keeps its own "View CV" CTA for the hiring audience.
+  navCta: { label: "Find Your Path", href: "/quiz/" },
 
   /* ------------------------------------------------------------------ */
   /*  LABS  —  the student playground at /labs                           */
@@ -66,6 +81,36 @@ export const content = {
         "An adaptive single-page trainer covering 45 high-miss concepts across 8 scaffolded modules — subnetting, routing, DNS, cloud, VLANs, wireless, and ops drills. Each item closes when you answer it correctly twice in a row.",
       tags: ["Network+", "Subnetting", "Routing", "VLANs", "Cloud"],
       href: "/netplus-trainer.html",
+    },
+  ],
+
+  /* ------------------------------------------------------------------ */
+  /*  QUIZZES  —  the quiz hub at /quiz                                  */
+  /*  Each entry becomes a card. Add a quiz by dropping a self-contained */
+  /*  HTML file in /public and appending here (same idea as labs).       */
+  /* ------------------------------------------------------------------ */
+  quizPage: {
+    kicker: "Not sure yet? Start here",
+    heading: "Find Your Path",
+    intro:
+      "Two quick quizzes to help you decide — no sign-up, instant result. One for students still choosing a college course, one for those already headed into IT.",
+  },
+  quizzes: [
+    {
+      title: "Anong kurso ang para sa'yo?",
+      audience: "For incoming college students",
+      blurb:
+        "Hindi pa sigurado kung anong course kukunin? Sagutin ang 8 tanong at bibigyan ka namin ng suhestiyon — BSIT, BSCS, BSIS, BSCpE, Data Science, at iba pa. Walang tama o mali.",
+      tags: ["Course finder", "Senior high → college", "8 tanong"],
+      href: "/course-quiz.html",
+    },
+    {
+      title: "Anong IT path ang bagay sa'yo?",
+      audience: "For future IT pros",
+      blurb:
+        "Papasok ka na ba sa IT o nag-aaral na? Alamin kung aling sangay ang bagay sa'yo — Support, Networking, Security, Data, o Web/Dev — kasama ang totoong sahod sa PH.",
+      tags: ["IT specialization", "Career path", "6 tanong"],
+      href: "/it-path-quiz.html",
     },
   ],
 
@@ -99,11 +144,15 @@ export const content = {
       "Gear you need vs. what you can skip on a student budget",
       "Free tools & accounts to set up before day one",
       "How to study tech the right way: labs over lectures",
+      "Flowcharts & logic — how to think through a problem before you code",
+      "Your first code, explained simply — variables, if/else, and loops",
       "Certs worth chasing while still in school (A+, Network+, cloud)",
       "Building a portfolio from year 1 — GitHub, home labs, projects",
       "Common first-year mistakes and how to dodge them",
       "IT career paths after BSIT — with real Philippine salary ranges",
       "My go-to free resources: channels, courses, and communities",
+      "Bonus — a Quick-Start Checklist to set up before day one",
+      "Bonus — a plain-Taglish glossary of common IT terms",
     ],
 
     // ---- Sneak peek (blurred preview images) -------------------------
@@ -111,10 +160,10 @@ export const content = {
     // the teaser page is blurred so the full text can't be read for free.
     previewHeading: "Silipin muna",
     previewNote:
-      "Ito ang cover at unang chapter ng guide. Ang buong 14 na pahina — makukuha mo pagkatapos mong mabili.",
+      "Ito ang cover at unang chapter ng guide. Ang buong 21 na pahina — makukuha mo pagkatapos mong mabili.",
     coverImage: "/guide/guide-cover.png",
     peekImage: "/guide/guide-peek.png",
-    peekBadge: "🔒 14 pages · buksan lahat sa ₱99",
+    peekBadge: "🔒 21 pages · buksan lahat sa ₱99",
 
     // "Who it's for" — each string becomes a bullet.
     audienceHeading: "Who it's for",
@@ -129,7 +178,7 @@ export const content = {
   /*  PAYMENT  —  ONE shared GCash checkout for ALL paid products        */
   /*                                                                    */
   /*  Manual flow: buyer pays via GCash, sends proof, you send the file.*/
-  /*  Used by both the /shop page and each product page. Edit here ONCE */
+  /*  Used by both the /support page and each product page. Edit here ONCE */
   /*  and it updates everywhere.                                        */
   /*                                                                    */
   /*  IMPORTANT: never put a paid file (PDF/video) in /public — the URL */
@@ -155,24 +204,24 @@ export const content = {
     // Facebook profile — clicking opens your profile so buyers can message you.
     messengerHref: "https://www.facebook.com/joshuacruzcervantesx/",
     emailLabel: "Or email your proof to",
-    email: "joshuacruzcervantes@gmail.com",
+    email: "yt.sirvantes@gmail.com",
     emailSubject: "GCash proof of payment — Sir Vantes",
     note: "Not sure yet? Message me first — happy to answer questions before you buy.",
   },
 
   /* ------------------------------------------------------------------ */
-  /*  SHOP  —  the storefront at /shop (all paid products in one place)  */
+  /*  SUPPORT  —  the storefront at /support (all paid products here)    */
   /*                                                                    */
   /*  Add a product by appending to `products`. status: "available"     */
   /*  makes the button link to `href`; "coming-soon" shows a disabled   */
   /*  badge instead. Leave `image` as "" to show a colored placeholder. */
   /* ------------------------------------------------------------------ */
-  shop: {
-    navLabel: "Shop",
-    kicker: "Learn with Sir Vantes",
-    heading: "Shop",
+  support: {
+    navLabel: "Support",
+    kicker: "Support Sir Vantes",
+    heading: "Support",
     intro:
-      "Practical guides and courses from a real IT pro — hindi textbook theory, kundi real experience. Pay via GCash, instant access.",
+      "Everything here I make myself — on my own time, around a full-time job. That's exactly why I'd rather hand you a real guide or course than take your money for nothing. I don't do donations; I want a fair exchange — you get genuine value, and that support keeps me building more. Pay via GCash, instant access.",
 
     // ---- Coming-soon interest capture --------------------------------
     // Each "Coming soon" product shows a button that lets people tell you
@@ -220,6 +269,14 @@ export const content = {
         file: "/free/5-IT-Resume-Mistakes-Free.pdf",
         leadsTo: "Resume + LinkedIn Guide",
       },
+      {
+        title: "BSIT Survival Guide — Free Trial",
+        kind: "Free · For students",
+        blurb:
+          "The first half of the guide, free — Chapters 1 to 6 plus the intro and full contents. Read the real thing, then unlock the remaining 6 chapters (coding, certs, portfolio, career paths + PH salaries) in the ₱99 version.",
+        file: "/free/The-Incoming-BSIT-Survival-Guide-Free-Trial.pdf",
+        leadsTo: "BSIT Survival Guide",
+      },
     ],
 
     products: [
@@ -229,8 +286,8 @@ export const content = {
         price: "₱99",
         priceNote: "Student price",
         blurb:
-          "14-page Taglish guide para sa mga papasok na BSIT — subjects year-by-year, gear, certs, portfolio, at career paths na may totoong sahod sa PH.",
-        tags: ["PDF", "14 pages", "Taglish"],
+          "21-page Taglish guide para sa mga papasok na BSIT — subjects year-by-year, gear, certs, portfolio, career paths na may totoong sahod sa PH, plus quick-start checklist at IT glossary.",
+        tags: ["PDF", "21 pages", "Taglish"],
         slug: "guide",
         image: "/guide/guide-cover.png",
         href: "/guide/",
@@ -260,8 +317,8 @@ export const content = {
           "Quick-reference reviewers for your cert exams — subnetting, ports & protocols, and flashcards. Printable and phone-friendly.",
         tags: ["Reviewer", "Cheat sheet", "Certs"],
         slug: "cheat-sheet",
-        image: "/shop/cheat-sheet-cover.png",
-        href: "/shop/cheat-sheet/",
+        image: "/support/cheat-sheet-cover.png",
+        href: "/support/cheat-sheet/",
         cta: "View & buy",
         status: "available",
       },
@@ -274,8 +331,8 @@ export const content = {
           "How to build an IT resume and LinkedIn profile that actually gets callbacks — with templates and real examples.",
         tags: ["Resume", "LinkedIn", "Fresh grad"],
         slug: "resume-linkedin",
-        image: "/shop/resume-linkedin-cover.png",
-        href: "/shop/resume-linkedin/",
+        image: "/support/resume-linkedin-cover.png",
+        href: "/support/resume-linkedin/",
         cta: "View & buy",
         status: "available",
       },
@@ -288,8 +345,8 @@ export const content = {
           "50 practice questions with clear explanations to get you exam-ready for CompTIA A+ and Network+.",
         tags: ["Practice", "A+", "Network+"],
         slug: "practice-exams",
-        image: "/shop/practice-exams-cover.png",
-        href: "/shop/practice-exams/",
+        image: "/support/practice-exams-cover.png",
+        href: "/support/practice-exams/",
         cta: "View & buy",
         status: "available",
       },
@@ -340,8 +397,8 @@ export const content = {
 
   /* ------------------------------------------------------------------ */
   /*  PRODUCT DETAILS  —  extra copy for each product's own page         */
-  /*  (/shop/<slug>). Keyed by the product's `slug`. Cover/peek images   */
-  /*  are derived from the slug: /shop/<slug>-cover.png & -peek.png.     */
+  /*  (/support/<slug>). Keyed by the product `slug`. Cover/peek images  */
+  /*  are derived from the slug: /support/<slug>-cover.png & -peek.png.  */
   /* ------------------------------------------------------------------ */
   productDetails: {
     "cheat-sheet": {
@@ -406,7 +463,7 @@ export const content = {
       "Enterprise IT Support & Operations turned educator. I translate real-world systems into lessons students can actually use.",
     // Call-to-action buttons.
     ctaPrimary: { label: "View CV", href: "/cv.pdf" }, // downloads the PDF in /public
-    ctaSecondary: { label: "Watch me teach", href: "https://www.youtube.com/channel/UCVltEiWbsqnMqarwjEK7iAw" },
+    ctaSecondary: { label: "Watch me teach", href: "https://www.youtube.com/@ytsirvantes" },
   },
 
   /* ------------------------------------------------------------------ */
@@ -439,7 +496,7 @@ export const content = {
       {
         name: "contact.txt",
         body:
-          "email:    joshuacruzcervantes@gmail.com\nlinkedin: linkedin.com/in/joshuacruzcervantes\nyoutube:  youtube.com/channel/UCVltEiWbsqnMqarwjEK7iAw",
+          "email:    yt.sirvantes@gmail.com\nyoutube:  youtube.com/@ytsirvantes\ntiktok:   tiktok.com/@sir.vantes\nlinkedin: linkedin.com/in/joshuacruzcervantes",
       },
     ],
     // A "directory" listed by `ls` — typing `cat projects/` hints to scroll.
@@ -532,7 +589,8 @@ export const content = {
     // The YouTube call-out card.
     youtube: {
       channelName: "Sir Vantes",
-      channelUrl: "https://www.youtube.com/channel/UCVltEiWbsqnMqarwjEK7iAw",
+      channelUrl: "https://www.youtube.com/@ytsirvantes",
+      tiktokUrl: "https://www.tiktok.com/@sir.vantes",
       // Optional: paste a YouTube video ID to embed a live teaching demo.
       // Find it in the video URL after "v=" (e.g. dQw4w9WgXcQ). Leave "" to
       // hide the embed and just show a link to the channel.
@@ -648,14 +706,10 @@ export const content = {
     heading: "Get in Touch",
     intro:
       "Hiring for a teaching role, or want to talk shop about IT? I'd love to hear from you.",
-    email: "joshuacruzcervantes@gmail.com",
+    email: "yt.sirvantes@gmail.com",
     // Pre-fills the email subject line when someone clicks your address.
     emailSubject: "Hello Joshua — Teaching / IT Opportunity",
-    socials: [
-      { label: "LinkedIn", href: "https://linkedin.com/in/joshuacruzcervantes" },
-      { label: "YouTube", href: "https://www.youtube.com/channel/UCVltEiWbsqnMqarwjEK7iAw" },
-      { label: "Email", href: "mailto:joshuacruzcervantes@gmail.com" },
-    ],
+    // Social links now live in the shared top-level `socials` list above.
     cvLabel: "Download CV",
     cvHref: "/cv.pdf",
   },

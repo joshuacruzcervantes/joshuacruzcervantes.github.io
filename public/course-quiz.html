@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="tl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anong Kurso ang Para Sa'yo? — Sir Vantes</title>
+<meta name="description" content="Sagutin ang 8 na tanong at alamin kung anong bachelor course ang bagay sa'yo — BSIT, BSCS, BSIS, BSCpE, Data Science, at iba pa. Para sa mga papasok ng kolehiyo.">
+<meta name="og:title" content="Anong Kurso ang Para Sa'yo? — Sir Vantes">
+<meta name="og:description" content="8 na tanong. Instant result. Alamin kung anong college course ang bagay sa'yo.">
+<meta name="og:type" content="website">
+<style>
+  /* ============================================================
+     Design tokens mirrored from the main site — light-first,
+     blue brand accent, slate palette. Dark mode follows the OS.
+     ============================================================ */
+  :root{
+    --brand-50:#eef6ff; --brand-100:#d9ebff; --brand-400:#59a5ff;
+    --brand-500:#3182f6; --brand-600:#1f66e0; --brand-700:#1a52b8;
+    --white:#ffffff;
+    --slate-50:#f8fafc; --slate-100:#f1f5f9; --slate-200:#e2e8f0;
+    --slate-300:#cbd5e1; --slate-400:#94a3b8; --slate-500:#64748b;
+    --slate-600:#475569; --slate-700:#334155; --slate-800:#1e293b;
+    --slate-900:#0f172a; --slate-950:#020617;
+    --bg:var(--slate-50); --panel:var(--white); --panel2:var(--slate-50);
+    --border:var(--slate-200); --heading:var(--slate-900); --text:var(--slate-700);
+    --mute:var(--slate-500); --accent:var(--brand-600); --accent-strong:var(--brand-500);
+    --on-accent:#ffffff;
+    --shadow:0 1px 2px 0 rgba(15,23,42,.06), 0 1px 3px 0 rgba(15,23,42,.08);
+    --shadow-hover:0 8px 24px -6px rgba(15,23,42,.15);
+    --warn:#c2410c;
+    --mono:var(--font-mono,ui-monospace),"SFMono-Regular",Menlo,Consolas,monospace;
+    --sans:var(--font-sans,-apple-system),"Segoe UI",system-ui,Roboto,Helvetica,Arial,sans-serif;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:var(--slate-950); --panel:var(--slate-900); --panel2:#0f1a2e;
+      --border:var(--slate-800); --heading:#ffffff; --text:var(--slate-200);
+      --mute:var(--slate-400); --accent:var(--brand-400); --accent-strong:var(--brand-500);
+      --shadow:0 1px 2px 0 rgba(0,0,0,.4); --shadow-hover:0 8px 24px -6px rgba(0,0,0,.6);
+      --warn:#fb923c;
+    }
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  html,body{background:var(--bg);color:var(--text);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  body{min-height:100vh;display:flex;justify-content:center;padding:32px 16px 72px}
+  .wrap{width:100%;max-width:680px}
+
+  .term-line{font-family:var(--mono);color:var(--mute);font-size:13px;margin-bottom:24px}
+  .term-line .g{color:var(--accent);font-weight:600}
+  .kicker{font-family:var(--sans);font-size:13px;font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--accent);margin-bottom:10px}
+  h1{font-size:clamp(30px,6vw,44px);font-weight:700;line-height:1.1;
+    letter-spacing:-.02em;color:var(--heading);margin-bottom:12px}
+  h1 .g{color:var(--accent)}
+  .sub{color:var(--mute);font-size:clamp(15px,3.5vw,18px);line-height:1.6;margin-bottom:28px}
+
+  .card{background:var(--panel);border:1px solid var(--border);
+    border-radius:16px;padding:28px 24px;box-shadow:var(--shadow)}
+  .progress{display:flex;align-items:center;gap:12px;margin-bottom:22px;
+    font-family:var(--mono);font-size:12.5px;color:var(--mute)}
+  .bar{flex:1;height:6px;background:var(--slate-200);border-radius:99px;overflow:hidden}
+  @media (prefers-color-scheme: dark){.bar{background:var(--slate-800)}}
+  .bar > i{display:block;height:100%;width:0;background:var(--accent-strong);
+    border-radius:99px;transition:width .35s ease}
+  .qlabel{font-family:var(--mono);color:var(--accent);font-size:12.5px;
+    font-weight:600;margin-bottom:12px;text-transform:uppercase;letter-spacing:.04em}
+  .qtext{font-size:clamp(19px,4.5vw,24px);font-weight:700;line-height:1.3;
+    color:var(--heading);margin-bottom:24px}
+
+  .opts{display:flex;flex-direction:column;gap:12px}
+  .opt{display:flex;align-items:center;gap:14px;text-align:left;
+    background:var(--panel2);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;color:var(--text);font-size:16px;font-family:inherit;
+    cursor:pointer;transition:.15s;width:100%}
+  .opt:hover{border-color:var(--accent-strong);
+    box-shadow:0 0 0 3px rgba(49,130,246,.12);transform:translateY(-1px)}
+  .opt .k{display:inline-flex;align-items:center;justify-content:center;
+    width:28px;height:28px;border-radius:8px;background:var(--brand-50);
+    color:var(--accent);font-family:var(--mono);font-weight:700;font-size:14px;flex-shrink:0}
+  @media (prefers-color-scheme: dark){.opt .k{background:rgba(49,130,246,.15)}}
+
+  .nav{display:flex;justify-content:space-between;margin-top:22px}
+  .back{background:none;border:none;color:var(--mute);font-family:var(--mono);
+    font-size:14px;cursor:pointer;padding:8px 4px;transition:.15s}
+  .back:hover{color:var(--accent)}
+  .back[disabled]{opacity:0;pointer-events:none}
+
+  .rlabel{font-family:var(--sans);color:var(--accent);font-size:13px;font-weight:600;
+    letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+  .result h2{font-size:clamp(30px,7vw,48px);font-weight:800;letter-spacing:-.02em;
+    margin-bottom:6px;color:var(--accent)}
+  .result .role{color:var(--mute);font-size:16px;line-height:1.55;margin-bottom:22px}
+  .runner-up{font-size:14px;color:var(--mute);margin:-14px 0 22px}
+  .runner-up b{color:var(--heading);font-weight:600}
+
+  .block{background:var(--panel);border:1px solid var(--border);border-radius:12px;
+    padding:16px 18px;margin-bottom:12px;box-shadow:var(--shadow)}
+  .block h3{font-family:var(--sans);font-size:12px;color:var(--mute);font-weight:700;
+    letter-spacing:.06em;margin-bottom:10px;text-transform:uppercase}
+  .block p{font-size:15px;line-height:1.6;color:var(--text)}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{font-size:13px;font-weight:500;background:var(--slate-100);border-radius:99px;
+    padding:6px 12px;color:var(--slate-700)}
+  @media (prefers-color-scheme: dark){.chip{background:var(--slate-800);color:var(--slate-300)}}
+
+  .disclaimer{font-size:13.5px;color:var(--mute);margin:18px 0 22px;line-height:1.6}
+  .disclaimer b{color:var(--warn);font-weight:600}
+
+  .cta{display:flex;flex-direction:column;gap:12px}
+  .btn{display:block;text-align:center;text-decoration:none;padding:14px 18px;
+    border-radius:12px;font-weight:600;font-size:16px;font-family:inherit;
+    cursor:pointer;border:1px solid transparent;transition:.15s}
+  .btn.primary{background:var(--accent-strong);color:var(--on-accent);border-color:var(--accent-strong)}
+  .btn.primary:hover{background:var(--accent);transform:translateY(-1px);box-shadow:var(--shadow-hover)}
+  .btn.ghost{background:transparent;color:var(--text);border-color:var(--border)}
+  .btn.ghost:hover{border-color:var(--accent-strong);color:var(--accent)}
+
+  .footer{text-align:center;color:var(--mute);font-size:12.5px;margin-top:28px}
+  .footer a{color:var(--accent);text-decoration:none}
+  .footer a:hover{text-decoration:underline}
+  .hidden{display:none}
+  @media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="term-line">sirvantes@studio ~ % <span class="g">./anong-kurso-mo.sh</span></div>
+
+  <!-- INTRO / QUIZ -->
+  <div id="quiz">
+    <p class="kicker">Course finder</p>
+    <h1>Anong kurso ang <span class="g">para sa'yo?</span></h1>
+    <p class="sub">8 na tanong. Walang tama o mali. Sa dulo, may suhestiyon kami kung aling bachelor course ang pinaka-bagay sa'yo — base sa gusto at galing mo, hindi sa uso.</p>
+    <div class="card">
+      <div class="progress">
+        <span id="pcount">01 / 08</span>
+        <span class="bar"><i id="pbar"></i></span>
+      </div>
+      <div class="qlabel" id="qlabel">&gt; TANONG 1</div>
+      <div class="qtext" id="qtext"></div>
+      <div class="opts" id="opts"></div>
+      <div class="nav">
+        <button class="back" id="backBtn" disabled>&larr; balik</button>
+        <span></span>
+      </div>
+    </div>
+    <div class="footer">Sir Vantes · Tagalog IT Real Talk</div>
+  </div>
+
+  <!-- RESULT -->
+  <div id="result" class="result hidden">
+    <p class="rlabel">Ang bagay sa'yong kurso</p>
+    <h2 id="rName"></h2>
+    <p class="role" id="rRole"></p>
+    <p class="runner-up" id="rRunner"></p>
+
+    <div class="block">
+      <h3>Ano ang kursong ito</h3>
+      <p id="rWhat"></p>
+    </div>
+    <div class="block">
+      <h3>Bakit bagay sa'yo</h3>
+      <p id="rWhy"></p>
+    </div>
+    <div class="block">
+      <h3>Mga posibleng trabaho</h3>
+      <div class="chips" id="rCareers"></div>
+    </div>
+
+    <p class="disclaimer"><b>Tandaan:</b> hindi ito final na sagot — gabay lang base sa sagot mo. Iba-iba rin ang flavor ng bawat course per school, kaya basahin mo ang curriculum at kausapin ang guidance counselor. Ang mahalaga: may starting direction ka na.</p>
+
+    <div class="cta">
+      <a class="btn primary" id="ytBtn" href="https://www.youtube.com/@ytsirvantes?sub_confirmation=1" target="_blank" rel="noopener">▶ Mag-subscribe sa YouTube</a>
+      <a class="btn ghost" id="ttBtn" href="https://www.tiktok.com/@sir.vantes" target="_blank" rel="noopener">♪ Mag-follow sa TikTok</a>
+      <button class="btn ghost" id="restart">↻ Ulitin ang quiz</button>
+    </div>
+    <div class="footer">Sir Vantes · <a href="https://joshuacervantes.online" target="_blank" rel="noopener">joshuacervantes.online</a></div>
+  </div>
+</div>
+
+<script>
+const COURSES = {
+  cs: {
+    name: "BSCS",
+    role: "Computer Science — malalim na programming, algorithms, at theory.",
+    what: "Dito matututunan mo kung paano talaga gumagana ang software mula sa pinaka-pundasyon — coding, algorithms, at ang math ng computing. Pinakamalawak ang pinto papuntang software at AI.",
+    why: "Mahilig ka sa problem-solving at abstract thinking. Gusto mong gumawa ng software mula sa wala at intindihin ang 'bakit,' hindi lang ang 'paano.'",
+    careers: ["Software Engineer", "AI / ML Engineer", "Backend Developer", "Researcher"]
+  },
+  it: {
+    name: "BSIT",
+    role: "Information Technology — hands-on tech: networks, systems, support, web.",
+    what: "Praktikal at applied. Networks, systems, support, databases, at web — mabilis kang makakapasok sa trabaho dahil hands-on ang natututunan mo.",
+    why: "Praktikal ka at mahilig mag-tinker. Mas gusto mong gumawa at mag-ayos kaysa purong theory. Malawak at mabilis ang pinto sa trabaho.",
+    careers: ["IT Support", "System Administrator", "Network Engineer", "Web Developer"]
+  },
+  is: {
+    name: "BSIS",
+    role: "Information Systems — teknolohiya na pinagdugtong sa negosyo.",
+    what: "Pinagsasama ang IT at business. Paano gamitin ang teknolohiya para umandar at lumago ang isang organisasyon.",
+    why: "Gusto mo ang tech pero mahilig ka rin sa negosyo, proseso, at tao. Ikaw ang tulay sa pagitan ng IT team at ng business.",
+    careers: ["Business Analyst", "Systems Analyst", "IT Project Coordinator", "ERP Specialist"]
+  },
+  cpe: {
+    name: "BSCpE",
+    role: "Computer Engineering — hardware at software na pinagsama.",
+    what: "Chips, circuits, embedded systems, robotics, at IoT. Dito nagtatagpo ang hardware at coding.",
+    why: "Mahilig ka sa gadgets, hardware, at kung paano gumagana ang mga bagay sa loob. Gusto mong gumawa ng device, hindi lang software.",
+    careers: ["Embedded Systems Engineer", "Hardware Engineer", "Robotics / IoT", "Firmware Developer"]
+  },
+  ece: {
+    name: "BSECE",
+    role: "Electronics & Communications Engineering — circuits, signals, at communications.",
+    what: "Malapit sa hardware: circuits, signals, telecommunications, at semiconductors. Malakas ang math at physics dito.",
+    why: "Mahilig ka sa physics, electronics, at kung paano dumadaloy ang signal at kuryente. Mas hardware ka kaysa software.",
+    careers: ["Electronics Engineer", "Telecom Engineer", "Semiconductor / IC Design", "Signal Systems"]
+  },
+  ds: {
+    name: "BS Data Science",
+    role: "Data Science — statistics at coding para hanapin ang kwento sa datos.",
+    what: "Statistics, programming, at machine learning para gawing insight ang datos. Isa sa pinaka-in-demand ngayon.",
+    why: "Mahilig ka sa numbers, patterns, at 'bakit ganito ang resulta.' Gusto mong gumawa ng desisyon base sa datos.",
+    careers: ["Data Analyst", "Data Scientist", "ML Engineer", "Business Intelligence"]
+  },
+  emc: {
+    name: "BSEMC",
+    role: "Entertainment & Multimedia Computing — game dev, animation, interactive media.",
+    what: "Coding + creativity. Game development, animation, at interactive media. Para sa gustong gumawa ng nakaka-engganyong karanasan.",
+    why: "Mahilig ka sa games, animation, o digital media — at gusto mong matutunan ang tech sa likod nito, hindi lang maglaro o manood.",
+    careers: ["Game Developer", "Animator / 3D Artist", "Multimedia Programmer", "UI / UX Designer"]
+  },
+  mma: {
+    name: "BS Multimedia Arts",
+    role: "Multimedia Arts — disenyo, art, at visual storytelling.",
+    what: "Creative track: graphic design, video, motion graphics, at digital art. Tech-enabled na sining.",
+    why: "Creative ka at visual — mahilig sa disenyo, art, at pagkukwento. Gusto mong trabahong may self-expression.",
+    careers: ["Graphic Designer", "UX / UI Designer", "Video / Motion Editor", "Digital Artist"]
+  },
+  bsba: {
+    name: "BSBA",
+    role: "Business Administration — negosyo, management, at data-driven decisions.",
+    what: "Para sa mahilig sa negosyo, pamumuno, marketing, at desisyon base sa datos. May tech-leaning tracks (MIS / Business Analytics) para sa mas techie.",
+    why: "People-person ka at mahilig sa negosyo, plano, at pamumuno. Gusto mo ang tech bilang tool para sa business, hindi bilang trabaho mismo.",
+    careers: ["Business Analyst", "Digital Marketer", "Operations / Management", "Entrepreneur"]
+  }
+};
+
+// Each option adds points to one or more courses.
+const QUESTIONS = [
+  { q: "Ano ang pinaka-gusto mong gawin kahit walang nag-uutos?", a: [
+    ["Mag-solve ng puzzle o math problem", {cs:2, ds:1}],
+    ["Mag-tinker ng gadget, PC, o device", {cpe:2, it:1}],
+    ["Mag-drawing, design, o video edit", {mma:2, emc:1}],
+    ["Maglaro ng games (at iniisip paano ginawa)", {emc:2, cs:1}],
+    ["Mag-plano ng negosyo o event", {bsba:2, is:1}]
+  ]},
+  { q: "Aling subject ang kinaya at kinagustuhan mo?", a: [
+    ["Math (algebra, calculus)", {cs:2, ds:1}],
+    ["Science / Physics", {ece:2, cpe:1}],
+    ["Computer / ICT", {it:2, cs:1}],
+    ["Arts / creative (MAPEH)", {mma:2}],
+    ["Business / Economics (ABM)", {bsba:2, is:1}]
+  ]},
+  { q: "Pumili ng project na masaya mong gawin:", a: [
+    ["Gumawa ng app o program", {cs:2, it:1}],
+    ["Mag-set up ng network o mag-repair", {it:2}],
+    ["Gumawa ng robot o circuit", {cpe:2, ece:1}],
+    ["Mag-design ng game o animation", {emc:2, mma:1}],
+    ["Mag-analyze ng survey o data", {ds:2, is:1}]
+  ]},
+  { q: "Anong problema ang gusto mong solusyunan?", a: [
+    ["Paano gawing mas matalino ang software", {cs:2}],
+    ["Bakit down ang system o network", {it:2}],
+    ["Paano kumita at lumago ang negosyo", {bsba:2, is:1}],
+    ["Paano gumawa ng nakaka-engganyong karanasan", {emc:2, mma:1}],
+    ["Ano ang sinasabi ng datos", {ds:2}]
+  ]},
+  { q: "Ikaw ba ay...?", a: [
+    ["Mahilig sa math at abstract thinking", {cs:2, ds:1, ece:1}],
+    ["Praktikal at hands-on", {it:2, cpe:1}],
+    ["Creative at visual", {mma:2, emc:1}],
+    ["People-person at leader", {bsba:2, is:1}],
+    ["Detalyado at mahilig sa pattern", {ds:2, cs:1}]
+  ]},
+  { q: "Alin ang mas nakaka-excite sa'yo?", a: [
+    ["Malalim na coding at algorithms", {cs:2}],
+    ["Hardware, chips, robotics, IoT", {cpe:2, ece:1}],
+    ["Networks, servers, cloud, support", {it:2}],
+    ["Games, animation, interactive media", {emc:2, mma:1}],
+    ["Business systems at data-driven decisions", {is:2, bsba:1, ds:1}]
+  ]},
+  { q: "Anong trabaho ang pinapangarap mo?", a: [
+    ["Software Engineer / Developer", {cs:2, it:1}],
+    ["IT Support / Network / SysAdmin", {it:2}],
+    ["Hardware / Electronics / Robotics Engineer", {cpe:2, ece:2}],
+    ["Game Dev / Animator / Multimedia Artist", {emc:2, mma:2}],
+    ["Data Analyst / Business Analyst / Entrepreneur", {ds:2, bsba:1, is:1}]
+  ]},
+  { q: "Ano ang pinaka-importante sa'yo sa isang kurso?", a: [
+    ["Malalim na kaalaman at problem-solving", {cs:2, cpe:1}],
+    ["Praktikal na skills, mabilis magamit sa trabaho", {it:2}],
+    ["Creative freedom at self-expression", {mma:2, emc:1}],
+    ["Malapit sa negosyo at pamumuno", {bsba:2, is:1}],
+    ["Trabahong in-demand at data-focused", {ds:2, is:1}]
+  ]}
+];
+
+const KEYS = ["A","B","C","D","E"];
+// Stable tie-break order.
+const ORDER = ["cs","it","is","cpe","ece","ds","emc","mma","bsba"];
+let current = 0;
+const answers = [];   // stores the chosen option index per question
+
+const el = id => document.getElementById(id);
+
+function renderQuestion(){
+  const item = QUESTIONS[current];
+  el("qlabel").textContent = "> TANONG " + (current+1);
+  el("qtext").textContent = item.q;
+  el("pcount").textContent = String(current+1).padStart(2,"0") + " / 0" + QUESTIONS.length;
+  el("pbar").style.width = ((current) / QUESTIONS.length * 100) + "%";
+  const opts = el("opts");
+  opts.innerHTML = "";
+  item.a.forEach((opt, i) => {
+    const b = document.createElement("button");
+    b.className = "opt";
+    b.innerHTML = '<span class="k">'+KEYS[i]+'</span><span>'+opt[0]+'</span>';
+    b.onclick = () => choose(i);
+    opts.appendChild(b);
+  });
+  el("backBtn").disabled = current === 0;
+}
+
+function choose(optIndex){
+  answers[current] = optIndex;
+  if(current < QUESTIONS.length - 1){
+    current++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+}
+
+el("backBtn").onclick = () => { if(current>0){ current--; renderQuestion(); } };
+
+function showResult(){
+  const tally = {}; ORDER.forEach(k => tally[k] = 0);
+  answers.forEach((optIndex, qi) => {
+    const scores = QUESTIONS[qi].a[optIndex][1];
+    for(const key in scores){ tally[key] += scores[key]; }
+  });
+  const ranked = ORDER.slice().sort((a,b) => tally[b]-tally[a]);
+  const win = ranked[0], second = ranked[1];
+  const C = COURSES[win];
+
+  el("pbar").style.width = "100%";
+  el("rName").textContent = C.name;
+  el("rRole").textContent = C.role;
+  el("rWhat").textContent = C.what;
+  el("rWhy").textContent = C.why;
+  const careers = el("rCareers"); careers.innerHTML = "";
+  C.careers.forEach(c => { const s=document.createElement("span"); s.className="chip"; s.textContent=c; careers.appendChild(s); });
+
+  // Show a close second when the gap is small.
+  if(tally[second] > 0 && (tally[win]-tally[second]) <= 2){
+    el("rRunner").innerHTML = "Malapit-lapit din sa'yo: <b>"+COURSES[second].name+"</b>. Pwede mong pag-isipan pareho.";
+  } else {
+    el("rRunner").textContent = "";
+  }
+
+  el("quiz").classList.add("hidden");
+  el("result").classList.remove("hidden");
+  window.scrollTo({top:0, behavior:"smooth"});
+}
+
+el("restart").onclick = () => {
+  current = 0; answers.length = 0;
+  el("result").classList.add("hidden");
+  el("quiz").classList.remove("hidden");
+  renderQuestion();
+  window.scrollTo({top:0, behavior:"smooth"});
+};
+
+renderQuestion();
+</script>
+</body>
+</html>

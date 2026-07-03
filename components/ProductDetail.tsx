@@ -1,13 +1,13 @@
 /**
  * ProductDetail
  * -------------
- * Renders a full sales page for one Shop product: hero, sneak peek
+ * Renders a full sales page for one Support product: hero, sneak peek
  * (cover + blurred teaser), what's inside, and the shared GCash checkout.
- * Driven entirely by `content.shop.products` + `content.productDetails`,
- * keyed by the product `slug`. Used by the /shop/[product] route.
+ * Driven entirely by `content.support.products` + `content.productDetails`,
+ * keyed by the product `slug`. Used by the /support/[product] route.
  *
  * Cover/peek images are derived from the slug:
- *   /shop/<slug>-cover.png   and   /shop/<slug>-peek.png
+ *   /support/<slug>-cover.png   and   /support/<slug>-peek.png
  */
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -15,7 +15,7 @@ import PaymentCard from "@/components/PaymentCard";
 import { content } from "@/lib/content";
 
 export function getProduct(slug: string) {
-  const product = content.shop.products.find((p) => p.slug === slug);
+  const product = content.support.products.find((p) => p.slug === slug);
   const detail =
     content.productDetails[slug as keyof typeof content.productDetails];
   if (!product || !detail || product.status !== "available") return null;
@@ -26,8 +26,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
   const found = getProduct(slug);
   if (!found) return null;
   const { product, detail } = found;
-  const cover = `/shop/${slug}-cover.png`;
-  const peek = `/shop/${slug}-peek.png`;
+  const cover = `/support/${slug}-cover.png`;
+  const peek = `/support/${slug}-peek.png`;
 
   return (
     <>

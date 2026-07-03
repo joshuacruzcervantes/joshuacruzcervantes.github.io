@@ -1,5 +1,5 @@
 /**
- * PRODUCT DETAIL ROUTE — /shop/<slug>
+ * PRODUCT DETAIL ROUTE — /support/<slug>
  * -----------------------------------
  * One static page per available product that has a `slug` and an entry in
  * `content.productDetails`. Content is data-driven; the layout lives in
@@ -12,7 +12,7 @@ import ProductDetail, { getProduct } from "@/components/ProductDetail";
 import { content } from "@/lib/content";
 
 export function generateStaticParams() {
-  return content.shop.products
+  return content.support.products
     .filter(
       (p) =>
         p.status === "available" &&
@@ -34,11 +34,11 @@ export async function generateMetadata({
   return {
     title: `${product.title} — ${content.site.name}`,
     description: detail.subheading,
-    alternates: { canonical: `/shop/${slug}` },
+    alternates: { canonical: `/support/${slug}` },
     openGraph: {
       title: `${product.title} — ${content.site.name}`,
       description: detail.subheading,
-      url: `/shop/${slug}`,
+      url: `/support/${slug}`,
       siteName: content.site.name,
       type: "website",
     },

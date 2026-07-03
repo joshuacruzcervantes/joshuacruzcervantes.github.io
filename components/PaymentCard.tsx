@@ -1,7 +1,7 @@
 /**
  * PaymentCard
  * -----------
- * The shared manual-GCash checkout used by the Shop and every product page.
+ * The shared manual-GCash checkout used by the Support page and every product page.
  * All text/details come from `content.payment` — edit there once and it
  * updates everywhere. Pass an `id` (default "buy") so on-page CTAs can
  * anchor-scroll to it.
