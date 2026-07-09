@@ -5,7 +5,8 @@
  * ----
  * The first thing visitors see. It's intentionally clean and professional:
  *   - An eyebrow label, your name, the dual-audience tagline, and supporting text.
- *   - Two CTAs: "View CV" (downloads the PDF) and "Watch me teach" (YouTube).
+ *   - Three CTAs: "View CV" (downloads the PDF), "Follow on TikTok", and
+ *     "Watch me teach" (YouTube).
  *   - A subtle animated background: a faint NETWORK TOPOLOGY diagram — a hub
  *     with links to nodes, and little "packets" traveling along the links.
  *     It's a quiet nod to what Joshua actually teaches, instead of a generic
@@ -192,11 +193,24 @@ export default function Hero() {
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
             >
+              {/* tiktok icon */}
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+              </svg>
+              {hero.ctaSecondary.label}
+            </a>
+
+            <a
+              href={hero.ctaTertiary.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-300 bg-white/60 px-6 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
+            >
               {/* play icon */}
               <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M8 5v14l11-7z" />
               </svg>
-              {hero.ctaSecondary.label}
+              {hero.ctaTertiary.label}
             </a>
           </motion.div>
         </div>

@@ -97,6 +97,14 @@ export const content = {
   },
   quizzes: [
     {
+      title: "Alin sa 4 na landas ang bagay sa'yo?",
+      audience: "For anyone choosing between TESDA, DTS, Ladderized, or College",
+      blurb:
+        "TESDA NC, Dual Training System, Ladderized Program, o College Diploma — magkaiba ang tulin, gastos, at destinasyon. Sagutin ang 6 na tanong at makakuha ng suhestiyon, kasama ang mga opisyal na link kung saan mag-che-check.",
+      tags: ["4 pathways", "TESDA · DTS · Ladderized · College", "6 tanong"],
+      href: "/pathways-quiz.html",
+    },
+    {
       title: "Anong kurso ang para sa'yo?",
       audience: "For incoming college students",
       blurb:
@@ -457,13 +465,14 @@ export const content = {
     name: "Joshua Cervantes",
     // The one-line positioning statement that speaks to BOTH audiences.
     tagline:
-      "IT Instructor & Industry Practitioner — I teach networking, security, and systems from 6 years in the field, not from a textbook.",
+      "IT Instructor and Industry Practitioner. I teach networking, security, and systems from 6 years in the field, not from a textbook.",
     // A short supporting sentence under the tagline.
     subtext:
       "Enterprise IT Support & Operations turned educator. I translate real-world systems into lessons students can actually use.",
     // Call-to-action buttons.
     ctaPrimary: { label: "View CV", href: "/cv.pdf" }, // downloads the PDF in /public
-    ctaSecondary: { label: "Watch me teach", href: "https://www.youtube.com/@ytsirvantes" },
+    ctaSecondary: { label: "Follow on TikTok", href: "https://www.tiktok.com/@sir.vantes" },
+    ctaTertiary: { label: "Follow me on YouTube", href: "https://www.youtube.com/@ytsirvantes" },
   },
 
   /* ------------------------------------------------------------------ */
@@ -510,14 +519,14 @@ export const content = {
     heading: "About",
     // The small accent label above the big heading (adds variety per section).
     kicker: "Who I am",
-    // Your photo lives at /public/profile.png.
-    photo: "/profile.png",
+    // Your photo lives at /public/profile.jpg.
+    photo: "/profile.jpg",
     photoAlt: "Portrait of Joshua Cervantes",
     // Each string is a paragraph.
     paragraphs: [
-      "I spent six years on the front lines of enterprise IT — Support and Operations — keeping systems, networks, and end users running. I've deployed and managed fleets of workstations, defended uptime, and resolved the kind of messy, real-world problems that never appear in a textbook.",
-      "Now I'm channeling that experience into teaching. What makes me a strong instructor isn't theory — it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
-      "I teach bilingually in English and Tagalog, and I've worked with learners at every level — from absolute beginners touching a command line for the first time to students preparing for industry certifications.",
+      "I spent six years on the front lines of enterprise IT, doing Support and Operations, keeping systems, networks, and end users running. I've deployed and managed fleets of workstations, defended uptime, and dealt with the kind of messy, real-world problems that never show up in a textbook.",
+      "Now I'm putting that experience into teaching. What makes me a strong instructor isn't theory, it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
+      "I teach bilingually in English and Tagalog, and I've worked with learners at every level, from absolute beginners touching a command line for the first time to students preparing for industry certifications.",
     ],
     // Small highlight chips shown next to the photo.
     highlights: [
@@ -591,12 +600,26 @@ export const content = {
       channelName: "Sir Vantes",
       channelUrl: "https://www.youtube.com/@ytsirvantes",
       tiktokUrl: "https://www.tiktok.com/@sir.vantes",
-      // Optional: paste a YouTube video ID to embed a live teaching demo.
-      // Find it in the video URL after "v=" (e.g. dQw4w9WgXcQ). Leave "" to
-      // hide the embed and just show a link to the channel.
+      // Your channel ID (starts with "UC..."), used to build the "uploads"
+      // playlist embed below so the preview always shows your latest video
+      // with zero manual updates. Find it via a channel-ID lookup tool, or
+      // view page source on your channel and search for "externalId".
+      channelId: "UCVltEiWbsqnMqarwjEK7iAw",
+      // Optional: paste a specific YouTube video ID to pin one video instead
+      // of always showing the latest upload. Find it in the video URL after
+      // "v=" (e.g. dQw4w9WgXcQ). Leave "" to auto-show the newest upload.
       demoVideoId: "",
       blurb:
         "Watch a live teaching demo and see how I break down complex IT topics into clear, practical lessons.",
+    },
+    // The TikTok call-out card. Uses TikTok's official "Creator Profile
+    // Embed" widget, which auto-updates with your live follower count and
+    // your 10 most recent videos — no manual updates needed here either.
+    tiktok: {
+      handle: "sir.vantes",
+      profileUrl: "https://www.tiktok.com/@sir.vantes",
+      blurb:
+        "Helping senior high students pick the right course and IT students figure out their next move, straight talk, no sugarcoating. New clips every week.",
     },
   },
 

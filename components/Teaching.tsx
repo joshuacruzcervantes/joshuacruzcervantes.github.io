@@ -3,13 +3,17 @@
  * --------
  * The section that sells the academe pivot to deans/HR. It shows:
  *   - The subjects/courses you teach (as cards).
- *   - A YouTube call-out for "Sir Vantes" — either an embedded demo video (if
- *     you set a demoVideoId in content.ts) or a button linking to your channel.
+ *   - A YouTube call-out for "Sir Vantes" — auto-embeds your latest upload
+ *     (via the channel's "uploads" playlist, no manual video IDs needed),
+ *     unless you pin a specific demoVideoId in content.ts.
+ *   - A TikTok call-out using TikTok's official Creator Profile embed, which
+ *     shows your live follower count and 10 most recent videos automatically.
  *
  * It sits on a subtly tinted background to visually separate the "teaching"
  * story from the "technical" sections around it.
  */
 import type { ReactNode } from "react";
+import Script from "next/script";
 import { content } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
@@ -61,6 +65,13 @@ export default function Teaching() {
   // anything else from the config value so a malformed/edited entry can never
   // change the embed URL or inject unexpected query params.
   const safeVideoId = teaching.youtube.demoVideoId.replace(/[^A-Za-z0-9_-]/g, "");
+  // Same defensive stripping for the channel ID (always starts with "UC").
+  const safeChannelId = teaching.youtube.channelId.replace(/[^A-Za-z0-9_-]/g, "");
+  // A channel's "uploads" playlist is always its channel ID with "UC" swapped
+  // for "UU" — embedding it as a playlist auto-shows the newest video first,
+  // with zero manual updates whenever you upload.
+  const uploadsPlaylistId = safeChannelId.replace(/^UC/, "UU");
+  const safeTiktokHandle = teaching.tiktok.handle.replace(/[^A-Za-z0-9_.]/g, "");
 
   return (
     <section
@@ -146,24 +157,26 @@ export default function Teaching() {
                     Visit the channel
                     <span aria-hidden>→</span>
                   </a>
-                  <a
-                    href={teaching.youtube.tiktokUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
+                  {/* Same destination as "Visit the channel" above (YouTube
+                      has no separate one-click subscribe link) — shown as a
+                      plain label rather than a second live link. */}
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex cursor-default select-none items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-400 dark:border-slate-800 dark:text-slate-500"
                   >
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                      <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+                      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z" />
                     </svg>
-                    Follow on TikTok
-                  </a>
+                    Subscribe to YouTube
+                  </span>
                 </div>
               </div>
 
-              {/* Right: embedded video OR a branded placeholder. */}
+              {/* Right: embedded video — either a pinned demoVideoId, or (by
+                  default) the channel's uploads playlist, which always opens
+                  on the newest video with no manual updates required. */}
               <div className="aspect-video w-full bg-slate-900 md:aspect-auto md:h-full md:min-h-[18rem]">
                 {safeVideoId ? (
-                  // If you set a demoVideoId in content.ts, embed it here.
                   // We use youtube-nocookie.com (privacy-enhanced mode) so YouTube
                   // doesn't set tracking cookies until the visitor actually plays,
                   // and request only the permissions the player needs.
@@ -176,8 +189,18 @@ export default function Teaching() {
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
                     allowFullScreen
                   />
+                ) : uploadsPlaylistId ? (
+                  <iframe
+                    className="h-full w-full"
+                    src={`https://www.youtube-nocookie.com/embed/videoseries?list=${uploadsPlaylistId}`}
+                    title={`${teaching.youtube.channelName} — latest video`}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 ) : (
-                  // Otherwise show a clean placeholder linking to the channel.
+                  // Fallback if no channelId/demoVideoId is configured at all.
                   <a
                     href={teaching.youtube.channelUrl}
                     target="_blank"
@@ -196,6 +219,80 @@ export default function Teaching() {
             </div>
           </div>
         </Reveal>
+
+        {/* TikTok call-out — official Creator Profile embed (live follower
+            count + 10 most recent videos, refreshed automatically). */}
+        <Reveal delay={0.15}>
+          <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
+            <div className="grid items-center gap-0 md:grid-cols-2">
+              {/* Left: text + CTA */}
+              <div className="p-8">
+                <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+                  </svg>
+                  TikTok · @{teaching.tiktok.handle}
+                </div>
+                <h3 className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
+                  Catch my latest clips
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                  {teaching.tiktok.blurb}
+                </p>
+                <div className="mt-6 flex flex-wrap items-center gap-3">
+                  <a
+                    href={teaching.tiktok.profileUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
+                  >
+                    Visit the profile
+                    <span aria-hidden>→</span>
+                  </a>
+                  {/* Same destination as "Visit the profile" above (TikTok
+                      has no separate one-click follow link) — shown as a
+                      plain label rather than a second live link. */}
+                  <span
+                    aria-hidden="true"
+                    className="inline-flex cursor-default select-none items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-400 dark:border-slate-800 dark:text-slate-500"
+                  >
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                      <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+                    </svg>
+                    Follow on TikTok
+                  </span>
+                </div>
+              </div>
+
+              {/* Right: TikTok's official embed widget. Their embed.js script
+                  scans the page for ".tiktok-embed" and swaps it for a live
+                  iframe — the follower count and video grid it renders are
+                  always current, no code changes needed on our end. */}
+              <div className="flex min-h-[18rem] w-full items-center justify-center bg-slate-50 p-4 dark:bg-slate-950/40 md:h-full">
+                {safeTiktokHandle ? (
+                  <blockquote
+                    className="tiktok-embed"
+                    cite={teaching.tiktok.profileUrl}
+                    data-unique-id={safeTiktokHandle}
+                    data-embed-type="creator"
+                    style={{ maxWidth: "100%", minWidth: "288px" }}
+                  >
+                    <section>
+                      <a
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        href={`${teaching.tiktok.profileUrl}?refer=creator_embed`}
+                      >
+                        @{safeTiktokHandle}
+                      </a>
+                    </section>
+                  </blockquote>
+                ) : null}
+              </div>
+            </div>
+          </div>
+        </Reveal>
+        <Script src="https://www.tiktok.com/embed.js" strategy="lazyOnload" />
       </div>
     </section>
   );
