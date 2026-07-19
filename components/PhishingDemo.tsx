@@ -13,10 +13,9 @@
  *   3. ACKNOWLEDGED  — after they confirm, the screen calms down to green.
  *      "Close" resets back to the login screen for the next volunteer.
  *
- * No network requests anywhere in this file (or anywhere in the demo) — the
- * only thing this writes is one localStorage entry (via lib/aclcCapture.ts,
- * including a *faked* IP/location/ISP — see that file's header) so
- * /aclc/admin can pick it up in a second tab on the SAME browser.
+ * Submitting writes one row to Supabase (via lib/aclcCapture.ts, including a
+ * *faked* IP/location/ISP — see that file's header) so /aclc/admin can pick
+ * it up live, from any device — a student's phone, your laptop, whatever.
  */
 "use client";
 
@@ -62,7 +61,7 @@ export default function PhishingDemo() {
     await new Promise((resolve) => setTimeout(resolve, 3000));
 
     const capturedAtMs = Date.now();
-    appendCapture({
+    await appendCapture({
       studentId,
       password,
       capturedAt: new Date(capturedAtMs).toLocaleString("en-PH", { hour12: true }),

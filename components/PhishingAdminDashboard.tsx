@@ -13,12 +13,11 @@
  * AttackVectorBreakdown) that exist purely to look cool on a projector. Their
  * numbers are illustrative, not measurements of anything real; they're
  * labeled as such in the UI. IP/city/ISP are also faked (lib/aclcCapture.ts
- * → fakeGeo) — there is NO network request anywhere in this whole demo.
+ * → fakeGeo).
  *
- * Reads from the same localStorage list /aclc appends to and polls +
- * listens for storage events so it live-updates as students submit — as
- * long as this tab is open in the SAME browser as the /aclc tab. There's no
- * backend, so this can't sync across two different physical devices.
+ * Reads from the same Supabase table /aclc writes to and polls it, so it
+ * live-updates as students submit from any device (their phone, your
+ * laptop, whatever) — not just other tabs in this same browser.
  */
 "use client";
 
@@ -230,20 +229,23 @@ export default function PhishingAdminDashboard() {
     }
   }, []);
 
-  // Live-sync from localStorage: storage events fire when the /aclc tab
-  // writes a new capture; the interval is a fallback for browsers/timing
-  // where that event doesn't fire reliably, and also re-renders "time ago".
+  // Live-sync from Supabase: poll every couple seconds so submissions from
+  // any device show up here, plus re-render "time ago" each tick.
   useEffect(() => {
     if (!unlocked) return;
-    setCaptures(readCaptures());
-    const sync = () => setCaptures(readCaptures());
-    window.addEventListener("storage", sync);
+    let cancelled = false;
+    const sync = () => {
+      readCaptures().then((rows) => {
+        if (!cancelled) setCaptures(rows);
+      });
+    };
+    sync();
     const interval = setInterval(() => {
       sync();
       forceTick((n) => n + 1);
-    }, 1000);
+    }, 2000);
     return () => {
-      window.removeEventListener("storage", sync);
+      cancelled = true;
       clearInterval(interval);
     };
   }, [unlocked]);
@@ -269,9 +271,9 @@ export default function PhishingAdminDashboard() {
   }
 
   function handleClear() {
-    clearCaptures();
     setCaptures([]);
     setExpandedId(null);
+    clearCaptures();
   }
 
   if (!unlocked) {
