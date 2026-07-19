@@ -80,7 +80,7 @@ export default function Terminal() {
 function TerminalInner() {
   // The welcome/banner shown before the user types anything.
   const initialLines: Line[] = [
-    { kind: "system", text: "Sir Vantes — interactive shell. Type 'help' to begin." },
+    { kind: "system", text: "Sir Vantes: interactive shell. Type 'help' to begin." },
     { kind: "system", text: "" },
   ];
 
@@ -190,7 +190,7 @@ function TerminalInner() {
             { kind: "output", text: `PING ${arg}: 56 data bytes` },
             { kind: "output", text: "64 bytes from joshua: always_up=true time=0.001 ms" },
             { kind: "output", text: `--- ${arg} ping statistics ---` },
-            { kind: "output", text: "1 packets transmitted, 1 received, 0% packet loss. He responds fast — try email." },
+            { kind: "output", text: "1 packets transmitted, 1 received, 0% packet loss. He responds fast, try email." },
           ];
         }
         const times = [0, 1, 2].map(() => (Math.random() * 20 + 8).toFixed(1));
@@ -213,7 +213,7 @@ function TerminalInner() {
 
       case "history":
         if (history.length === 0) {
-          return [{ kind: "output", text: "history: empty (this is your first command — bold choice)" }];
+          return [{ kind: "output", text: "history: empty (this is your first command, bold choice)" }];
         }
         return history.map((h, i) => ({
           kind: "output" as const,
@@ -332,7 +332,7 @@ function TerminalInner() {
       >
         {/* Small caption above the window */}
         <p className="mb-3 text-center text-sm text-slate-500 dark:text-slate-400">
-          Curious whether I really know my stuff? Try the shell — type{" "}
+          Curious whether I really know my stuff? Try the shell, type{" "}
           <code className="rounded bg-slate-100 px-1.5 py-0.5 font-mono text-brand-600 dark:bg-slate-800 dark:text-brand-400">
             help
           </code>
@@ -350,7 +350,7 @@ function TerminalInner() {
             <span className="h-3 w-3 rounded-full bg-yellow-500" />
             <span className="h-3 w-3 rounded-full bg-green-500" />
             <span className="ml-2 select-none font-mono text-xs text-slate-400">
-              {PROMPT} — bash
+              {PROMPT} - bash
             </span>
           </div>
 

@@ -193,7 +193,7 @@ export default function Teaching() {
                   <iframe
                     className="h-full w-full"
                     src={`https://www.youtube-nocookie.com/embed/videoseries?list=${uploadsPlaylistId}`}
-                    title={`${teaching.youtube.channelName} — latest video`}
+                    title={`${teaching.youtube.channelName}: latest video`}
                     loading="lazy"
                     referrerPolicy="strict-origin-when-cross-origin"
                     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"

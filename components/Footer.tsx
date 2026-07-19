@@ -21,7 +21,7 @@ export default function Footer() {
         <SocialLinks variant="icons" />
         {/* A last wink at the terminal theme. */}
         <p className="font-mono text-xs text-slate-400 dark:text-slate-500">
-          exit 0 — session ended cleanly
+          exit 0, session ended cleanly
         </p>
         <a
           href="#top"

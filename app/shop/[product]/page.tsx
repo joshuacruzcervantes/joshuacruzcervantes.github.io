@@ -30,7 +30,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { product } = await params;
   return {
-    title: "Moved to Support — Joshua Cervantes",
+    title: "Moved to Support | Joshua Cervantes",
     alternates: { canonical: `/support/${product}` },
     robots: { index: false, follow: true },
   };

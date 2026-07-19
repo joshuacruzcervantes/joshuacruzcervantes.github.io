@@ -24,11 +24,11 @@ import { content } from "@/lib/content";
 const s = content.support;
 
 export const metadata: Metadata = {
-  title: `${s.heading} — ${content.site.name}`,
+  title: `${s.heading} | ${content.site.name}`,
   description: s.intro,
   alternates: { canonical: "/support" },
   openGraph: {
-    title: `${s.heading} — ${content.site.name}`,
+    title: `${s.heading} | ${content.site.name}`,
     description: s.intro,
     url: "/support",
     siteName: content.site.name,

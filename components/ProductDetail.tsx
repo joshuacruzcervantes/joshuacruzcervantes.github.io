@@ -70,7 +70,7 @@ export default function ProductDetail({ slug }: { slug: string }) {
               Silipin muna
             </h2>
             <p className="mt-1 max-w-2xl text-sm text-slate-600 dark:text-slate-300">
-              A peek at what's inside — the rest is blurred until you get your
+              A peek at what's inside. The rest is blurred until you get your
               copy.
             </p>
 

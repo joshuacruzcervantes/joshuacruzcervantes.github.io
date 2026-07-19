@@ -15,11 +15,11 @@ import Footer from "@/components/Footer";
 import { content } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: `${content.quizPage.heading} — ${content.site.name}`,
+  title: `${content.quizPage.heading} | ${content.site.name}`,
   description: content.quizPage.intro,
   alternates: { canonical: "/quiz" },
   openGraph: {
-    title: `${content.quizPage.heading} — ${content.site.name}`,
+    title: `${content.quizPage.heading} | ${content.site.name}`,
     description: content.quizPage.intro,
     url: "/quiz",
     siteName: content.site.name,
@@ -88,7 +88,7 @@ export default function QuizPage() {
           </div>
 
           <p className="mt-10 text-sm text-slate-500 dark:text-slate-400">
-            Walang tama o mali — gabay lang ang mga ito para may malinaw kang unang hakbang.
+            Walang tama o mali, gabay lang ang mga ito para may malinaw kang unang hakbang.
           </p>
         </div>
       </main>

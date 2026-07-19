@@ -15,11 +15,11 @@ import Footer from "@/components/Footer";
 import { content } from "@/lib/content";
 
 export const metadata: Metadata = {
-  title: `${content.labsPage.heading} — ${content.site.name}`,
+  title: `${content.labsPage.heading} | ${content.site.name}`,
   description: content.labsPage.intro,
   alternates: { canonical: "/labs" },
   openGraph: {
-    title: `${content.labsPage.heading} — ${content.site.name}`,
+    title: `${content.labsPage.heading} | ${content.site.name}`,
     description: content.labsPage.intro,
     url: "/labs",
     siteName: content.site.name,
@@ -89,7 +89,7 @@ export default function LabsPage() {
 
           {/* More-coming note */}
           <p className="mt-10 text-sm text-slate-500 dark:text-slate-400">
-            More labs in development — check back soon.
+            More labs in development. Check back soon.
           </p>
         </div>
       </main>

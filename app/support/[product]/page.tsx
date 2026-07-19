@@ -29,14 +29,14 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { product: slug } = await params;
   const found = getProduct(slug);
-  if (!found) return { title: `Not found — ${content.site.name}` };
+  if (!found) return { title: `Not found | ${content.site.name}` };
   const { product, detail } = found;
   return {
-    title: `${product.title} — ${content.site.name}`,
+    title: `${product.title} | ${content.site.name}`,
     description: detail.subheading,
     alternates: { canonical: `/support/${slug}` },
     openGraph: {
-      title: `${product.title} — ${content.site.name}`,
+      title: `${product.title} | ${content.site.name}`,
       description: detail.subheading,
       url: `/support/${slug}`,
       siteName: content.site.name,

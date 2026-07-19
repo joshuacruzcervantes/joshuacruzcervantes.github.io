@@ -9,7 +9,7 @@ import type { Metadata } from "next";
 import RedirectTo from "@/components/RedirectTo";
 
 export const metadata: Metadata = {
-  title: "Moved to Support — Joshua Cervantes",
+  title: "Moved to Support | Joshua Cervantes",
   alternates: { canonical: "/support" },
   robots: { index: false, follow: true },
 };

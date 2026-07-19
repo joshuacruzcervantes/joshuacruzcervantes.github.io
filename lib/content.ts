@@ -25,7 +25,7 @@ export const content = {
   site: {
     name: "Joshua Cervantes",
     // Shown in the browser tab and search results.
-    title: "Joshua Cervantes — IT Instructor & Industry Practitioner",
+    title: "Joshua Cervantes | IT Instructor & Industry Practitioner",
     description:
       "IT professional with 6 years of hands-on Support & Operations experience, now teaching networking, security, and systems as an IT instructor.",
     // Used by the logo/brand in the navbar. "Sir Vantes" is the teaching brand.
@@ -71,14 +71,14 @@ export const content = {
     heading: "Labs Playground",
     kicker: "Hands-on practice",
     intro:
-      "Pick a lab and run it in your browser — no sign-in, no installs. Progress saves locally on your device, so you can close the tab and pick up where you left off later.",
+      "Pick a lab and run it in your browser. No sign-in, no installs. Progress saves locally on your device, so you can close the tab and pick up where you left off later.",
   },
   labs: [
     {
       title: "Network+ N10-009 Trainer",
       topic: "CompTIA Network+",
       blurb:
-        "An adaptive single-page trainer covering 45 high-miss concepts across 8 scaffolded modules — subnetting, routing, DNS, cloud, VLANs, wireless, and ops drills. Each item closes when you answer it correctly twice in a row.",
+        "An adaptive single-page trainer covering 45 high-miss concepts across 8 scaffolded modules (subnetting, routing, DNS, cloud, VLANs, wireless, and ops drills). Each item closes when you answer it correctly twice in a row.",
       tags: ["Network+", "Subnetting", "Routing", "VLANs", "Cloud"],
       href: "/netplus-trainer.html",
     },
@@ -93,14 +93,14 @@ export const content = {
     kicker: "Not sure yet? Start here",
     heading: "Find Your Path",
     intro:
-      "Two quick quizzes to help you decide — no sign-up, instant result. One for students still choosing a college course, one for those already headed into IT.",
+      "Two quick quizzes to help you decide. No sign-up, instant result. One for students still choosing a college course, one for those already headed into IT.",
   },
   quizzes: [
     {
       title: "Alin sa 4 na landas ang bagay sa'yo?",
       audience: "For anyone choosing between TESDA, DTS, Ladderized, or College",
       blurb:
-        "TESDA NC, Dual Training System, Ladderized Program, o College Diploma — magkaiba ang tulin, gastos, at destinasyon. Sagutin ang 6 na tanong at makakuha ng suhestiyon, kasama ang mga opisyal na link kung saan mag-che-check.",
+        "TESDA NC, Dual Training System, Ladderized Program, o College Diploma: magkaiba ang tulin, gastos, at destinasyon. Sagutin ang 6 na tanong at makakuha ng suhestiyon, kasama ang mga opisyal na link kung saan mag-che-check.",
       tags: ["4 pathways", "TESDA · DTS · Ladderized · College", "6 tanong"],
       href: "/pathways-quiz.html",
     },
@@ -108,7 +108,7 @@ export const content = {
       title: "Anong kurso ang para sa'yo?",
       audience: "For incoming college students",
       blurb:
-        "Hindi pa sigurado kung anong course kukunin? Sagutin ang 8 tanong at bibigyan ka namin ng suhestiyon — BSIT, BSCS, BSIS, BSCpE, Data Science, at iba pa. Walang tama o mali.",
+        "Hindi pa sigurado kung anong course kukunin? Sagutin ang 8 tanong at bibigyan ka namin ng suhestiyon: BSIT, BSCS, BSIS, BSCpE, Data Science, at iba pa. Walang tama o mali.",
       tags: ["Course finder", "Senior high → college", "8 tanong"],
       href: "/course-quiz.html",
     },
@@ -116,7 +116,7 @@ export const content = {
       title: "Anong IT path ang bagay sa'yo?",
       audience: "For future IT pros",
       blurb:
-        "Papasok ka na ba sa IT o nag-aaral na? Alamin kung aling sangay ang bagay sa'yo — Support, Networking, Security, Data, o Web/Dev — kasama ang totoong sahod sa PH.",
+        "Papasok ka na ba sa IT o nag-aaral na? Alamin kung aling sangay ang bagay sa'yo: Support, Networking, Security, Data, o Web/Dev, kasama ang totoong sahod sa PH.",
       tags: ["IT specialization", "Career path", "6 tanong"],
       href: "/it-path-quiz.html",
     },
@@ -138,7 +138,7 @@ export const content = {
     kicker: "Digital guide for BSIT students",
     heading: "The Incoming BSIT Survival Guide",
     subheading:
-      "Everything I wish someone told me before first year — from a 6-year IT pro turned instructor. Written in plain Taglish so it actually makes sense.",
+      "Everything I wish someone told me before first year, from a 6-year IT pro turned instructor. Written in plain Taglish so it actually makes sense.",
     // Shown as a badge near the top and again in the payment card.
     price: "₱99",
     priceNote: "Student price · One-time payment · Lifetime access · PDF download",
@@ -147,20 +147,20 @@ export const content = {
     // "What's inside" — each string becomes a checkmarked line.
     contentsHeading: "What's inside",
     contents: [
-      "What BSIT really is — and how it differs from CS and IS",
+      "What BSIT really is, and how it differs from CS and IS",
       "The subjects you'll face year by year, and which ones actually matter",
       "Gear you need vs. what you can skip on a student budget",
       "Free tools & accounts to set up before day one",
       "How to study tech the right way: labs over lectures",
-      "Flowcharts & logic — how to think through a problem before you code",
-      "Your first code, explained simply — variables, if/else, and loops",
+      "Flowcharts & logic: how to think through a problem before you code",
+      "Your first code, explained simply: variables, if/else, and loops",
       "Certs worth chasing while still in school (A+, Network+, cloud)",
-      "Building a portfolio from year 1 — GitHub, home labs, projects",
+      "Building a portfolio from year 1: GitHub, home labs, projects",
       "Common first-year mistakes and how to dodge them",
-      "IT career paths after BSIT — with real Philippine salary ranges",
+      "IT career paths after BSIT, with real Philippine salary ranges",
       "My go-to free resources: channels, courses, and communities",
-      "Bonus — a Quick-Start Checklist to set up before day one",
-      "Bonus — a plain-Taglish glossary of common IT terms",
+      "Bonus: a Quick-Start Checklist to set up before day one",
+      "Bonus: a plain-Taglish glossary of common IT terms",
     ],
 
     // ---- Sneak peek (blurred preview images) -------------------------
@@ -168,7 +168,7 @@ export const content = {
     // the teaser page is blurred so the full text can't be read for free.
     previewHeading: "Silipin muna",
     previewNote:
-      "Ito ang cover at unang chapter ng guide. Ang buong 21 na pahina — makukuha mo pagkatapos mong mabili.",
+      "Ito ang cover at unang chapter ng guide. Ang buong 21 na pahina, makukuha mo pagkatapos mong mabili.",
     coverImage: "/guide/guide-cover.png",
     peekImage: "/guide/guide-peek.png",
     peekBadge: "🔒 21 pages · buksan lahat sa ₱99",
@@ -206,15 +206,15 @@ export const content = {
       "Send the exact price to the GCash number above (account name: Joshua C. Cervantes).",
       "Screenshot your GCash receipt / reference number.",
       "Message me the screenshot (Messenger or email), and tell me which product you bought + the email to send it to.",
-      "I'll reply with your file/access within 24 hours — usually much faster.",
+      "I'll reply with your file/access within 24 hours, usually much faster.",
     ],
     messengerLabel: "Send proof on Messenger",
     // Facebook profile — clicking opens your profile so buyers can message you.
     messengerHref: "https://www.facebook.com/joshuacruzcervantesx/",
     emailLabel: "Or email your proof to",
     email: "yt.sirvantes@gmail.com",
-    emailSubject: "GCash proof of payment — Sir Vantes",
-    note: "Not sure yet? Message me first — happy to answer questions before you buy.",
+    emailSubject: "GCash proof of payment: Sir Vantes",
+    note: "Not sure yet? Message me first, happy to answer questions before you buy.",
   },
 
   /* ------------------------------------------------------------------ */
@@ -229,7 +229,7 @@ export const content = {
     kicker: "Support Sir Vantes",
     heading: "Support",
     intro:
-      "Everything here I make myself — on my own time, around a full-time job. That's exactly why I'd rather hand you a real guide or course than take your money for nothing. I don't do donations; I want a fair exchange — you get genuine value, and that support keeps me building more. Pay via GCash, instant access.",
+      "Everything here I make myself, on my own time, around a full-time job. That's exactly why I'd rather hand you a real guide or course than take your money for nothing. I don't do donations; I want a fair exchange: you get genuine value, and that support keeps me building more. Pay via GCash, instant access.",
 
     // ---- Coming-soon interest capture --------------------------------
     // Each "Coming soon" product shows a button that lets people tell you
@@ -251,13 +251,13 @@ export const content = {
     // These files ARE meant to be public — they live in /public/free/.
     freebiesHeading: "Start free",
     freebiesNote:
-      "Free downloads, no sign-up. Genuinely useful on their own — and the paid versions go deeper.",
+      "Free downloads, no sign-up. Genuinely useful on their own, and the paid versions go deeper.",
     freebies: [
       {
         title: "Subnetting Made Simple",
         kind: "Free · Networking",
         blurb:
-          "The block-size method that finally makes subnetting click — with worked examples and quick practice. The topic everyone fears, simplified.",
+          "The block-size method that finally makes subnetting click, with worked examples and quick practice. The topic everyone fears, simplified.",
         file: "/free/Subnetting-Made-Simple-Free.pdf",
         leadsTo: "Cheat-Sheet & Practice packs",
       },
@@ -265,7 +265,7 @@ export const content = {
         title: "Before You Start BSIT",
         kind: "Free · For students",
         blurb:
-          "7 things to set up this summer so you walk into first year already ahead — accounts, tools, and how to study tech.",
+          "7 things to set up this summer so you walk into first year already ahead: accounts, tools, and how to study tech.",
         file: "/free/BSIT-Summer-Head-Start-Free.pdf",
         leadsTo: "BSIT Survival Guide",
       },
@@ -273,15 +273,15 @@ export const content = {
         title: "5 IT Resume Mistakes",
         kind: "Free · Careers",
         blurb:
-          "The mistakes that get fresh-grad resumes ignored in seconds — and the simple fix for each, from the hiring side.",
+          "The mistakes that get fresh-grad resumes ignored in seconds, and the simple fix for each, from the hiring side.",
         file: "/free/5-IT-Resume-Mistakes-Free.pdf",
         leadsTo: "Resume + LinkedIn Guide",
       },
       {
-        title: "BSIT Survival Guide — Free Trial",
+        title: "BSIT Survival Guide: Free Trial",
         kind: "Free · For students",
         blurb:
-          "The first half of the guide, free — Chapters 1 to 6 plus the intro and full contents. Read the real thing, then unlock the remaining 6 chapters (coding, certs, portfolio, career paths + PH salaries) in the ₱99 version.",
+          "The first half of the guide, free: Chapters 1 to 6 plus the intro and full contents. Read the real thing, then unlock the remaining 6 chapters (coding, certs, portfolio, career paths + PH salaries) in the ₱99 version.",
         file: "/free/The-Incoming-BSIT-Survival-Guide-Free-Trial.pdf",
         leadsTo: "BSIT Survival Guide",
       },
@@ -294,7 +294,7 @@ export const content = {
         price: "₱99",
         priceNote: "Student price",
         blurb:
-          "21-page Taglish guide para sa mga papasok na BSIT — subjects year-by-year, gear, certs, portfolio, career paths na may totoong sahod sa PH, plus quick-start checklist at IT glossary.",
+          "21-page Taglish guide para sa mga papasok na BSIT: subjects year-by-year, gear, certs, portfolio, career paths na may totoong sahod sa PH, plus quick-start checklist at IT glossary.",
         tags: ["PDF", "21 pages", "Taglish"],
         slug: "guide",
         image: "/guide/guide-cover.png",
@@ -308,7 +308,7 @@ export const content = {
         price: "₱999",
         priceNote: "Lifetime access",
         blurb:
-          "Step-by-step video lessons — from scratch to 1st year ready. Hands-on labs, walkthroughs, and real-world tips from 6 years of experience.",
+          "Step-by-step video lessons, from scratch to 1st year ready. Hands-on labs, walkthroughs, and real-world tips from 6 years of experience.",
         tags: ["Video", "Lifetime", "Beginner"],
         slug: "",
         image: "",
@@ -322,7 +322,7 @@ export const content = {
         price: "₱49",
         priceNote: "Printable + digital",
         blurb:
-          "Quick-reference reviewers for your cert exams — subnetting, ports & protocols, and flashcards. Printable and phone-friendly.",
+          "Quick-reference reviewers for your cert exams: subnetting, ports & protocols, and flashcards. Printable and phone-friendly.",
         tags: ["Reviewer", "Cheat sheet", "Certs"],
         slug: "cheat-sheet",
         image: "/support/cheat-sheet-cover.png",
@@ -336,7 +336,7 @@ export const content = {
         price: "₱129",
         priceNote: "PDF + templates",
         blurb:
-          "How to build an IT resume and LinkedIn profile that actually gets callbacks — with templates and real examples.",
+          "How to build an IT resume and LinkedIn profile that actually gets callbacks, with templates and real examples.",
         tags: ["Resume", "LinkedIn", "Fresh grad"],
         slug: "resume-linkedin",
         image: "/support/resume-linkedin-cover.png",
@@ -378,7 +378,7 @@ export const content = {
         price: "₱500",
         priceNote: "Per session",
         blurb:
-          "A private session with Sir Vantes — mock interview, resume review, or career advice. Book a slot and bring your questions.",
+          "A private session with Sir Vantes: mock interview, resume review, or career advice. Book a slot and bring your questions.",
         tags: ["1-on-1", "Career", "Live"],
         slug: "",
         image: "",
@@ -392,7 +392,7 @@ export const content = {
         price: "₱149",
         priceNote: "Per month",
         blurb:
-          "Join the community — monthly Q&A, guidance, and support while you study or job-hunt. Cancel anytime.",
+          "Join the community: monthly Q&A, guidance, and support while you study or job-hunt. Cancel anytime.",
         tags: ["Community", "Discord", "Monthly"],
         slug: "",
         image: "",
@@ -411,11 +411,11 @@ export const content = {
   productDetails: {
     "cheat-sheet": {
       subheading:
-        "The tables and facts you keep forgetting — subnetting, ports, OSI, commands, and flashcards. Made to review fast, print, or keep on your phone.",
+        "The tables and facts you keep forgetting: subnetting, ports, OSI, commands, and flashcards. Made to review fast, print, or keep on your phone.",
       format: "PDF · quick-reference · printable & phone-friendly",
       contentsHeading: "What's inside",
       contents: [
-        "Subnetting cheat sheet — mask chart, CIDR → hosts, the magic numbers",
+        "Subnetting cheat sheet: mask chart, CIDR → hosts, the magic numbers",
         "Ports & protocols table (the one everyone gets asked)",
         "OSI model with an easy mnemonic",
         "Private & special IP ranges (incl. APIPA & loopback)",
@@ -426,12 +426,12 @@ export const content = {
     },
     "resume-linkedin": {
       subheading:
-        "How to build an IT resume and LinkedIn profile that actually get interviews — even with no work experience yet. Templates and real before/after examples included.",
+        "How to build an IT resume and LinkedIn profile that actually get interviews, even with no work experience yet. Templates and real before/after examples included.",
       format: "PDF · guide + fill-in template · examples",
       contentsHeading: "What's inside",
       contents: [
         "The resume structure that gets callbacks (with no experience)",
-        "Bullet formulas — weak vs. strong, with real examples",
+        "Bullet formulas: weak vs. strong, with real examples",
         "How to pass the ATS (resume-scanning software)",
         "A copy-paste fill-in resume template",
         "LinkedIn profile optimization (headline, about, skills)",
@@ -441,7 +441,7 @@ export const content = {
     },
     "practice-exams": {
       subheading:
-        "50 original practice questions with clear explanations across 8 domains — get exam-ready for CompTIA A+ and Network+ by learning the 'why,' not just the answer.",
+        "50 original practice questions with clear explanations across 8 domains. Get exam-ready for CompTIA A+ and Network+ by learning the 'why,' not just the answer.",
       format: "PDF · 50 questions · answers + explanations",
       contentsHeading: "What's covered",
       contents: [
@@ -482,7 +482,7 @@ export const content = {
   terminal: {
     // One-line bio printed by the `whoami` command.
     whoami:
-      "joshua — IT Support & Operations (6 yrs) → IT Instructor. Networking, security, systems. Bilingual EN/Tagalog.",
+      "joshua: IT Support & Operations (6 yrs) → IT Instructor. Networking, security, systems. Bilingual EN/Tagalog.",
     // The "files" the terminal exposes. The `name` is what users type after
     // `cat`. Use \n inside body strings to create new lines.
     files: [
@@ -544,13 +544,13 @@ export const content = {
     heading: "Teaching",
     kicker: "What I teach",
     intro:
-      "I teach the subjects I've lived. Every topic below comes with field stories, live demos, and the context that turns memorization into understanding — delivered bilingually in English and Tagalog.",
+      "I teach the subjects I've lived. Every topic below comes with field stories, live demos, and the context that turns memorization into understanding, delivered bilingually in English and Tagalog.",
     // Photos from a live teaching demo. Drop images in /public/teaching/ and
     // update the src/alt below. Keep alt text descriptive for accessibility.
     gallery: {
       heading: "Live teaching demo",
       caption:
-        "Delivering live IT lessons — slides, whiteboard, and a full class.",
+        "Delivering live IT lessons: slides, whiteboard, and a full class.",
       images: [
         {
           src: "/teaching/teaching-demo-1.jpg",
@@ -574,7 +574,7 @@ export const content = {
         icon: "network",
         title: "Networking",
         detail:
-          "OSI & TCP/IP models, subnetting, routing & switching, VLANs — with hands-on labs in Cisco Packet Tracer.",
+          "OSI & TCP/IP models, subnetting, routing & switching, VLANs, with hands-on labs in Cisco Packet Tracer.",
       },
       {
         icon: "hardware",
@@ -630,7 +630,7 @@ export const content = {
     heading: "Technical Skills",
     kicker: "What I work with",
     intro:
-      "Six years of doing, not just knowing. Grouped by domain — these are tools and systems I've worked with hands-on in production environments.",
+      "Six years of doing, not just knowing. Grouped by domain: these are tools and systems I've worked with hands-on in production environments.",
     // Headline metrics shown as a stat strip.
     metrics: [
       { value: "99.9%", label: "System uptime maintained" },
@@ -673,14 +673,14 @@ export const content = {
     heading: "Projects & Labs",
     kicker: "What I build",
     intro:
-      "Hands-on labs and projects — the kind of work I both do and teach.",
+      "Hands-on labs and projects, the kind of work I both do and teach.",
     // Put images at /public/projects/<file> (see README). Set link to "" to
     // hide the link button on a card.
     items: [
       {
         title: "Packet Tracer Lab: Multi-VLAN Network",
         description:
-          "A segmented campus network with inter-VLAN routing, DHCP, and access control — built and documented in Cisco Packet Tracer as a teaching reference.",
+          "A segmented campus network with inter-VLAN routing, DHCP, and access control, built and documented in Cisco Packet Tracer as a teaching reference.",
         tags: ["Networking", "Cisco", "VLANs", "Packet Tracer"],
         image: "/projects/placeholder-1.svg",
         link: "",
@@ -688,7 +688,7 @@ export const content = {
       {
         title: "Home Lab: Active Directory Domain",
         description:
-          "A virtualized Windows Server domain with organizational units, Group Policy, and managed user accounts — used to demo enterprise identity concepts.",
+          "A virtualized Windows Server domain with organizational units, Group Policy, and managed user accounts, used to demo enterprise identity concepts.",
         tags: ["Windows Server", "Active Directory", "Virtualization"],
         image: "/projects/placeholder-2.svg",
         link: "",
@@ -696,7 +696,7 @@ export const content = {
       {
         title: "Automation Scripts & Configs",
         description:
-          "A collection of PowerShell and Bash scripts for provisioning, backups, and routine maintenance — refined over years of operations work.",
+          "A collection of PowerShell and Bash scripts for provisioning, backups, and routine maintenance, refined over years of operations work.",
         tags: ["PowerShell", "Bash", "Automation"],
         image: "/projects/placeholder-3.svg",
         link: "",
@@ -731,7 +731,7 @@ export const content = {
       "Hiring for a teaching role, or want to talk shop about IT? I'd love to hear from you.",
     email: "yt.sirvantes@gmail.com",
     // Pre-fills the email subject line when someone clicks your address.
-    emailSubject: "Hello Joshua — Teaching / IT Opportunity",
+    emailSubject: "Hello Joshua: Teaching / IT Opportunity",
     // Social links now live in the shared top-level `socials` list above.
     cvLabel: "Download CV",
     cvHref: "/cv.pdf",

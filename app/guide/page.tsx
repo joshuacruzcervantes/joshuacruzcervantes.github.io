@@ -18,11 +18,11 @@ import { content } from "@/lib/content";
 const g = content.guidePage;
 
 export const metadata: Metadata = {
-  title: `${g.heading} — ${content.site.name}`,
+  title: `${g.heading} | ${content.site.name}`,
   description: g.subheading,
   alternates: { canonical: "/guide" },
   openGraph: {
-    title: `${g.heading} — ${content.site.name}`,
+    title: `${g.heading} | ${content.site.name}`,
     description: g.subheading,
     url: "/guide",
     siteName: content.site.name,
