@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!--
+  INTEGRATION NOTES (for joshuacervantes.online), read this before wiring it up.
+  ================================================================================
+  This is a single, self-contained file: no external scripts, no CDN links, no
+  build step, no backend. Every style and every script lives inside this one
+  HTML file, so it is safe to drop anywhere in a static site as-is.
+
+  Publish as its own page:
+    1. Drop this file into the site (e.g. /labs/security-mechanisms.html,
+       matching the existing /labs pattern already used on the site).
+    2. Link to it from wherever makes sense (nav, a blog post, a portfolio card).
+       No extra config, no dependencies to install.
+
+  Embed inside an existing page instead of giving it its own URL:
+    <iframe src="/labs/security-mechanisms.html"
+            style="width:100%; min-height:900px; border:0;"
+            title="Security Mechanisms Teaching Toolkit"></iframe>
+    (raise min-height if the Firewall Rule Lab tab feels cramped, its table
+    plus log panel is the tallest section; the page itself scrolls fine.)
+
+  Offline: fully self-contained, safe to demo in a classroom with no wifi.
+  Mobile: cards and the firewall rule table both reflow on small screens, but
+  the rule table reads best on a laptop or tablet; a "best viewed on a larger
+  screen" note is worth adding if a lot of phone traffic is expected.
+
+  Not yet wired up: no analytics, no navigation back to the rest of the site.
+  Both are easy additions whenever integration actually happens.
+-->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Security Teaching Toolkit, Encryption &amp; Firewalls · MSIT 643 · Joshua Cervantes</title>
+<style>
+  :root{
+    --bg:#0b1524; --panel:#121d33; --panel2:#1a2740; --ink:#eaf1ff; --muted:#8ea0c8;
+    --accent:#00c2a8; --steel:#3a7ca5; --good:#25d07d; --warn:#ffb020; --bad:#ff5470; --line:#25324f;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 600px at 20% -10%,#152037,transparent),var(--bg);
+    background-color:var(--bg);color:var(--ink);min-height:100vh}
+  header{padding:18px 24px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  header h1{font-size:18px;margin:0;font-weight:700}
+  header .sub{color:var(--muted);font-size:13px}
+  nav{display:flex;gap:8px;flex-wrap:wrap;padding:14px 24px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--bg);z-index:5}
+  nav button{background:var(--panel);color:var(--ink);border:1px solid var(--line);padding:9px 14px;
+    border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;transition:.15s}
+  nav button:hover{border-color:var(--accent)}
+  nav button.active{background:var(--accent);color:#04231e;border-color:var(--accent)}
+  main{padding:26px 24px;max-width:1080px;margin:0 auto}
+  .view{display:none;animation:fade .25s}
+  .view.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  h2{margin:0 0 6px;font-size:24px}
+  .tag{color:var(--muted);font-size:13px;margin-bottom:18px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:18px}
+  .hint{color:var(--muted);font-size:13px;margin-top:10px;font-style:italic}
+  button.big{font-size:14px;font-weight:700;border-radius:10px;padding:11px 16px;border:none;cursor:pointer}
+  label.small{display:block;color:var(--muted);font-size:12px;margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.03em}
+  input[type=text],input[type=number],select{
+    width:100%;font-size:14px;padding:9px 10px;border-radius:8px;border:1px solid var(--line);
+    background:#0e1728;color:var(--ink)}
+  select{cursor:pointer}
+
+  /* two-col */
+  .cols2{display:flex;gap:16px;flex-wrap:wrap}
+  .col{flex:1;min-width:280px}
+
+  /* ============ ENCRYPTION TAB ============ */
+  .cipher-out{font-family:"Courier New",monospace;background:#0e1728;border:1px solid var(--line);
+    border-radius:10px;padding:12px;min-height:52px;word-break:break-all;font-size:14px;color:var(--accent)}
+  .cipher-out.bad{color:var(--bad)}
+  .key-row{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+  .key-row>div{flex:1;min-width:180px}
+
+  .dh-swatch{width:70px;height:70px;border-radius:10px;border:2px dashed var(--line);margin:0 auto;
+    display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:20px;font-weight:700;
+    background:transparent;transition:.2s}
+
+  /* ============ DIFFIE-HELLMAN DIAGRAM (Alice / Eve / Bob) ============ */
+  .dh-diagram{background:#000;border:1px solid var(--line);border-radius:14px;padding:22px 24px 8px;
+    margin-top:16px;display:flex;flex-direction:column;align-items:center;overflow-x:auto}
+  .dh-label{font-family:"Courier New",monospace;font-weight:900;letter-spacing:.14em;font-size:19px;
+    color:#f2f2f2;text-shadow:0 0 8px rgba(255,255,255,.4)}
+  .dh-label-eve{color:var(--warn);text-shadow:0 0 8px rgba(255,176,32,.55);margin-bottom:8px}
+  .dh-eve{display:flex;flex-direction:column;align-items:center}
+  .dh-wire-vert{width:2px;height:26px;background:var(--warn)}
+  .dh-wire-row{position:relative;width:100%;max-width:380px;display:flex;justify-content:space-between;
+    align-items:flex-start;margin-top:0}
+  .dh-wire-horiz{position:absolute;top:0;left:0;right:0;height:2px;background:#c0392b}
+  .dh-person{display:flex;flex-direction:column;align-items:center;position:relative;z-index:1}
+  .dh-person .dh-label{margin-top:8px}
+  .dh-person-row{display:flex;align-items:stretch;gap:8px}
+  .dh-legend{display:flex;flex-direction:column;justify-content:center;gap:6px;font-size:10.5px;color:#999}
+  .dh-legend-item{display:flex;align-items:center;gap:5px;white-space:nowrap}
+  .dh-swatchkey{width:11px;height:11px;border-radius:2px;flex-shrink:0}
+  .dh-swatchkey.empty{background:transparent!important;border:1px dashed #555}
+  .dh-palette{display:flex;flex-direction:column;gap:3px;align-items:center}
+  .dh-swatch-btn{width:14px;height:14px;border-radius:4px;border:1.5px solid var(--line);cursor:pointer;padding:0}
+  .dh-swatch-btn:hover{border-color:var(--muted)}
+  .dh-swatch-btn.selected{border-color:var(--ink);box-shadow:0 0 0 2px var(--accent)}
+  .dh-stack{width:84px;display:flex;flex-direction:column}
+  .dh-block{height:44px;background:#161616;color:#555;font-size:13px;font-weight:700;
+    display:flex;align-items:center;justify-content:center;transition:background-color .4s ease}
+  .dh-block.hidden{border:1px dashed #3a3a3a}
+  .dh-received{margin-top:10px;display:flex;flex-direction:column;align-items:center}
+  .dh-block-sm{height:28px;width:84px}
+  .dh-received-lbl{font-size:10px;color:#888;margin-top:4px;text-align:center;max-width:84px;line-height:1.3}
+  .dh-mini-row{display:flex;align-items:center;gap:6px;justify-content:center}
+  .dh-block-tiny{height:28px;width:36px}
+  .dh-plus{color:#666;font-weight:900;font-size:14px}
+  .dh-packet{position:absolute;top:-6px;width:14px;height:14px;border-radius:50%;
+    box-shadow:0 0 8px rgba(0,0,0,.7),0 0 4px currentColor;z-index:2;pointer-events:none}
+  .dh-packet.right{animation:dhMoveRight 1.1s linear forwards}
+  .dh-packet.left{top:4px;animation:dhMoveLeft 1.1s linear forwards}
+  @keyframes dhMoveRight{from{left:6%}to{left:94%}}
+  @keyframes dhMoveLeft{from{left:94%}to{left:6%}}
+  .dh-swatch.stirring{animation:dhStirSpin .9s linear;box-shadow:0 0 16px rgba(255,255,255,.35)}
+  @keyframes dhStirSpin{
+    0%{transform:rotate(0deg) scale(1)}
+    50%{transform:rotate(360deg) scale(1.22)}
+    100%{transform:rotate(720deg) scale(1)}
+  }
+  @media (max-width:480px){
+    .dh-diagram{padding:16px 10px 8px}
+    .dh-label{font-size:15px}
+    .dh-person-row{gap:5px}
+    .dh-stack{width:56px}
+    .dh-block{height:30px;font-size:11px}
+    .dh-block-sm{width:56px;height:20px}
+    .dh-block-tiny{width:24px;height:20px}
+    .dh-legend{font-size:9px;gap:4px}
+    .dh-swatchkey{width:9px;height:9px}
+    .dh-swatch-btn{width:12px;height:12px;border-radius:3px}
+    .dh-received-lbl{max-width:56px;font-size:9px}
+    .toolbar .big{font-size:12.5px;padding:9px 12px}
+  }
+
+  .mailbox{display:flex;gap:16px;flex-wrap:wrap;align-items:stretch}
+  .mailbox .box{flex:1;min-width:240px;background:var(--panel2);border:2px solid var(--line);border-radius:16px;padding:20px;text-align:center}
+  .mailbox .icon{font-size:40px;margin-bottom:8px}
+  .locked-msg{font-family:"Courier New",monospace;background:#0e1728;border-radius:10px;padding:14px;margin:12px 0;
+    font-size:13px;word-break:break-all;min-height:44px;color:var(--warn)}
+  .result-banner{border-radius:10px;padding:12px 14px;margin-top:10px;font-weight:700;text-align:center}
+  .result-banner.ok{background:rgba(37,208,125,.15);color:var(--good);border:1px solid var(--good)}
+  .result-banner.no{background:rgba(255,84,112,.15);color:var(--bad);border:1px solid var(--bad)}
+
+  .flip{display:flex;gap:16px;flex-wrap:wrap}
+  .flipcard{flex:1;min-width:220px;background:var(--panel2);border:2px solid var(--line);border-radius:16px;
+    padding:20px;cursor:pointer;text-align:center;transition:.2s}
+  .flipcard:hover{transform:translateY(-3px)}
+  .flipcard .hidden{display:none;margin-top:10px;font-size:13px;background:#0e1728;border-radius:10px;padding:10px;text-align:left}
+  .flipcard.reveal .hidden{display:block}
+
+  /* ============ FIREWALL TAB ============ */
+  table{border-collapse:collapse;width:100%;margin-top:4px;font-size:13px}
+  th,td{border:1px solid var(--line);padding:9px 8px;text-align:center;vertical-align:middle}
+  th{background:var(--panel2);font-size:11.5px;text-transform:uppercase;letter-spacing:.03em;color:var(--muted)}
+  td select,td input{font-size:12.5px;padding:6px 4px}
+  .rule-row.disabled{opacity:.4}
+  .rule-row.flash{animation:flashRow .9s ease}
+  @keyframes flashRow{0%{background:rgba(0,194,168,.35)}100%{background:transparent}}
+  .act-badge{display:inline-block;padding:4px 10px;border-radius:20px;font-weight:800;font-size:11.5px;cursor:pointer;user-select:none}
+  .act-allow{background:rgba(37,208,125,.18);color:var(--good);border:1px solid var(--good)}
+  .act-deny{background:rgba(255,84,112,.18);color:var(--bad);border:1px solid var(--bad)}
+  .rowbtns{display:flex;gap:4px;justify-content:center}
+  .rowbtns button{background:var(--panel2);border:1px solid var(--line);color:var(--ink);border-radius:6px;
+    width:26px;height:26px;cursor:pointer;font-size:12px;line-height:1}
+  .rowbtns button:hover{border-color:var(--accent)}
+  .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+
+  .traffic-log{max-height:230px;overflow-y:auto;background:#0e1728;border-radius:10px;border:1px solid var(--line);
+    padding:10px;margin-top:10px;font-size:13px}
+  .log-item{display:flex;gap:8px;align-items:center;padding:7px 6px;border-bottom:1px solid var(--line)}
+  .log-item:last-child{border-bottom:none}
+  .log-stamp{font-weight:800;font-size:11px;padding:3px 8px;border-radius:20px;min-width:56px;text-align:center}
+  .log-stamp.ALLOW{background:rgba(37,208,125,.18);color:var(--good)}
+  .log-stamp.BLOCK{background:rgba(255,84,112,.18);color:var(--bad)}
+  .log-desc{flex:1;color:var(--ink)}
+  .log-rule{color:var(--muted);font-size:11.5px}
+
+  .tally{display:flex;gap:14px;margin-top:10px}
+  .tally div{background:var(--panel2);border-radius:10px;padding:10px 16px;font-weight:700;font-size:14px}
+  .tally .allow-n{color:var(--good)}
+  .tally .block-n{color:var(--bad)}
+
+  .presetbar{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+  .chip{font-size:12px;background:var(--panel2);border:1px solid var(--line);border-radius:20px;padding:6px 12px;cursor:pointer}
+  .chip:hover{border-color:var(--accent)}
+
+  /* ============ HOW TO USE TAB ============ */
+  .steps{margin:0;padding-left:26px}
+  .steps li{margin-bottom:14px;font-size:15px;line-height:1.55;padding-left:6px}
+  .steps b{color:var(--accent)}
+  .example-box{background:#0e1728;border:1px dashed var(--accent);border-radius:10px;padding:14px 16px;margin-top:14px;font-size:14px}
+  .example-box .lbl{color:var(--accent);font-weight:800;font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;display:block;margin-bottom:6px}
+  .stepcard-head{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .stepcard-head .num{background:var(--accent);color:#04231e;font-weight:800;width:32px;height:32px;border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+  .stepcard-head b{font-size:17px}
+
+  /* ============ REFERENCE TAB ============ */
+  .refgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .refcard{background:var(--panel2);border-radius:14px;padding:16px;border:1px solid var(--line)}
+  .refcard h4{margin:0 0 6px;font-size:15px;color:var(--accent);display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .refcard p{margin:0;font-size:13px;color:var(--ink);line-height:1.45}
+  @media (max-width:700px){.refgrid{grid-template-columns:1fr}}
+  .src-tag{font-size:9.5px;font-weight:800;text-transform:uppercase;letter-spacing:.03em;padding:2px 8px;border-radius:20px;flex-shrink:0}
+  .src-tag.lecture{background:rgba(0,194,168,.18);color:var(--accent);border:1px solid var(--accent)}
+  .src-tag.supp{background:rgba(142,160,200,.18);color:var(--muted);border:1px solid var(--muted)}
+  .sources-box{background:#0e1728;border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:16px;font-size:12.5px;color:var(--muted);line-height:1.5}
+  .sources-box b{color:var(--ink)}
+</style>
+</head>
+<body>
+<header>
+  <h1>🔐 Security Teaching Toolkit</h1>
+  <span class="sub">Lecture 7 · Topic: Security Mechanisms (Encryption + Firewalls) · MSIT 643 · Joshua Cervantes. Click a tab, project it, let them play.</span>
+</header>
+<nav id="nav"></nav>
+<main>
+
+  <!-- ============ HOW TO USE ============ -->
+  <section class="view" data-view="howto">
+    <h2>How to Use This Toolkit</h2>
+    <div class="tag">No coding needed. Everything happens by clicking, typing, or picking from a dropdown menu. Nothing here can break, so feel free to click around.</div>
+
+    <div class="card">
+      <div class="stepcard-head"><div class="num">1</div><b>Getting started</b></div>
+      <ol class="steps">
+        <li>Look at the row of buttons at the top of the page: <b>How to Use This</b>, <b>Encryption Playground</b>, <b>Firewall Rule Lab</b>, <b>Quick Reference</b>. Those are the four sections of this toolkit.</li>
+        <li>Click a button to open that section. The button you're on turns teal (bright green-blue) so you always know where you are.</li>
+        <li>Everything reacts to clicking, typing, or picking from a dropdown. There's no save button and no way to mess it up, so try things and see what happens.</li>
+      </ol>
+    </div>
+
+    <div class="card">
+      <div class="stepcard-head"><div class="num">2</div><b>Encryption Playground, step by step</b></div>
+      <ol class="steps">
+        <li>Open the <b>Encryption Playground</b> tab.</li>
+        <li>Find the box labeled <b>Message</b> and type any short sentence.</li>
+        <li>Find the box labeled <b>Shared key</b> and type any single word, like a password.</li>
+        <li>Look below at <b>Ciphertext</b>, it updates automatically into a string of letters and numbers. That's your message locked.</li>
+        <li>Find <b>Try decrypting with this key</b> and type the exact same word you used as the shared key. The <b>Decrypted result</b> box will show your original message again.</li>
+        <li>Now change that key to a different word instead. Watch the decrypted result turn into unreadable symbols. That's what happens when you don't have the right key.</li>
+        <li>Scroll down to the mailbox demo. Type a message, click <b>Lock with Josh's PUBLIC key</b>, then click <b>Unlock with Josh's PRIVATE key</b> to see it open. Click the red button instead to see it get rejected.</li>
+        <li>Scroll down further to the paint-mixing demo. Pick a public paint and two secret paints, Alice and Bob's towers paint themselves immediately, that's their own paint, no reason to hide it from themselves. Click <b>Step 1</b> and watch two little blobs travel across the wire, Alice's mixture heading to Bob, Bob's heading to Alice, both crossing paths where Eve is tapping the line in the middle. When they land, Alice and Bob each reveal what they received from the other, and Eve reveals what she intercepted. Click <b>Step 2</b> to watch Alice and Bob each stir their own secret into what they received, landing on the exact same final color, even though Eve never saw it. Change any color and the demo resets, so you can try it again.</li>
+      </ol>
+      <div class="example-box">
+        <span class="lbl">Try this example</span>
+        Type <b>Good morning class</b> as the message and <b>bulacan</b> as the key. Copy <b>bulacan</b> into the "try decrypting" box, it decrypts correctly. Now change it to <b>manila</b> instead, and watch it turn into garbage.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="stepcard-head"><div class="num">3</div><b>Firewall Rule Lab, step by step</b></div>
+      <ol class="steps">
+        <li>Open the <b>Firewall Rule Lab</b> tab.</li>
+        <li>At the top is a table. Each row is one rule, read left to right: <b>Source, Destination, Port, Protocol, Action</b>.</li>
+        <li>Click the green <b>ALLOW</b> or red <b>DENY</b> word in any row to flip it.</li>
+        <li>Use the up and down arrows (▲▼) on the right of each row to move it higher or lower. Order matters, the first rule that matches a packet wins.</li>
+        <li>Click <b>+ Add rule</b> to create a new row, then use the dropdowns to fill it in.</li>
+        <li>Click <b>▶ Send sample traffic (5 packets)</b> to send 5 example connections through your rules automatically. Watch the log on the right mark each one ALLOW or BLOCK, in real time.</li>
+        <li>Want to test something specific? Use the <b>Or test one custom packet</b> boxes, pick your options, and click <b>Test this packet</b>.</li>
+        <li>Curious what a bad setup looks like? Click <b>⚠️ Load broken example</b>, then send traffic again. Everything gets blocked, because the "block everything" rule is now sitting first in line.</li>
+        <li>Click <b>↺ Reset to working rule set</b> any time to start over from the safe default.</li>
+      </ol>
+      <div class="example-box">
+        <span class="lbl">Try this example</span>
+        Change row 1's <b>Port</b> from <b>443</b> to <b>8080</b>, then click <b>Send sample traffic</b> again. Notice the first packet (the HTTPS visitor) now gets BLOCKED instead of ALLOWED, because it no longer matches that rule. Click <b>Reset to working rule set</b> to undo it.
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="stepcard-head"><div class="num">4</div><b>Quick Reference</b></div>
+      <p style="margin:0;font-size:15px;line-height:1.55">This tab is a plain list of definitions, nothing to click. Use it if you or a classmate forgets what a term means during questions.</p>
+    </div>
+
+    <p class="hint">Presenter tip: project this page on the screen and let a volunteer come up and try the Firewall Rule Lab themselves, live, in front of the class.</p>
+  </section>
+
+  <!-- ============ ENCRYPTION ============ -->
+  <section class="view" data-view="crypto">
+    <h2>Encryption Playground</h2>
+    <div class="tag">DLO 1, Describe encryption mechanisms. Two families: one shared key, or a public/private pair.</div>
+
+    <div class="card">
+      <b>🔑 Symmetric encryption, one key, both directions</b>
+      <p class="hint" style="margin-top:6px;margin-bottom:0">Type a message and a shared key. The same operation that locks it is the one that unlocks it, only if the key matches exactly.</p>
+      <div class="key-row">
+        <div>
+          <label class="small">Message</label>
+          <input type="text" id="symMsg" value="Meet at the flagpole at noon" oninput="runSym()">
+        </div>
+        <div>
+          <label class="small">Shared key</label>
+          <input type="text" id="symKey" value="bulacan" oninput="runSym()">
+        </div>
+      </div>
+      <label class="small" style="margin-top:12px">Ciphertext (what a hacker sniffing the wire actually sees)</label>
+      <div class="cipher-out" id="symCipher">(nothing typed yet)</div>
+
+      <div class="key-row" style="margin-top:14px">
+        <div>
+          <label class="small">Try decrypting with this key</label>
+          <input type="text" id="symTryKey" value="bulacan" oninput="runSymDecrypt()">
+        </div>
+      </div>
+      <label class="small" style="margin-top:12px">Decrypted result</label>
+      <div class="cipher-out" id="symPlain">(nothing typed yet)</div>
+      <p class="hint">Change the "try decrypting" key to anything else. Same ciphertext, wrong key, pure garbage. That's the whole point of a key.</p>
+    </div>
+
+    <div class="card">
+      <b>📬 Asymmetric encryption, the mailbox slot</b>
+      <p class="hint" style="margin-top:6px;margin-bottom:0">Anyone can lock a message with Josh's <i>public</i> key, like dropping a letter in a mail slot. Only Josh's <i>private</i> key opens it.</p>
+      <div class="mailbox" style="margin-top:14px">
+        <div class="box">
+          <div class="icon">✉️</div>
+          <div style="font-weight:700;margin-bottom:8px">1. Lock a message</div>
+          <input type="text" id="asymMsg" value="The exam key is in my drawer" style="margin-bottom:10px">
+          <button class="big" style="background:var(--steel);color:#fff;width:100%" onclick="lockAsym()">Lock with Josh's PUBLIC key 🔓→🔒</button>
+          <div class="locked-msg" id="asymLocked">(nothing locked yet)</div>
+        </div>
+        <div class="box">
+          <div class="icon">🔐</div>
+          <div style="font-weight:700;margin-bottom:8px">2. Try to unlock it</div>
+          <button class="big" style="background:var(--good);color:#04231e;width:100%;margin-bottom:8px" onclick="unlockAsym(true)">Unlock with Josh's PRIVATE key</button>
+          <button class="big" style="background:var(--bad);color:#fff;width:100%" onclick="unlockAsym(false)">Unlock with a stranger's private key</button>
+          <div id="asymResult"></div>
+        </div>
+      </div>
+      <p class="hint">Notice: the key that <b>locks</b> is not the key that <b>unlocks</b>. That's the entire difference from symmetric encryption above.</p>
+      <p class="hint">Grounding: Lecture 7 Slide 19 mentions public and private keys for TLS, IPsec, and SSH, that's the anchor. The symmetric/asymmetric terms, the analogies, and this whole playground are supplemental, not in the lecture itself.</p>
+    </div>
+
+    <div class="card">
+      <b>🎨 Diffie-Hellman key exchange, the paint-mixing analogy</b>
+      <p class="hint" style="margin-top:6px;margin-bottom:0">Alice and Bob each hold two paints: their own secret, and a shared public paint everyone can see. Each mixes their two paints and sends the mixture to the other, over a line Eve is tapping. Alice and Bob both receive a mixture, Eve only ever watches one pass by.</p>
+
+      <div class="dh-diagram">
+        <div class="dh-eve">
+          <div class="dh-label dh-label-eve">EVE</div>
+          <div class="dh-legend-item" style="margin-bottom:8px"><span class="dh-swatchkey" id="dhEveLegendPublic"></span>knows public, it's public</div>
+          <div class="dh-stack">
+            <div class="dh-block hidden" id="dhEveTop">?</div>
+            <div class="dh-block hidden" id="dhEveBottom">?</div>
+          </div>
+        </div>
+        <div class="dh-wire-vert" id="dhWireVert"></div>
+        <div class="dh-wire-row" id="dhWireRow">
+          <div class="dh-wire-horiz" id="dhWireHoriz"></div>
+          <div class="dh-person">
+            <div class="dh-person-row">
+              <div class="dh-palette" id="dhPaletteA"></div>
+              <div class="dh-stack">
+                <div class="dh-block" id="dhAliceTop"></div>
+                <div class="dh-block" id="dhAliceBottom"></div>
+              </div>
+              <div class="dh-legend">
+                <div class="dh-legend-item"><span class="dh-swatchkey" id="dhAliceLegendPublic"></span>public</div>
+                <div class="dh-legend-item"><span class="dh-swatchkey" id="dhAliceLegendPrivate"></span>private</div>
+              </div>
+            </div>
+            <div class="dh-label">ALICE</div>
+            <div class="dh-received">
+              <div class="dh-block dh-block-sm hidden" id="dhAliceReceived">?</div>
+              <div class="dh-received-lbl">received from Bob</div>
+            </div>
+            <div class="dh-received">
+              <div class="dh-mini-row">
+                <div class="dh-block dh-block-tiny hidden" id="dhAliceStirReceived">?</div>
+                <span class="dh-plus">+</span>
+                <div class="dh-block dh-block-tiny" id="dhAliceStirSecret"></div>
+              </div>
+              <div class="dh-received-lbl">received + her secret</div>
+            </div>
+          </div>
+          <div class="dh-person">
+            <div class="dh-person-row">
+              <div class="dh-legend">
+                <div class="dh-legend-item"><span class="dh-swatchkey" id="dhBobLegendPublic"></span>public</div>
+                <div class="dh-legend-item"><span class="dh-swatchkey" id="dhBobLegendPrivate"></span>private</div>
+              </div>
+              <div class="dh-stack">
+                <div class="dh-block" id="dhBobTop"></div>
+                <div class="dh-block" id="dhBobBottom"></div>
+              </div>
+              <div class="dh-palette" id="dhPaletteB"></div>
+            </div>
+            <div class="dh-label">BOB</div>
+            <div class="dh-received">
+              <div class="dh-block dh-block-sm hidden" id="dhBobReceived">?</div>
+              <div class="dh-received-lbl">received from Alice</div>
+            </div>
+            <div class="dh-received">
+              <div class="dh-mini-row">
+                <div class="dh-block dh-block-tiny hidden" id="dhBobStirReceived">?</div>
+                <span class="dh-plus">+</span>
+                <div class="dh-block dh-block-tiny" id="dhBobStirSecret"></div>
+              </div>
+              <div class="dh-received-lbl">received + his secret</div>
+            </div>
+          </div>
+        </div>
+        <div class="toolbar" style="justify-content:center;margin-top:18px">
+          <button class="big" id="dhStep1Btn" style="background:var(--steel);color:#fff" onclick="dhStep1()">▶ Step 1, Alice &amp; Bob send their mixtures</button>
+          <button class="big" id="dhStep2Btn" style="background:var(--good);color:#04231e" onclick="dhStep2()" disabled>▶ Step 2, each side stirs in their own secret</button>
+          <button class="big" style="background:var(--panel2);color:var(--ink)" onclick="resetDH()">↺ Reset</button>
+        </div>
+        <p class="hint" id="dhCaption" style="margin-top:12px;text-align:center">Both towers have the same public paint on top, and each person's own private paint below it. Click <b>Step 1</b> to mix and send.</p>
+      </div>
+
+      <div class="mailbox" style="margin-top:14px">
+        <div class="box">
+          <div style="font-weight:700;margin-bottom:8px">Alice's final shared secret</div>
+          <div id="dhSwatchFinalA" class="dh-swatch" style="margin:0 auto">?</div>
+          <p class="hint" style="margin-top:8px">Bob's mixture, stirred with her own secret.</p>
+        </div>
+        <div class="box">
+          <div style="font-weight:700;margin-bottom:8px">Bob's final shared secret</div>
+          <div id="dhSwatchFinalB" class="dh-swatch" style="margin:0 auto">?</div>
+          <p class="hint" style="margin-top:8px">Alice's mixture, stirred with his own secret.</p>
+        </div>
+      </div>
+      <div id="dhResult"></div>
+
+      <p class="hint">Notice: both sides land on the exact same final color, but neither the public paint, Alice's sent mixture, nor Bob's sent mixture was ever the shared secret itself. Nobody watching the wire, not even Eve, can "unmix" a mixture back into its two ingredient paints, that one-way difficulty is standing in for how hard it is to reverse the modular exponentiation real Diffie-Hellman actually uses.</p>
+      <p class="hint">Further study: 📺 <a href="https://www.youtube.com/watch?v=YEBfamv-_do" target="_blank" rel="noopener noreferrer" style="color:var(--accent)">Diffie-Hellman Key Exchange, Computerphile</a> (~8 min), the classic version of this same paint-mixing analogy (Alice / Eve / Bob and all). Good second analogy to have ready in class beyond the mailbox-slot one above.</p>
+    </div>
+
+    <div class="card">
+      <b>📡 Where is data actually exposed? Click each card.</b>
+      <div class="flip" style="margin-top:12px">
+        <div class="flipcard" onclick="this.classList.toggle('reveal')">
+          <div style="font-size:30px">🌐</div>
+          <div style="font-weight:700;margin-top:6px">Data in transit</div>
+          <div class="hidden">Moving across a network right now, like a login, an upload, or a video call. TLS, SSH, and IPsec all protect data <b>in transit</b>.</div>
+        </div>
+        <div class="flipcard" onclick="this.classList.toggle('reveal')">
+          <div style="font-size:30px">💾</div>
+          <div style="font-weight:700;margin-top:6px">Data at rest</div>
+          <div class="hidden">Sitting on a disk, like a laptop, a backup drive, or a phone. BitLocker, EFS, and encrypted file systems protect data <b>at rest</b>.</div>
+        </div>
+      </div>
+      <p class="hint">Grounding: solid. Lecture 7 Slide 19 says encryption "may be used to secure data both in transit and when stored," almost word for word.</p>
+    </div>
+  </section>
+
+  <!-- ============ FIREWALL LAB ============ -->
+  <section class="view" data-view="firewall">
+    <h2>Firewall Rule Lab</h2>
+    <div class="tag">DLO 2, Configure a simulated firewall rule set allowing secure traffic flow. Rules run <b>top to bottom, first match wins.</b></div>
+
+    <div class="card">
+      <b>🧱 Your rule set</b>
+      <div style="overflow-x:auto"><table id="ruleTable"></table></div>
+      <div class="toolbar">
+        <button class="big" style="background:var(--accent);color:#04231e" onclick="addRule()">+ Add rule</button>
+        <button class="big" style="background:var(--panel2);color:var(--ink)" onclick="resetRules()">↺ Reset to working rule set</button>
+        <button class="big" style="background:var(--bad);color:#fff" onclick="loadBrokenRules()">⚠️ Load broken example (deny-all first)</button>
+      </div>
+      <p class="hint">Click ALLOW/DENY to flip an action. Use ▲▼ to reorder. Order changes the outcome. 🗑 deletes a rule.</p>
+      <p class="hint">Grounding: Lecture 7 only mentions firewalls in passing, as a hardening control (Slides 12, 16, 25, 30, 37). The rule table, the fields, the ordering logic, and this whole simulator are supplemental, built specifically to satisfy this topic's hands-on DLO.</p>
+    </div>
+
+    <div class="card">
+      <b>🚦 Send traffic through it</b>
+      <div class="presetbar">
+        <button class="big" style="background:var(--steel);color:#fff" onclick="sendSampleTraffic()">▶ Send sample traffic (5 packets)</button>
+        <button class="big" style="background:var(--panel2);color:var(--ink)" onclick="clearLog()">Clear log</button>
+      </div>
+
+      <div class="cols2" style="margin-top:16px">
+        <div class="col">
+          <label class="small">Or test one custom packet</label>
+          <div class="key-row" style="margin-top:0">
+            <div>
+              <label class="small">Source</label>
+              <select id="cSource"><option>Any</option><option>Admin IP</option><option>Unknown IP</option></select>
+            </div>
+            <div>
+              <label class="small">Destination</label>
+              <select id="cDest"><option>Web Server</option><option>SSH Server</option><option>Any</option></select>
+            </div>
+          </div>
+          <div class="key-row">
+            <div>
+              <label class="small">Port</label>
+              <input type="text" id="cPort" value="443">
+            </div>
+            <div>
+              <label class="small">Protocol</label>
+              <select id="cProto"><option>TCP</option><option>UDP</option><option>Any</option></select>
+            </div>
+          </div>
+          <button class="big" style="background:var(--accent);color:#04231e;width:100%;margin-top:10px" onclick="sendCustomPacket()">Test this packet →</button>
+        </div>
+        <div class="col">
+          <label class="small">Result log</label>
+          <div class="tally">
+            <div>Allowed: <span class="allow-n" id="allowCount">0</span></div>
+            <div>Blocked: <span class="block-n" id="blockCount">0</span></div>
+          </div>
+          <div class="traffic-log" id="trafficLog"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ QUICK REFERENCE ============ -->
+  <section class="view" data-view="ref">
+    <h2>Quick Reference</h2>
+    <div class="tag">Cheat sheet for Q&amp;A, everything from Lecture 7's Encryption Technology and firewall mentions, in one place. The small pill on each card shows whether it's straight from Lecture 7 or supplemental knowledge added to meet the DLO.</div>
+    <div class="refgrid">
+      <div class="refcard"><h4>TLS / HTTPS <span class="src-tag lecture">Lecture 7</span></h4><p>Encrypts traffic between a browser and a website. The padlock icon in your address bar. Uses asymmetric encryption to agree on a key, then symmetric encryption for the session.</p></div>
+      <div class="refcard"><h4>SSH <span class="src-tag lecture">Lecture 7</span></h4><p>Encrypts a remote login or admin session, so credentials and commands never travel in plain text across the network.</p></div>
+      <div class="refcard"><h4>IPsec (VPN) <span class="src-tag lecture">Lecture 7</span></h4><p>Encrypts an entire tunnel between two networks, or a laptop and an office network. Everything inside the tunnel is protected, not just one app.</p></div>
+      <div class="refcard"><h4>BitLocker / EFS <span class="src-tag lecture">Lecture 7</span></h4><p>Windows' encryption for data at rest, full-disk (BitLocker) or file-level (EFS). Protects data if a device is lost or stolen.</p></div>
+      <div class="refcard"><h4>Host-based firewall <span class="src-tag lecture">Lecture 7</span></h4><p>Runs on a single machine and only protects that machine. Examples: Windows Defender Firewall, a Linux host firewall.</p></div>
+      <div class="refcard"><h4>Network firewall <span class="src-tag lecture">Lecture 7</span></h4><p>Sits at the edge of a network and protects everything behind it, one checkpoint guarding many machines at once.</p></div>
+      <div class="refcard"><h4>Firewall rule anatomy <span class="src-tag supp">Supplemental</span></h4><p><b>Source → Destination → Port → Protocol → Action.</b> Every rule is really just those five fields. Lecture 7 never explains rule syntax, this is standard networking knowledge added for the DLO.</p></div>
+      <div class="refcard"><h4>Rule order <span class="src-tag supp">Supplemental</span></h4><p>Rules are evaluated top to bottom. The <b>first</b> matching rule wins. Everything below a matching rule is never checked. Not covered in Lecture 7.</p></div>
+      <div class="refcard"><h4>Symmetric encryption <span class="src-tag supp">Supplemental</span></h4><p>One shared key locks and unlocks. Fast, used for the actual bulk data (e.g., AES). Lecture 7 only hints at this via "keys must be generated," the terminology itself is standard cryptography.</p></div>
+      <div class="refcard"><h4>Asymmetric encryption <span class="src-tag supp">Supplemental</span></h4><p>A public key locks, a private key unlocks. Slower, used to safely exchange a shared key in the first place (e.g., RSA). Same note as symmetric, above.</p></div>
+    </div>
+    <div class="sources-box">
+      <b>Sources:</b> Lecture 7, Security Measures in Operating Systems (Dela Fuente, MSIT 643), specifically the Encryption Technology slide and the firewall mentions scattered across the OS-hardening, Linux/Unix, Windows, and hypervisor sections. Supplemented with standard, correctly-attributed encryption and firewall concepts not covered in the lecture material, needed to meet this topic's DLOs in full.
+    </div>
+  </section>
+
+</main>
+
+<script>
+  // ---- nav ----
+  const views=[
+    ['howto','How to Use This'],['crypto','Encryption Playground'],['firewall','Firewall Rule Lab'],['ref','Quick Reference']
+  ];
+  const nav=document.getElementById('nav');
+  views.forEach(([id,label],i)=>{
+    const b=document.createElement('button');
+    b.textContent=label; b.onclick=()=>show(id,b);
+    if(i===0)b.classList.add('active');
+    nav.appendChild(b);
+  });
+  function show(id,btn){
+    document.querySelectorAll('.view').forEach(v=>v.classList.toggle('active',v.dataset.view===id));
+    document.querySelectorAll('nav button').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+  }
+  document.querySelector('[data-view="howto"]').classList.add('active');
+
+  /* ===================== ENCRYPTION ===================== */
+  // simple reversible XOR-based cipher, rendered as hex, real "same key locks/unlocks" behavior
+  function xorCipher(str, key){
+    if(!key) key='x';
+    let out=[];
+    for(let i=0;i<str.length;i++){
+      const c = str.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+      out.push(c);
+    }
+    return out;
+  }
+  function bytesToHex(bytes){ return bytes.map(b=>b.toString(16).padStart(2,'0')).join(' '); }
+
+  let lastCipherBytes = [];
+  function runSym(){
+    const msg = document.getElementById('symMsg').value;
+    const key = document.getElementById('symKey').value || '(empty)';
+    lastCipherBytes = xorCipher(msg, key || 'x');
+    document.getElementById('symCipher').textContent = msg ? bytesToHex(lastCipherBytes) : '(nothing typed yet)';
+    runSymDecrypt();
+  }
+  function runSymDecrypt(){
+    const tryKey = document.getElementById('symTryKey').value || 'x';
+    const out = document.getElementById('symPlain');
+    if(!lastCipherBytes.length){ out.textContent='(nothing typed yet)'; out.classList.remove('bad'); return; }
+    const bytes = lastCipherBytes.map((b,i)=> b ^ tryKey.charCodeAt(i % tryKey.length));
+    const chars = bytes.map(b=>String.fromCharCode(b));
+    const text = chars.join('');
+    const correctKey = document.getElementById('symKey').value || '(empty)';
+    const isCorrect = tryKey === correctKey;
+    out.textContent = isCorrect ? text : text.split('').map(ch=> /[ -~]/.test(ch) ? ch : '▓').join('');
+    out.classList.toggle('bad', !isCorrect);
+  }
+  runSym();
+
+  let asymLockedMsg = null;
+  function lockAsym(){
+    const msg = document.getElementById('asymMsg').value || '(empty message)';
+    asymLockedMsg = msg;
+    const scrambled = msg.split('').map(c=>{
+      const code = c.charCodeAt(0) ^ 0x2A;
+      return code.toString(16).padStart(2,'0');
+    }).join(' ');
+    document.getElementById('asymLocked').textContent = scrambled;
+    document.getElementById('asymResult').innerHTML='';
+  }
+  function unlockAsym(withRightKey){
+    const box = document.getElementById('asymResult');
+    if(!asymLockedMsg){ box.innerHTML = '<div class="result-banner no">Nothing is locked yet. Lock a message first.</div>'; return; }
+    if(withRightKey){
+      box.innerHTML = `<div class="result-banner ok">✔ Unlocked: "${asymLockedMsg}"</div>`;
+    } else {
+      box.innerHTML = `<div class="result-banner no">✘ Access denied. Wrong private key, message stays scrambled.</div>`;
+    }
+  }
+
+  /* ===================== DIFFIE-HELLMAN PAINT MIXING ===================== */
+  function hexToRgb(hex){
+    const n = parseInt(hex.slice(1), 16);
+    return [(n>>16)&255, (n>>8)&255, n&255];
+  }
+  function rgbToHex(rgb){
+    return '#' + rgb.map(c=>Math.round(c).toString(16).padStart(2,'0')).join('');
+  }
+  // average an arbitrary list of colors together, order doesn't matter, only the set does
+  function mixColors(hexList){
+    const rgbs = hexList.map(hexToRgb);
+    const avg = [0,1,2].map(ch => rgbs.reduce((sum,c)=>sum+c[ch],0) / rgbs.length);
+    return rgbToHex(avg);
+  }
+  let dhMixA = null, dhMixB = null;
+
+  function dhSetBlock(id, color, revealed){
+    const el = document.getElementById(id);
+    el.style.background = revealed ? color : '#161616';
+    el.classList.toggle('hidden', !revealed);
+    el.textContent = revealed ? '' : '?';
+  }
+  function dhSetSwatch(id, color, revealed){
+    const el = document.getElementById(id);
+    el.style.background = revealed ? color : 'transparent';
+    el.style.borderStyle = revealed ? 'solid' : 'dashed';
+    el.textContent = revealed ? '' : '?';
+  }
+
+  // simplified 7-color palette, picking a specific hex is not the point, telling paints apart is
+  const DH_PALETTE = [
+    ['Red','#e74c3c'], ['Orange','#e67e22'], ['Yellow','#f1c40f'], ['Green','#2ecc71'],
+    ['Blue','#2e86de'], ['Purple','#8e44ad'], ['Pink','#e84393']
+  ];
+  const dhPublicColor = '#f1c40f'; // public paint is always yellow, no picking needed, that's the point of "public"
+  let dhSecretAColor = null;       // Alice and Bob start with no private paint chosen
+  let dhSecretBColor = null;
+
+  function dhBuildPalette(containerId, role){
+    const el = document.getElementById(containerId);
+    el.innerHTML = '';
+    DH_PALETTE.forEach(([name, hex]) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'dh-swatch-btn';
+      btn.style.background = hex;
+      btn.title = name;
+      btn.setAttribute('aria-label', name);
+      btn.onclick = () => dhSelectColor(role, hex, btn);
+      el.appendChild(btn);
+    });
+  }
+  function dhSelectColor(role, hex, btnEl){
+    if(role === 'secretA') dhSecretAColor = hex;
+    if(role === 'secretB') dhSecretBColor = hex;
+    btnEl.parentElement.querySelectorAll('.dh-swatch-btn').forEach(b => b.classList.remove('selected'));
+    btnEl.classList.add('selected');
+    resetDH();
+  }
+
+  // Alice and Bob always know their own two paints, so their towers paint immediately
+  function dhPaintTowers(){
+    const pub = dhPublicColor, a = dhSecretAColor, b = dhSecretBColor;
+    document.getElementById('dhAliceTop').style.background = pub;
+    document.getElementById('dhBobTop').style.background = pub;
+    dhSetBlock('dhAliceBottom', a, !!a);
+    dhSetBlock('dhBobBottom', b, !!b);
+    document.getElementById('dhAliceLegendPublic').style.background = pub;
+    document.getElementById('dhBobLegendPublic').style.background = pub;
+    document.getElementById('dhEveLegendPublic').style.background = pub; // public means public, Eve knows it too, always
+    document.getElementById('dhAliceLegendPrivate').classList.toggle('empty', !a);
+    document.getElementById('dhAliceLegendPrivate').style.background = a || 'transparent';
+    document.getElementById('dhBobLegendPrivate').classList.toggle('empty', !b);
+    document.getElementById('dhBobLegendPrivate').style.background = b || 'transparent';
+    dhSetBlock('dhAliceStirSecret', a, !!a);
+    dhSetBlock('dhBobStirSecret', b, !!b);
+    document.getElementById('dhWireHoriz').style.background = pub;
+    document.getElementById('dhWireVert').style.background = 'var(--warn)';
+  }
+
+  function dhClearPackets(){
+    document.querySelectorAll('.dh-packet').forEach(p => p.remove());
+  }
+
+  function resetDH(){
+    dhMixA = null; dhMixB = null;
+    dhClearPackets();
+    dhPaintTowers();
+    dhSetBlock('dhEveTop', null, false);
+    dhSetBlock('dhEveBottom', null, false);
+    dhSetBlock('dhAliceReceived', null, false);
+    dhSetBlock('dhBobReceived', null, false);
+    dhSetBlock('dhAliceStirReceived', null, false);
+    dhSetBlock('dhBobStirReceived', null, false);
+    document.getElementById('dhSwatchFinalA').classList.remove('stirring');
+    document.getElementById('dhSwatchFinalB').classList.remove('stirring');
+    dhSetSwatch('dhSwatchFinalA', null, false);
+    dhSetSwatch('dhSwatchFinalB', null, false);
+    document.getElementById('dhResult').innerHTML = '';
+    const ready = dhSecretAColor && dhSecretBColor;
+    document.getElementById('dhCaption').innerHTML = ready
+      ? 'Both towers have the same public paint on top, and each person\'s own private paint below it. Click <b>Step 1</b> to mix and send.'
+      : 'Pick a private paint for Alice and for Bob above to get started.';
+    document.getElementById('dhStep1Btn').disabled = !ready;
+    document.getElementById('dhStep2Btn').disabled = true;
+  }
+
+  function dhStep1(){
+    const pub = dhPublicColor;
+    const secretA = dhSecretAColor;
+    const secretB = dhSecretBColor;
+
+    dhMixA = mixColors([pub, secretA]); // what Alice mixes and sends
+    dhMixB = mixColors([pub, secretB]); // what Bob mixes and sends
+
+    dhClearPackets();
+    document.getElementById('dhStep1Btn').disabled = true;
+
+    // little traveling paint blobs, Alice's mixture heads right, Bob's heads left, crossing in the middle
+    const wireRow = document.getElementById('dhWireRow');
+    const packetA = document.createElement('div');
+    packetA.className = 'dh-packet right';
+    packetA.style.background = dhMixA;
+    packetA.style.color = dhMixA;
+    wireRow.appendChild(packetA);
+    const packetB = document.createElement('div');
+    packetB.className = 'dh-packet left';
+    packetB.style.background = dhMixB;
+    packetB.style.color = dhMixB;
+    wireRow.appendChild(packetB);
+
+    document.getElementById('dhCaption').innerHTML = '📨 Alice mixes her secret into the public paint and sends it right, Bob does the same and sends it left...';
+
+    setTimeout(()=>{
+      dhSetBlock('dhEveTop', dhMixA, true);
+      dhSetBlock('dhEveBottom', dhMixB, true);
+      document.getElementById('dhCaption').innerHTML = '👀 Eve, tapping the middle of the wire, just intercepted both mixtures as they crossed.';
+    }, 560);
+
+    setTimeout(()=>{
+      dhSetBlock('dhAliceReceived', dhMixB, true);
+      dhSetBlock('dhBobReceived', dhMixA, true);
+      dhSetBlock('dhAliceStirReceived', dhMixB, true);
+      dhSetBlock('dhBobStirReceived', dhMixA, true);
+      dhClearPackets();
+      document.getElementById('dhCaption').innerHTML = 'Alice now holds Bob\'s mixture, Bob now holds Alice\'s, and Eve has both, but nobody\'s actual secret paint ever crossed the wire.';
+      document.getElementById('dhStep1Btn').disabled = false;
+      document.getElementById('dhStep2Btn').disabled = false;
+    }, 1150);
+  }
+
+  function dhStep2(){
+    if(dhMixA === null || dhMixB === null) return;
+    const pub = dhPublicColor;
+    const secretA = dhSecretAColor;
+    const secretB = dhSecretBColor;
+
+    // Compute the true shared average once, from the exact original paints. Alice and Bob
+    // conceptually get there via different paths (each other's rounded mixture + their own
+    // secret), but if we recomputed each path independently through those already-rounded
+    // mixtures, two separate rounding chains could land 1 shade apart, so we settle both
+    // sides on the same exact value, which is the whole point: they DO land on the same color.
+    const finalShared = mixColors([pub, secretA, secretB]);
+    const finalAlice = finalShared;
+    const finalBob = finalShared;
+
+    const elA = document.getElementById('dhSwatchFinalA');
+    const elB = document.getElementById('dhSwatchFinalB');
+
+    document.getElementById('dhStep2Btn').disabled = true;
+    document.getElementById('dhCaption').innerHTML = '🥄 Alice stirs her own secret into what she received, Bob does the same...';
+
+    // a visibly spinning two-color pinwheel while "stirring", not just a flat color popping in
+    [elA, elB].forEach(el => { el.textContent = ''; el.style.borderStyle = 'solid'; });
+    elA.style.background = `conic-gradient(${dhMixB} 0deg 180deg, ${secretA} 180deg 360deg)`;
+    elB.style.background = `conic-gradient(${dhMixA} 0deg 180deg, ${secretB} 180deg 360deg)`;
+    elA.classList.add('stirring');
+    elB.classList.add('stirring');
+
+    setTimeout(()=>{
+      elA.classList.remove('stirring');
+      elB.classList.remove('stirring');
+      dhSetSwatch('dhSwatchFinalA', finalAlice, true);
+      dhSetSwatch('dhSwatchFinalB', finalBob, true);
+      document.getElementById('dhStep2Btn').disabled = false;
+
+      const banner = document.getElementById('dhResult');
+      banner.innerHTML = `<div class="result-banner ok">✔ Match! Both landed on ${finalShared}, the shared secret, without ever sending it directly. Eve still only has the two mixtures from Step 1, she can't reconstruct this color from those.</div>`;
+    }, 900);
+  }
+  dhBuildPalette('dhPaletteA', 'secretA');
+  dhBuildPalette('dhPaletteB', 'secretB');
+  resetDH();
+
+  /* ===================== FIREWALL LAB ===================== */
+  const WORKING_RULES = [
+    {source:'Any', dest:'Web Server', port:'443', protocol:'TCP', action:'ALLOW', enabled:true},
+    {source:'Any', dest:'Web Server', port:'80',  protocol:'TCP', action:'DENY',  enabled:true},
+    {source:'Admin IP', dest:'SSH Server', port:'22', protocol:'TCP', action:'ALLOW', enabled:true},
+    {source:'Any', dest:'Any', port:'Any', protocol:'Any', action:'DENY', enabled:true},
+  ];
+  let rules = JSON.parse(JSON.stringify(WORKING_RULES));
+
+  const SOURCE_OPTS=['Any','Admin IP','Unknown IP'];
+  const DEST_OPTS=['Any','Web Server','SSH Server'];
+  const PROTO_OPTS=['Any','TCP','UDP'];
+
+  function selectHTML(opts, current){
+    return opts.map(o=>`<option ${o===current?'selected':''}>${o}</option>`).join('');
+  }
+
+  function renderRules(flashIdx){
+    const t=document.getElementById('ruleTable');
+    let html='<tr><th>#</th><th>Source</th><th>Destination</th><th>Port</th><th>Protocol</th><th>Action</th><th>Enabled</th><th></th></tr>';
+    rules.forEach((r,i)=>{
+      html+=`<tr class="rule-row ${r.enabled?'':'disabled'} ${flashIdx===i?'flash':''}" data-i="${i}">
+        <td>${i+1}</td>
+        <td><select onchange="updateRule(${i},'source',this.value)">${selectHTML(SOURCE_OPTS,r.source)}</select></td>
+        <td><select onchange="updateRule(${i},'dest',this.value)">${selectHTML(DEST_OPTS,r.dest)}</select></td>
+        <td><input type="text" value="${r.port}" onchange="updateRule(${i},'port',this.value)" style="width:56px;text-align:center"></td>
+        <td><select onchange="updateRule(${i},'protocol',this.value)">${selectHTML(PROTO_OPTS,r.protocol)}</select></td>
+        <td><span class="act-badge ${r.action==='ALLOW'?'act-allow':'act-deny'}" onclick="toggleAction(${i})">${r.action}</span></td>
+        <td><input type="checkbox" ${r.enabled?'checked':''} onchange="toggleEnabled(${i})"></td>
+        <td><div class="rowbtns">
+          <button onclick="moveRule(${i},-1)" title="Move up">▲</button>
+          <button onclick="moveRule(${i},1)" title="Move down">▼</button>
+          <button onclick="deleteRule(${i})" title="Delete">🗑</button>
+        </div></td>
+      </tr>`;
+    });
+    t.innerHTML=html;
+  }
+  function updateRule(i,field,val){ rules[i][field]=val; }
+  function toggleAction(i){ rules[i].action = rules[i].action==='ALLOW' ? 'DENY' : 'ALLOW'; renderRules(); }
+  function toggleEnabled(i){ rules[i].enabled = !rules[i].enabled; renderRules(); }
+  function moveRule(i,dir){
+    const j=i+dir; if(j<0||j>=rules.length) return;
+    [rules[i],rules[j]]=[rules[j],rules[i]];
+    renderRules();
+  }
+  function deleteRule(i){ rules.splice(i,1); renderRules(); }
+  function addRule(){ rules.push({source:'Any',dest:'Any',port:'Any',protocol:'Any',action:'DENY',enabled:true}); renderRules(); }
+  function resetRules(){ rules = JSON.parse(JSON.stringify(WORKING_RULES)); renderRules(); clearLog(); }
+  function loadBrokenRules(){
+    rules = JSON.parse(JSON.stringify(WORKING_RULES));
+    // move the catch-all deny (last rule) to the front, classic misconfiguration
+    const catchAll = rules.pop();
+    rules.unshift(catchAll);
+    renderRules();
+    clearLog();
+    logMessage('⚠️ Loaded a broken rule set. The "deny everything" rule now runs FIRST. Send traffic and watch what happens.');
+  }
+  renderRules();
+
+  function evaluatePacket(pkt){
+    for(let i=0;i<rules.length;i++){
+      const r=rules[i];
+      if(!r.enabled) continue;
+      const srcMatch = r.source==='Any' || r.source===pkt.source;
+      const destMatch = r.dest==='Any' || r.dest===pkt.dest;
+      const portMatch = r.port==='Any' || String(r.port)===String(pkt.port);
+      const protoMatch = r.protocol==='Any' || r.protocol===pkt.protocol;
+      if(srcMatch && destMatch && portMatch && protoMatch){
+        return {action:r.action, ruleIndex:i};
+      }
+    }
+    return {action:'DENY', ruleIndex:-1}; // implicit deny if nothing matches
+  }
+
+  let allowCount=0, blockCount=0;
+  function logMessage(text){
+    const log=document.getElementById('trafficLog');
+    const div=document.createElement('div');
+    div.className='log-item';
+    div.innerHTML=`<div class="log-desc" style="color:var(--muted);font-style:italic">${text}</div>`;
+    log.prepend(div);
+  }
+  function logResult(pkt, result){
+    const log=document.getElementById('trafficLog');
+    const stampClass = result.action==='ALLOW' ? 'ALLOW' : 'BLOCK';
+    if(result.action==='ALLOW') allowCount++; else blockCount++;
+    document.getElementById('allowCount').textContent = allowCount;
+    document.getElementById('blockCount').textContent = blockCount;
+    const ruleTxt = result.ruleIndex>=0 ? `matched rule #${result.ruleIndex+1}` : 'no rule matched (implicit deny)';
+    const div=document.createElement('div');
+    div.className='log-item';
+    div.innerHTML=`<span class="log-stamp ${stampClass}">${stampClass==='ALLOW'?'ALLOW':'BLOCK'}</span>
+      <span class="log-desc">${pkt.label || (pkt.source+' → '+pkt.dest+' : '+pkt.protocol+'/'+pkt.port)}</span>
+      <span class="log-rule">${ruleTxt}</span>`;
+    log.prepend(div);
+    if(result.ruleIndex>=0){
+      renderRules(result.ruleIndex);
+    }
+  }
+  function clearLog(){
+    document.getElementById('trafficLog').innerHTML='';
+    allowCount=0; blockCount=0;
+    document.getElementById('allowCount').textContent='0';
+    document.getElementById('blockCount').textContent='0';
+  }
+
+  const SAMPLE_TRAFFIC=[
+    {source:'Any', dest:'Web Server', port:'443', protocol:'TCP', label:'Visitor loading the HTTPS website'},
+    {source:'Any', dest:'Web Server', port:'80',  protocol:'TCP', label:'Visitor trying plain HTTP'},
+    {source:'Admin IP', dest:'SSH Server', port:'22', protocol:'TCP', label:'Admin logging in via SSH'},
+    {source:'Unknown IP', dest:'SSH Server', port:'22', protocol:'TCP', label:'Random attacker trying SSH'},
+    {source:'Unknown IP', dest:'Web Server', port:'8080', protocol:'TCP', label:'Random scan on port 8080'},
+  ];
+  function sendSampleTraffic(){
+    let i=0;
+    (function step(){
+      if(i>=SAMPLE_TRAFFIC.length) return;
+      const pkt=SAMPLE_TRAFFIC[i];
+      const result=evaluatePacket(pkt);
+      logResult(pkt,result);
+      i++; setTimeout(step, 650);
+    })();
+  }
+  function sendCustomPacket(){
+    const pkt={
+      source: document.getElementById('cSource').value,
+      dest: document.getElementById('cDest').value,
+      port: document.getElementById('cPort').value,
+      protocol: document.getElementById('cProto').value,
+      label: 'Custom packet',
+    };
+    const result=evaluatePacket(pkt);
+    logResult(pkt,result);
+  }
+</script>
+</body>
+</html>

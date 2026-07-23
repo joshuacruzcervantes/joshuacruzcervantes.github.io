@@ -82,6 +82,14 @@ export const content = {
       tags: ["Network+", "Subnetting", "Routing", "VLANs", "Cloud"],
       href: "/netplus-trainer.html",
     },
+    {
+      title: "Security Teaching Toolkit",
+      topic: "MSIT 643 · Security Mechanisms",
+      blurb:
+        "An interactive encryption and firewall playground built for a Lecture 7 teaching demo: symmetric vs. asymmetric encryption (with a mailbox-slot and a paint-mixing Diffie-Hellman analogy), a click-and-drag firewall rule lab, and a Lecture 7-grounded quick reference sheet.",
+      tags: ["Encryption", "Diffie-Hellman", "Firewalls", "MSIT 643"],
+      href: "/security-teaching-toolkit.html",
+    },
   ],
 
   /* ------------------------------------------------------------------ */
