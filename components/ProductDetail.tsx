@@ -57,7 +57,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
             </div>
 
             <a
-              href="#buy"
+              href={product.file}
+              download
               className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
             >
               Get it <span aria-hidden>↓</span>
@@ -98,7 +99,8 @@ export default function ProductDetail({ slug }: { slug: string }) {
                   className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-white via-white/70 to-transparent dark:from-slate-900 dark:via-slate-900/70"
                 />
                 <a
-                  href="#buy"
+                  href={product.file}
+              download
                   className="absolute inset-x-0 bottom-0 flex items-center justify-center p-4"
                 >
                   <span className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-brand-600">

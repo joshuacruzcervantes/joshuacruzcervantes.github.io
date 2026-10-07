@@ -60,7 +60,7 @@ export default function Navbar() {
                 {...("newTab" in item && item.newTab
                   ? { target: "_blank", rel: "noopener noreferrer" }
                   : {})}
-                className="rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
+                className="whitespace-nowrap rounded-md px-3 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white"
               >
                 {item.label}
               </a>

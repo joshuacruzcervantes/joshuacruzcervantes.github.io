@@ -7,13 +7,15 @@
  * just move the lines around.
  *
  * Section order matches the spec:
- *   Hero → Terminal → About → Teaching → Skills → Projects → Certifications → Contact
+ *   Hero → About → Teaching → Skills → Projects → Certifications → Contact
  */
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import Terminal from "@/components/Terminal";
+import AsSeenOn from "@/components/AsSeenOn";
+import Identities from "@/components/Identities";
 import About from "@/components/About";
 import Teaching from "@/components/Teaching";
+import Media from "@/components/Media";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Certifications from "@/components/Certifications";
@@ -30,11 +32,17 @@ export default function Home() {
         {/* 1. Hero — loads clean & professional first */}
         <Hero />
 
-        {/* 2. Interactive terminal — desktop only (renders nothing on mobile) */}
-        <Terminal />
+        {/* As seen on: NET25 credibility strip */}
+        <AsSeenOn />
+
+        {/* The three hats: instructor, researcher, creator */}
+        <Identities />
 
         {/* 3. About */}
         <About />
+
+        {/* On camera: TV + viral clip */}
+        <Media />
 
         {/* 4. Teaching — sells the academe pivot */}
         <Teaching />

@@ -9,7 +9,7 @@
  *   4. Exports `metadata` for SEO (browser tab title, description).
  */
 import type { Metadata } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Inter, Newsreader, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { content } from "@/lib/content";
 import MotionProvider from "@/components/MotionProvider";
@@ -19,6 +19,13 @@ import MotionProvider from "@/components/MotionProvider";
 const sans = Inter({
   subsets: ["latin"],
   variable: "--font-sans",
+  display: "swap",
+});
+
+// Serif display face for headings — gives the site its academic voice.
+const display = Newsreader({
+  subsets: ["latin"],
+  variable: "--font-display",
   display: "swap",
 });
 
@@ -72,11 +79,32 @@ const personJsonLd = {
   jobTitle: "IT Instructor",
   description: content.site.description,
   url: content.site.url,
+  image: `${content.site.url}/media/hero-portrait.jpg`,
   email: `mailto:${content.contact.email}`,
   knowsLanguage: ["English", "Filipino"],
-  sameAs: content.socials
-    .map((s) => s.href)
-    .filter((href) => href.startsWith("http")),
+  knowsAbout: [
+    "Information Technology",
+    "Computer Networking",
+    "Cybersecurity",
+    "Information Assurance and Security",
+    "Web Development",
+    "IT Education",
+    "CompTIA Network+",
+    "CompTIA A+",
+  ],
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: "Bulacan State University",
+    sameAs: "https://bulsu.edu.ph",
+  },
+  worksFor: [
+    { "@type": "CollegeOrUniversity", name: "Richwell Colleges Incorporated" },
+    { "@type": "CollegeOrUniversity", name: "ACLC College of Baliuag" },
+  ],
+  sameAs: [
+    content.site.orcidUrl,
+    ...content.socials.map((s) => s.href).filter((href) => href.startsWith("http")),
+  ],
 };
 
 /**
@@ -120,7 +148,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${sans.variable} ${mono.variable} font-sans`}>
+      <body className={`${sans.variable} ${display.variable} ${mono.variable} font-sans`}>
         <MotionProvider>{children}</MotionProvider>
       </body>
     </html>

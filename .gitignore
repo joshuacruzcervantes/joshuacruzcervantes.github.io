@@ -27,3 +27,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Claude audit/build scratch (local only)
+.build-scratch/
+
+# Local product source files (PDF build sources, not for the site)
+Shop/

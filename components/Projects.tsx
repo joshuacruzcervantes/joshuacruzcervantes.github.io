@@ -26,16 +26,18 @@ export default function Projects() {
           {projects.items.map((project, i) => (
             <Reveal key={project.title} delay={i * 0.08}>
               <article className="group flex h-full flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition hover:-translate-y-1 hover:shadow-xl dark:border-slate-800 dark:bg-slate-900">
-                {/* Image / thumbnail */}
-                <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    loading="lazy"
-                    decoding="async"
-                    className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
-                  />
-                </div>
+                {/* Image / thumbnail (only when a real image is set) */}
+                {project.image ? (
+                  <div className="aspect-video w-full overflow-hidden bg-slate-100 dark:bg-slate-800">
+                    <img
+                      src={project.image}
+                      alt={project.title}
+                      loading="lazy"
+                      decoding="async"
+                      className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                    />
+                  </div>
+                ) : null}
 
                 {/* Body */}
                 <div className="flex flex-1 flex-col p-6">

@@ -13,7 +13,6 @@
  * story from the "technical" sections around it.
  */
 import type { ReactNode } from "react";
-import Script from "next/script";
 import { content } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
@@ -264,35 +263,29 @@ export default function Teaching() {
                 </div>
               </div>
 
-              {/* Right: TikTok's official embed widget. Their embed.js script
-                  scans the page for ".tiktok-embed" and swaps it for a live
-                  iframe — the follower count and video grid it renders are
-                  always current, no code changes needed on our end. */}
-              <div className="flex min-h-[18rem] w-full items-center justify-center bg-slate-50 p-4 dark:bg-slate-950/40 md:h-full">
-                {safeTiktokHandle ? (
-                  <blockquote
-                    className="tiktok-embed"
-                    cite={teaching.tiktok.profileUrl}
-                    data-unique-id={safeTiktokHandle}
-                    data-embed-type="creator"
-                    style={{ maxWidth: "100%", minWidth: "288px" }}
-                  >
-                    <section>
-                      <a
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        href={`${teaching.tiktok.profileUrl}?refer=creator_embed`}
-                      >
-                        @{safeTiktokHandle}
-                      </a>
-                    </section>
-                  </blockquote>
-                ) : null}
-              </div>
+              {/* Right: a reliable static TikTok card linking to the profile.
+                  Replaced the live creator-profile embed, which tripped
+                  TikTok's "overload-protect" rate limit. */}
+              <a
+                href={teaching.tiktok.profileUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex min-h-[18rem] w-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-center text-white transition hover:from-slate-800 hover:to-slate-700 md:h-full"
+              >
+                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-white/10">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+                    <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
+                  </svg>
+                </span>
+                <span className="text-lg font-semibold">@{safeTiktokHandle}</span>
+                <span className="text-sm text-slate-300">New clips every week</span>
+                <span className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900">
+                  Watch on TikTok
+                </span>
+              </a>
             </div>
           </div>
         </Reveal>
-        <Script src="https://www.tiktok.com/embed.js" strategy="lazyOnload" />
       </div>
     </section>
   );

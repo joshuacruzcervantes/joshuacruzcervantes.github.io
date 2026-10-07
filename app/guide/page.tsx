@@ -61,7 +61,8 @@ export default function GuidePage() {
 
             {/* Jump to buy */}
             <a
-              href="#buy"
+              href={g.file}
+              download
               className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
             >
               Get the guide <span aria-hidden>↓</span>
@@ -103,7 +104,8 @@ export default function GuidePage() {
                 />
                 {/* lock badge / CTA */}
                 <a
-                  href="#buy"
+                  href={g.file}
+              download
                   className="absolute inset-x-0 bottom-0 flex items-center justify-center p-4"
                 >
                   <span className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-brand-600">

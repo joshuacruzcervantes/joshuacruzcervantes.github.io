@@ -27,10 +27,12 @@ export const content = {
     // Shown in the browser tab and search results.
     title: "Joshua Cervantes | IT Instructor & Industry Practitioner",
     description:
-      "IT professional with 6 years of hands-on Support & Operations experience, now teaching networking, security, and systems as an IT instructor.",
+      "Full-time IT instructor at Richwell Colleges and part-time at ACLC Baliuag, MSIT student at PUP, with 6 years of enterprise IT Support and Operations experience. I teach networking, security, programming, and systems.",
     // Used by the logo/brand in the navbar. "Sir Vantes" is the teaching brand.
     brandShort: "Sir Vantes",
     url: "https://joshuacervantes.online", // the live site (custom domain on GitHub Pages)
+    orcidId: "0009-0000-5226-5244",
+    orcidUrl: "https://orcid.org/0009-0000-5226-5244",
   },
 
   /* ------------------------------------------------------------------ */
@@ -51,16 +53,79 @@ export const content = {
   nav: [
     { label: "About", href: "/#about" },
     { label: "Teaching", href: "/#teaching" },
-    { label: "Skills", href: "/#skills" },
     { label: "Projects", href: "/#projects" },
     { label: "Labs", href: "/labs/" },
-    { label: "Certifications", href: "/#certifications" },
+    { label: "Blog", href: "/blog/" },
+    { label: "Teaching Record", href: "/teaching-record/" },
     { label: "Contact", href: "/#contact" },
   ],
 
   // The prominent button in the navbar (was "View CV"). Sends students to the
   // quiz hub. The hero keeps its own "View CV" CTA for the hiring audience.
   navCta: { label: "Find Your Path", href: "/quiz/" },
+
+  /* ------------------------------------------------------------------ */
+  /*  AS SEEN ON  —  a thin credibility strip rendered under the hero.   */
+  /*  Text only. No TV footage (repost permission unconfirmed).          */
+  /* ------------------------------------------------------------------ */
+  asSeenOn: {
+    label: "As seen on",
+    outlet: "NET25 Kada Umaga",
+    note: "Invited on national TV as a resource person on artificial intelligence.",
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  IDENTITIES  —  the three hats, shown as a strip under the hero.    */
+  /* ------------------------------------------------------------------ */
+  identities: [
+    {
+      title: "Instructor",
+      detail:
+        "Full-time IT faculty at Richwell Colleges and part-time at ACLC Baliuag. I teach networking, security, programming, and systems, and I write my own courses.",
+    },
+    {
+      title: "Researcher",
+      detail:
+        "Taking my MSIT at PUP on the way to a doctorate in IT. My focus is learning analytics and how IT is actually taught.",
+    },
+    {
+      title: "Content Creator",
+      detail:
+        "Sir Vantes: free Tagalog IT education on YouTube and TikTok, and a resource person on national television.",
+    },
+  ],
+
+  /* ------------------------------------------------------------------ */
+  /*  MEDIA  —  the "On camera" section (TV + channel).                 */
+  /* ------------------------------------------------------------------ */
+  media: {
+    kicker: "On camera",
+    heading: "Media & Public Engagement",
+    // The most-watched clip, shown as a reliable card (TikTok's live embed
+    // rate-limits, so we link out instead of embedding).
+    viralClip: {
+      cover: "/media/viral-frv01.jpg",
+      title: "IT vs IS vs CS vs CpE: Ano ang pinagkaiba?",
+      views: "768.4K views",
+      series: "Most-watched \u00b7 FRV series",
+      blurb:
+        "My most-watched video: a plain-Tagalog breakdown of the four IT-related degree programs, from the Sir Vantes Frequently Raised Questions series.",
+      href: "https://www.tiktok.com/@sir.vantes/video/7657884987919781128",
+      hrefLabel: "Watch on TikTok",
+    },
+    items: [
+      {
+        title: "Resource Person, NET25 Kada Umaga",
+        period: "September 22, 2026 · aired live",
+        image: "/media/net25-panel.jpg",
+        imageAlt: "Joshua Cervantes on the NET25 Kada Umaga panel",
+        href: "https://www.youtube.com/watch?v=8mToSdE6XFU",
+        hrefLabel: "Watch the segment",
+        detail:
+          "Invited on live national television as the resource person on super intelligent AI, a twenty-minute conversation with the three hosts. I explained narrow AI, AGI, and superintelligence for a general audience, with two live demonstrations of generative AI tools.",
+      },
+    ],
+  },
 
   /* ------------------------------------------------------------------ */
   /*  LABS  —  the student playground at /labs                           */
@@ -131,16 +196,10 @@ export const content = {
   ],
 
   /* ------------------------------------------------------------------ */
-  /*  GUIDE  —  the paid PDF sales page at /guide                        */
+  /*  GUIDE  —  the BSIT Survival Guide page at /guide                   */
   /*                                                                    */
-  /*  This is a MANUAL GCash flow (the site is static and can't verify  */
-  /*  payments). A buyer pays via GCash, sends you the receipt, and you */
-  /*  reply with the PDF. Everything below is editable text.            */
-  /*                                                                    */
-  /*  IMPORTANT: do NOT put the paid PDF in /public — the URL would be  */
-  /*  public and anyone could download it for free. Keep the PDF on     */
-  /*  your computer / Google Drive and send it only after payment.      */
-  /*  (A GCash QR image IS fine to place in /public/guide/.)            */
+  /*  Everything is free now. The PDFs live in /public/downloads/ and   */
+  /*  are meant to be public. Everything below is editable text.        */
   /* ------------------------------------------------------------------ */
   guidePage: {
     kicker: "Digital guide for BSIT students",
@@ -148,8 +207,9 @@ export const content = {
     subheading:
       "Everything I wish someone told me before first year, from a 6-year IT pro turned instructor. Written in plain Taglish so it actually makes sense.",
     // Shown as a badge near the top and again in the payment card.
-    price: "₱99",
-    priceNote: "Student price · One-time payment · Lifetime access · PDF download",
+    price: "Free",
+    priceNote: "Free · Just follow Sir Vantes · PDF",
+    file: "/downloads/BSIT-Survival-Guide.pdf",
     format: "PDF · viewable on phone or laptop · yours to keep",
 
     // "What's inside" — each string becomes a checkmarked line.
@@ -179,7 +239,7 @@ export const content = {
       "Ito ang cover at unang chapter ng guide. Ang buong 21 na pahina, makukuha mo pagkatapos mong mabili.",
     coverImage: "/guide/guide-cover.png",
     peekImage: "/guide/guide-peek.png",
-    peekBadge: "🔒 21 pages · buksan lahat sa ₱99",
+    peekBadge: "Free · 21 pages · just follow me",
 
     // "Who it's for" — each string becomes a bullet.
     audienceHeading: "Who it's for",
@@ -191,42 +251,24 @@ export const content = {
   },
 
   /* ------------------------------------------------------------------ */
-  /*  PAYMENT  —  ONE shared GCash checkout for ALL paid products        */
+  /*  PAYMENT  —  the shared "follow me" card (everything is free)       */
   /*                                                                    */
-  /*  Manual flow: buyer pays via GCash, sends proof, you send the file.*/
-  /*  Used by both the /support page and each product page. Edit here ONCE */
-  /*  and it updates everywhere.                                        */
-  /*                                                                    */
-  /*  IMPORTANT: never put a paid file (PDF/video) in /public — the URL */
-  /*  would be public and downloadable for free. Keep paid files on     */
-  /*  your computer / Drive and send them only after payment.           */
+  /*  Used by both the /support page and each product page. Edit here   */
+  /*  ONCE and it updates everywhere.                                   */
   /* ------------------------------------------------------------------ */
   payment: {
-    heading: "How to buy (GCash)",
+    heading: "It's all free. Just follow me.",
     intro:
-      "Manual muna tayo: bayad via GCash, send mo ang resibo, ipapadala ko agad ang binili mo. Simple lang.",
-    gcashName: "Joshua C. Cervantes",
-    gcashNumber: "0975 966 0475",
-    // Optional: drop a GCash QR image at /public/guide/gcash-qr.png and set
-    // the path here. Leave as "" to hide the QR box.
-    gcashQr: "",
-    steps: [
-      "Send the exact price to the GCash number above (account name: Joshua C. Cervantes).",
-      "Screenshot your GCash receipt / reference number.",
-      "Message me the screenshot (Messenger or email), and tell me which product you bought + the email to send it to.",
-      "I'll reply with your file/access within 24 hours, usually much faster.",
-    ],
-    messengerLabel: "Send proof on Messenger",
-    // Facebook profile — clicking opens your profile so buyers can message you.
+      "I don't sell anything here. Take whatever helps, free. The only thing I ask is a follow, so these reach more students.",
+    messengerLabel: "Message me for your copy",
     messengerHref: "https://www.facebook.com/joshuacruzcervantesx/",
-    emailLabel: "Or email your proof to",
-    email: "yt.sirvantes@gmail.com",
-    emailSubject: "GCash proof of payment: Sir Vantes",
-    note: "Not sure yet? Message me first, happy to answer questions before you buy.",
+    emailLabel: "Or email me",
+    email: "joshuacruzcervantes@gmail.com",
+    note: "Everything here is free. If it helped, a follow and a share is the best thank-you.",
   },
 
   /* ------------------------------------------------------------------ */
-  /*  SUPPORT  —  the storefront at /support (all paid products here)    */
+  /*  SUPPORT  —  the storefront at /support (all free products here)    */
   /*                                                                    */
   /*  Add a product by appending to `products`. status: "available"     */
   /*  makes the button link to `href`; "coming-soon" shows a disabled   */
@@ -234,10 +276,10 @@ export const content = {
   /* ------------------------------------------------------------------ */
   support: {
     navLabel: "Support",
-    kicker: "Support Sir Vantes",
+    kicker: "Everything here is free",
     heading: "Support",
     intro:
-      "Everything here I make myself, on my own time, around a full-time job. That's exactly why I'd rather hand you a real guide or course than take your money for nothing. I don't do donations; I want a fair exchange: you get genuine value, and that support keeps me building more. Pay via GCash, instant access.",
+      "I don't sell anything here. Every guide and reviewer is free. The only thing I ask is that you follow Sir Vantes, so these reach more students. Grab whatever helps.",
 
     // ---- Coming-soon interest capture --------------------------------
     // Each "Coming soon" product shows a button that lets people tell you
@@ -255,11 +297,11 @@ export const content = {
     interestLabel: "Notify me",
 
     // ---- Free downloads (lead magnets) -------------------------------
-    // Genuinely useful free PDFs that each point to a paid product.
+    // Genuinely useful free PDFs.
     // These files ARE meant to be public — they live in /public/free/.
     freebiesHeading: "Start free",
     freebiesNote:
-      "Free downloads, no sign-up. Genuinely useful on their own, and the paid versions go deeper.",
+      "Free downloads, no sign-up. Genuinely useful on their own.",
     freebies: [
       {
         title: "Subnetting Made Simple",
@@ -289,7 +331,7 @@ export const content = {
         title: "BSIT Survival Guide: Free Trial",
         kind: "Free · For students",
         blurb:
-          "The first half of the guide, free: Chapters 1 to 6 plus the intro and full contents. Read the real thing, then unlock the remaining 6 chapters (coding, certs, portfolio, career paths + PH salaries) in the ₱99 version.",
+          "The first half of the guide, free: Chapters 1 to 6 plus the intro and full contents. The full guide is free too, with the remaining 6 chapters (coding, certs, portfolio, career paths + PH salaries).",
         file: "/free/The-Incoming-BSIT-Survival-Guide-Free-Trial.pdf",
         leadsTo: "BSIT Survival Guide",
       },
@@ -299,114 +341,62 @@ export const content = {
       {
         title: "The Incoming BSIT Survival Guide",
         kind: "PDF Guide",
-        price: "₱99",
-        priceNote: "Student price",
+        price: "Free",
+        priceNote: "Just follow me",
         blurb:
           "21-page Taglish guide para sa mga papasok na BSIT: subjects year-by-year, gear, certs, portfolio, career paths na may totoong sahod sa PH, plus quick-start checklist at IT glossary.",
         tags: ["PDF", "21 pages", "Taglish"],
         slug: "guide",
+        file: "/downloads/BSIT-Survival-Guide.pdf",
         image: "/guide/guide-cover.png",
         href: "/guide/",
-        cta: "View & buy",
+        cta: "Download free",
         status: "available",
-      },
-      {
-        title: "BSIT Head-Start Video Course",
-        kind: "Video Course",
-        price: "₱999",
-        priceNote: "Lifetime access",
-        blurb:
-          "Step-by-step video lessons, from scratch to 1st year ready. Hands-on labs, walkthroughs, and real-world tips from 6 years of experience.",
-        tags: ["Video", "Lifetime", "Beginner"],
-        slug: "",
-        image: "",
-        href: "",
-        cta: "Coming soon",
-        status: "coming-soon",
       },
       {
         title: "Cert Cheat-Sheet & Reviewer Pack",
         kind: "Reviewer Pack",
-        price: "₱49",
-        priceNote: "Printable + digital",
+        price: "Free",
+        priceNote: "Just follow me",
         blurb:
           "Quick-reference reviewers for your cert exams: subnetting, ports & protocols, and flashcards. Printable and phone-friendly.",
         tags: ["Reviewer", "Cheat sheet", "Certs"],
         slug: "cheat-sheet",
+        file: "/downloads/Cert-Cheat-Sheet-Reviewer-Pack.pdf",
         image: "/support/cheat-sheet-cover.png",
         href: "/support/cheat-sheet/",
-        cta: "View & buy",
+        cta: "Download free",
         status: "available",
       },
       {
         title: "Resume + LinkedIn Guide for IT Fresh Grads",
         kind: "PDF Guide",
-        price: "₱129",
-        priceNote: "PDF + templates",
+        price: "Free",
+        priceNote: "Just follow me",
         blurb:
           "How to build an IT resume and LinkedIn profile that actually gets callbacks, with templates and real examples.",
         tags: ["Resume", "LinkedIn", "Fresh grad"],
         slug: "resume-linkedin",
+        file: "/downloads/Resume-LinkedIn-Guide.pdf",
         image: "/support/resume-linkedin-cover.png",
         href: "/support/resume-linkedin/",
-        cta: "View & buy",
+        cta: "Download free",
         status: "available",
       },
       {
         title: "IT Cert Practice Exam Pack",
         kind: "Practice Exams",
-        price: "₱149",
-        priceNote: "50 questions + answers",
+        price: "Free",
+        priceNote: "Just follow me",
         blurb:
           "50 practice questions with clear explanations to get you exam-ready for CompTIA A+ and Network+.",
         tags: ["Practice", "A+", "Network+"],
         slug: "practice-exams",
+        file: "/downloads/IT-Cert-Practice-Exam-Pack.pdf",
         image: "/support/practice-exams-cover.png",
         href: "/support/practice-exams/",
-        cta: "View & buy",
+        cta: "Download free",
         status: "available",
-      },
-      {
-        title: "Guide + Video Course Bundle",
-        kind: "Bundle",
-        price: "₱1,099",
-        priceNote: "Save ₱99",
-        blurb:
-          "The BSIT Survival Guide plus the full video course, bundled together at a lower price than buying both.",
-        tags: ["Bundle", "Best value"],
-        slug: "",
-        image: "",
-        href: "",
-        cta: "Coming soon",
-        status: "coming-soon",
-      },
-      {
-        title: "1-on-1 Mentoring Session",
-        kind: "Mentoring",
-        price: "₱500",
-        priceNote: "Per session",
-        blurb:
-          "A private session with Sir Vantes: mock interview, resume review, or career advice. Book a slot and bring your questions.",
-        tags: ["1-on-1", "Career", "Live"],
-        slug: "",
-        image: "",
-        href: "",
-        cta: "Coming soon",
-        status: "coming-soon",
-      },
-      {
-        title: "Monthly Mentorship Community",
-        kind: "Membership",
-        price: "₱149",
-        priceNote: "Per month",
-        blurb:
-          "Join the community: monthly Q&A, guidance, and support while you study or job-hunt. Cancel anytime.",
-        tags: ["Community", "Discord", "Monthly"],
-        slug: "",
-        image: "",
-        href: "",
-        cta: "Coming soon",
-        status: "coming-soon",
       },
     ],
   },
@@ -430,7 +420,7 @@ export const content = {
         "Essential Windows/Linux troubleshooting commands",
         "Rapid-fire flashcards to test yourself",
       ],
-      peekBadge: "🔒 Full pack · unlock for ₱49",
+      peekBadge: "Free · full pack · just follow me",
     },
     "resume-linkedin": {
       subheading:
@@ -445,7 +435,7 @@ export const content = {
         "LinkedIn profile optimization (headline, about, skills)",
         "A pre-apply checklist to run every time",
       ],
-      peekBadge: "🔒 Full guide · unlock for ₱129",
+      peekBadge: "Free · full guide · just follow me",
     },
     "practice-exams": {
       subheading:
@@ -460,7 +450,7 @@ export const content = {
         "Wireless & security basics",
         "Troubleshooting, tools, hardware & cloud",
       ],
-      peekBadge: "🔒 All 50 questions · unlock for ₱149",
+      peekBadge: "Free · all 50 questions · just follow me",
     },
   },
 
@@ -469,15 +459,18 @@ export const content = {
   /* ------------------------------------------------------------------ */
   hero: {
     // Small label above the name.
-    eyebrow: "IT Instructor • 6 Years in the Field",
+    eyebrow: "Instructor · Researcher · Content Creator",
     name: "Joshua Cervantes",
     // The one-line positioning statement that speaks to BOTH audiences.
     tagline:
       "IT Instructor and Industry Practitioner. I teach networking, security, and systems from 6 years in the field, not from a textbook.",
     // A short supporting sentence under the tagline.
     subtext:
-      "Enterprise IT Support & Operations turned educator. I translate real-world systems into lessons students can actually use.",
+      "Now teaching full-time at Richwell Colleges and part-time at ACLC Baliuag, while taking my MSIT at PUP. I translate real-world systems into lessons students can actually use.",
     // Call-to-action buttons.
+    // Hero portrait (owned photo). Swap to an on-air still once cleared.
+    photo: "/media/hero-portrait.jpg",
+    photoAlt: "Joshua Cervantes",
     ctaPrimary: { label: "View CV", href: "/cv.pdf" }, // downloads the PDF in /public
     ctaSecondary: { label: "Follow on TikTok", href: "https://www.tiktok.com/@sir.vantes" },
     ctaTertiary: { label: "Follow me on YouTube", href: "https://www.youtube.com/@ytsirvantes" },
@@ -490,14 +483,14 @@ export const content = {
   terminal: {
     // One-line bio printed by the `whoami` command.
     whoami:
-      "joshua: IT Support & Operations (6 yrs) → IT Instructor. Networking, security, systems. Bilingual EN/Tagalog.",
+      "joshua: IT Support & Operations (6 yrs) → full-time IT instructor (Richwell) + part-time (ACLC), MSIT student at PUP. Bilingual EN/Tagalog.",
     // The "files" the terminal exposes. The `name` is what users type after
     // `cat`. Use \n inside body strings to create new lines.
     files: [
       {
         name: "about.txt",
         body:
-          "Joshua Cervantes\n6 years of hands-on enterprise IT (Support + Operations).\nNow teaching IT as an instructor/faculty.\nI bring the field into the classroom: real incidents, real fixes, real systems.",
+          "Joshua Cervantes\n6 years of hands-on enterprise IT (Support + Operations).\nNow full-time IT faculty at Richwell Colleges, part-time at ACLC Baliuag, and an MSIT student at PUP.\nI bring the field into the classroom: real incidents, real fixes, real systems.",
       },
       {
         name: "skills.json",
@@ -508,12 +501,12 @@ export const content = {
       {
         name: "certs.md",
         body:
-          "# Certifications\n- CompTIA A+ (2025)\n- CompTIA Network+ (in progress)\n- Google Cybersecurity Professional\n- Microsoft Azure Fundamentals (AZ-900)\n- Oracle Cloud Infrastructure Foundations\n- Master in Information Technology (in progress)",
+          "# Certifications\n- CompTIA A+ (2025)\n- CompTIA Network+ (in progress)\n- Google Cybersecurity Professional\n- Microsoft Azure Fundamentals (AZ-900)\n- Oracle Cloud Infrastructure Foundations\n- Master in Information Technology, PUP Open University (in progress)\n- BS Information Technology, Bulacan State University, Bustos (2019)",
       },
       {
         name: "contact.txt",
         body:
-          "email:    yt.sirvantes@gmail.com\nyoutube:  youtube.com/@ytsirvantes\ntiktok:   tiktok.com/@sir.vantes\nlinkedin: linkedin.com/in/joshuacruzcervantes",
+          "email:    joshuacruzcervantes@gmail.com\nyoutube:  youtube.com/@ytsirvantes\ntiktok:   tiktok.com/@sir.vantes\nlinkedin: linkedin.com/in/joshuacruzcervantes",
       },
     ],
     // A "directory" listed by `ls` — typing `cat projects/` hints to scroll.
@@ -533,7 +526,7 @@ export const content = {
     // Each string is a paragraph.
     paragraphs: [
       "I spent six years on the front lines of enterprise IT, doing Support and Operations, keeping systems, networks, and end users running. I've deployed and managed fleets of workstations, defended uptime, and dealt with the kind of messy, real-world problems that never show up in a textbook.",
-      "Now I'm putting that experience into teaching. What makes me a strong instructor isn't theory, it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
+      "Now I teach it full-time. I'm a full-time IT instructor at Richwell Colleges and teach part-time at ACLC Baliuag, while taking my Master in Information Technology at PUP. What makes me a strong instructor isn't theory, it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
       "I teach bilingually in English and Tagalog, and I've worked with learners at every level, from absolute beginners touching a command line for the first time to students preparing for industry certifications.",
     ],
     // Small highlight chips shown next to the photo.
@@ -580,27 +573,27 @@ export const content = {
     subjects: [
       {
         icon: "network",
-        title: "Networking",
+        title: "Data Communications & Networking",
         detail:
-          "OSI & TCP/IP models, subnetting, routing & switching, VLANs, with hands-on labs in Cisco Packet Tracer.",
-      },
-      {
-        icon: "hardware",
-        title: "Hardware & Computer Systems Servicing",
-        detail:
-          "PC assembly, troubleshooting, and maintenance aligned to CompTIA A+ competencies.",
-      },
-      {
-        icon: "security",
-        title: "Security Fundamentals",
-        detail:
-          "Core security concepts, threats, hardening, and safe operations practices for everyday IT.",
+          "OSI & TCP/IP, subnetting, routing & switching, and VLANs, with hands-on Cisco Packet Tracer labs. Taught as DCN1 and DCN3.",
       },
       {
         icon: "code",
-        title: "Intro to Programming",
+        title: "Web & Application Development",
         detail:
-          "Foundations of programming and problem solving in C, C++, C#, Java, PHP, and SQL.",
+          "Full-stack foundations: HTML, CSS, JavaScript, the DOM, PHP, MySQL, and OOP with data structures. Taught as Advanced OOP (AOOP).",
+      },
+      {
+        icon: "security",
+        title: "Information Assurance & Security",
+        detail:
+          "Core security concepts, threats, hardening, and IT audit and control, with live classroom demos. Taught as IAS2 and the IS elective.",
+      },
+      {
+        icon: "hardware",
+        title: "Systems & Platform Technologies",
+        detail:
+          "Platforms and operating systems, hardware and computer systems servicing aligned to CompTIA A+, and Living in the IT Era for first-years.",
       },
     ],
     // The YouTube call-out card.
@@ -686,27 +679,35 @@ export const content = {
     // hide the link button on a card.
     items: [
       {
-        title: "Packet Tracer Lab: Multi-VLAN Network",
+        title: "Network+ N10-009 Trainer",
         description:
-          "A segmented campus network with inter-VLAN routing, DHCP, and access control, built and documented in Cisco Packet Tracer as a teaching reference.",
-        tags: ["Networking", "Cisco", "VLANs", "Packet Tracer"],
+          "An adaptive, single-page study tool covering 45 high-miss Network+ concepts across 8 scaffolded modules. Runs in the browser with no sign-in; progress saves locally. Live in the Labs playground.",
+        tags: ["Network+", "Subnetting", "Routing", "JavaScript"],
         image: "/projects/placeholder-1.svg",
-        link: "",
+        link: "/netplus-trainer.html",
       },
       {
-        title: "Home Lab: Active Directory Domain",
+        title: "Security Teaching Toolkit",
         description:
-          "A virtualized Windows Server domain with organizational units, Group Policy, and managed user accounts, used to demo enterprise identity concepts.",
-        tags: ["Windows Server", "Active Directory", "Virtualization"],
+          "An interactive encryption and firewall playground built for a live lecture: symmetric vs. asymmetric encryption with a paint-mixing Diffie-Hellman analogy, plus a click-and-drag firewall rule lab.",
+        tags: ["Encryption", "Diffie-Hellman", "Firewalls"],
         image: "/projects/placeholder-2.svg",
+        link: "/security-teaching-toolkit.html",
+      },
+      {
+        title: "Classroom Reference Build",
+        description:
+          "A full-stack reference website (HTML, CSS, JavaScript, PHP, MySQL) built as the worked answer for my Advanced OOP and Data Structures course, with deliberately broken copies and an auditor script for student defect-hunting.",
+        tags: ["PHP", "MySQL", "Full-stack", "Teaching"],
+        image: "/projects/classroom-build.png",
         link: "",
       },
       {
-        title: "Automation Scripts & Configs",
+        title: "Instructor Attendance & Grading System",
         description:
-          "A collection of PowerShell and Bash scripts for provisioning, backups, and routine maintenance, refined over years of operations work.",
-        tags: ["PowerShell", "Bash", "Automation"],
-        image: "/projects/placeholder-3.svg",
+          "The reusable attendance and grading machinery I run across both schools: spreadsheet-based, low-infrastructure by design, and built to produce accreditation evidence as a byproduct of normal teaching.",
+        tags: ["Google Sheets", "Automation", "Operations"],
+        image: "/projects/grading-system.png",
         link: "",
       },
     ],
@@ -726,7 +727,8 @@ export const content = {
       { name: "Google Cybersecurity Professional", issuer: "Google", year: "", status: "done" },
       { name: "Microsoft Azure Fundamentals (AZ-900)", issuer: "Microsoft", year: "", status: "done" },
       { name: "Oracle Cloud Infrastructure Foundations", issuer: "Oracle", year: "", status: "done" },
-      { name: "Master in Information Technology", issuer: "Graduate Studies", year: "", status: "progress" },
+      { name: "BS Information Technology", issuer: "Bulacan State University, Bustos", year: "2019", status: "done" },
+      { name: "Master in Information Technology", issuer: "PUP Open University", year: "", status: "progress" },
     ],
   },
 
@@ -737,12 +739,157 @@ export const content = {
     heading: "Get in Touch",
     intro:
       "Hiring for a teaching role, or want to talk shop about IT? I'd love to hear from you.",
-    email: "yt.sirvantes@gmail.com",
+    email: "joshuacruzcervantes@gmail.com",
     // Pre-fills the email subject line when someone clicks your address.
     emailSubject: "Hello Joshua: Teaching / IT Opportunity",
     // Social links now live in the shared top-level `socials` list above.
     cvLabel: "Download CV",
     cvHref: "/cv.pdf",
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  TEACHING RECORD  —  /teaching-record. The academic / hiring-panel  */
+  /*  evidence page (BSU-oriented). Edit any text here.                  */
+  /* ------------------------------------------------------------------ */
+  teachingRecord: {
+    kicker: "For program chairs & hiring panels",
+    heading: "Teaching Record",
+    intro:
+      "A reference profile of my appointments, credentials, and the instructional materials I build. I came to teaching after six years in the field, and I prepare my own syllabi, semester programs, laboratory manuals, and examinations.",
+    cvLabel: "Download CV",
+    cvHref: "/cv.pdf",
+
+    credentials: [
+      {
+        title: "Master of Science in Information Technology",
+        org: "Polytechnic University of the Philippines",
+        note: "In progress, 9 units completed. 2026 to present.",
+      },
+      {
+        title: "Bachelor of Science in Information Technology",
+        org: "Bulacan State University, Bustos Campus",
+        note: "2019.",
+      },
+    ],
+
+    certifications: [
+      "CompTIA Network+ (N10-009), in preparation, target 2026",
+      "CompTIA A+ (2025)",
+      "Microsoft Certified: Azure Fundamentals (AZ-900) (2024)",
+      "Google Cybersecurity Professional Certificate (2023)",
+      "Oracle Cloud Infrastructure Foundations (2023)",
+    ],
+
+    appointments: [
+      {
+        role: "Full-Time Instructor",
+        org: "Richwell Colleges, Incorporated, Plaridel, Bulacan",
+        period: "August 2026 to present",
+        summary:
+          "A full-time load of four subjects across nine sections in three degree programs. Class adviser to BSIS 3-2.",
+        subjects: [
+          "Advanced Object-Oriented Programming and Data Structures (IS313C), BS Information Systems",
+          "Usability Engineering (IS313B), BS Information Systems",
+          "IT Audit and Control (ISELECT313A), BS Information Systems",
+          "Living in the IT Era (ELEC 113 and GEC ELECT 1s), BS Tourism Management and BS Civil Engineering",
+        ],
+        note:
+          "I wrote the CHED-aligned syllabus for every offering and rebuilt Advanced OOP around a full-stack track (HTML, CSS, Bootstrap, JavaScript, PHP, MySQL), ending with data structures from first principles. Every graded activity can be completed on paper when the lab or internet is unavailable. Complete courses deployed to Google Classroom, including graded assessments, using Google Apps Script.",
+      },
+      {
+        role: "Part-Time Instructor",
+        org: "ACLC College of Baliuag, Bulacan",
+        period: "July 2026 to present",
+        summary:
+          "Four tertiary IT subjects under the BS Information Technology program.",
+        subjects: [
+          "Data Communications and Networking 1 (DCN1)",
+          "Data Communications and Networking 3 (DCN3)",
+          "Information Assurance and Security 2 (IAS2)",
+          "Principles of Operating Systems and its Applications (POSA)",
+        ],
+        note:
+          "Prepared the complete course package for each subject: semester program, laboratory manual, and all four major examinations, following the institutional LMS and the prescribed BSIT curriculum outcomes. Networking is delivered through Cisco Packet Tracer and Cisco Networking Academy material; security through live demonstrations. I lecture bilingually for mixed-ability sections.",
+      },
+    ],
+
+    experience: [
+      {
+        role: "Information Technology Support",
+        org: "Asalus Corporation (Intellicare)",
+        period: "April 2023 to May 2026",
+        points: [
+          "Resolved daily hardware and software incidents on Windows and Linux workstations, averaging 150+ tickets a month, most on first contact.",
+          "Deployed and configured workstations to the security baseline; administered Active Directory, group policy, and user access.",
+          "Took part in three OS and software migrations with the accompanying hardware refresh.",
+        ],
+      },
+      {
+        role: "Operational Analyst",
+        org: "Smart Communications, Inc.",
+        period: "June 2020 to April 2023",
+        points: [
+          "Monitored high-availability platforms on a 24-hour rotation; handled critical escalations within service levels.",
+          "Coordinated the transfer of ISP circuits, surveillance, and biometric systems during an office relocation, with no service interruption.",
+        ],
+      },
+      {
+        role: "Network Systems Administration (On-the-Job Training)",
+        org: "Philippine Long Distance Telephone Company (PLDT)",
+        period: "2019",
+        points: [],
+      },
+    ],
+
+    materials: [
+      "CHED-aligned syllabi, semester programs, and laboratory manuals for every subject I teach",
+      "Six student self-study packs with answer keys (330 marks), each producible on paper with no lab and no internet",
+      "Network+ N10-009 browser trainer and a Security Teaching Toolkit, both used in class and public on the Labs page",
+      "A full-stack classroom reference build (HTML, CSS, JavaScript, PHP, MySQL) with a defect-hunting lab for Advanced OOP",
+      "A reusable attendance and grading system run across both schools, built to produce accreditation evidence as a byproduct",
+      "Complete Google Classroom course deployments, including graded assessments, automated with Google Apps Script",
+    ],
+
+    media: [
+      {
+        title: "Resource Person, Kada Umaga",
+        org: "NET25 live national television",
+        period: "September 22, 2026",
+        detail:
+          "Invited as resource person for a live segment on super intelligent AI, about twenty minutes with the three hosts. I explained narrow AI, AGI, and superintelligence for a general audience, ran two live generative-AI demonstrations, and discussed which jobs are most and least exposed to automation. The hosts invited me back for future segments.",
+      },
+      {
+        title: "Sir Vantes, Tagalog-language IT education channel",
+        org: "YouTube and TikTok",
+        period: "2026 to present",
+        detail:
+          "Free instructional content in Tagalog on IT certification and careers, reaching roughly 900,000 views and over 8,000 followers. I also maintain this site, which hosts a free CompTIA Network+ practice trainer for self-study learners.",
+      },
+    ],
+    publications: [
+      {
+        title:
+          "Keeping the Class Online: A Thematic Review of Network Performance Optimization Trends for Reliable E-Learning, 2022 to 2026",
+        venue:
+          "MSIT 643, Advanced Operating Systems and Networking. Adviser: Assoc. Prof. Carlo Inovero.",
+        type: "Review paper, IMRaD format",
+        year: "2026",
+        abstract:
+          "Synchronous online learning has become a permanent fixture of higher education, yet its delivery depends on residential and campus networks that were never engineered for sustained real-time media. This paper reviews fifteen peer-reviewed studies published between 2022 and 2026 to establish how contemporary operating system and network technologies address the reliability gap in e-learning. The review is organized thematically across six themes, from quality-of-service measurement and software-defined networking to edge computing, adaptive video delivery, security as a performance determinant, and the digital divide. Three findings emerge: the literature has shifted decisively from static provisioning toward learned, predictive control; prioritization consistently outperforms capacity expansion, because the flow that fails in an online class is low-bandwidth and latency-sensitive rather than bandwidth-hungry; and a measurement gap persists between the optimization literature, validated in simulation, and the education literature, which measures learner outcomes. The paper closes by mapping these trends onto a diagnosed Philippine household failure case and recommending an intervention order for school network administrators.",
+        pdf: "/research/Keeping-the-Class-Online.pdf",
+      },
+      {
+        title:
+          "Early Identification of At-Risk Students Using Attendance and Quiz Data: An Explainable Learning Analytics Model for Low-Infrastructure Philippine Higher Education Institutions",
+        venue:
+          "MSIT 632, Technology and Project Management. Individual research proposal, ACM format.",
+        type: "Research proposal",
+        year: "2026",
+        abstract:
+          "Students who fail a course usually show warning signs weeks before the final grade: missed classes, skipped quizzes and falling scores. Instructors in many Philippine higher education institutions see these signs too late because the records sit in separate attendance sheets, gradebooks and learning management systems. Most learning analytics research predicts at-risk students from rich LMS clickstream data collected in online or well-resourced settings, which does not match blended, low-infrastructure classrooms where LMS use is uneven. This proposal describes a quantitative, predictive study that will build and evaluate an explainable early warning model using only the two data sources such classrooms reliably have: attendance check-ins and quiz records. Logistic regression, decision tree, Random Forest and gradient boosting classifiers are compared at three checkpoints in the term, with recall as the primary metric and SHAP values used to explain each prediction. The expected output is a validated model and a weekly, printable risk list that tells the instructor which students to contact and why.",
+        pdf: "/research/MSIT632-Research-Proposal-Cervantes.pdf",
+      },
+    ],
   },
 
   /* ------------------------------------------------------------------ */

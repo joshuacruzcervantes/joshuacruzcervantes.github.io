@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url><loc>https://joshuacervantes.online/</loc></url>
+  <url><loc>https://joshuacervantes.online/teaching-record/</loc></url>
+  <url><loc>https://joshuacervantes.online/blog/</loc></url>
   <url><loc>https://joshuacervantes.online/labs/</loc></url>
-  <url><loc>https://joshuacervantes.online/shop/</loc></url>
+  <url><loc>https://joshuacervantes.online/quiz/</loc></url>
+  <url><loc>https://joshuacervantes.online/support/</loc></url>
   <url><loc>https://joshuacervantes.online/guide/</loc></url>
-  <url><loc>https://joshuacervantes.online/shop/cheat-sheet/</loc></url>
-  <url><loc>https://joshuacervantes.online/shop/resume-linkedin/</loc></url>
-  <url><loc>https://joshuacervantes.online/shop/practice-exams/</loc></url>
-  <url><loc>https://joshuacervantes.online/it-path-quiz.html</loc></url>
+  <url><loc>https://joshuacervantes.online/support/cheat-sheet/</loc></url>
+  <url><loc>https://joshuacervantes.online/support/resume-linkedin/</loc></url>
+  <url><loc>https://joshuacervantes.online/support/practice-exams/</loc></url>
+  <url><loc>https://joshuacervantes.online/blog/it-vs-is-vs-cs-vs-cpe/</loc><lastmod>2026-07-03</lastmod></url>
+  <url><loc>https://joshuacervantes.online/blog/magkano-ang-kita-sa-it/</loc><lastmod>2026-07-05</lastmod></url>
+  <url><loc>https://joshuacervantes.online/blog/every-it-job-ranked/</loc><lastmod>2026-07-11</lastmod></url>
+  <url><loc>https://joshuacervantes.online/blog/choosing-your-it-path/</loc><lastmod>2026-07-09</lastmod></url>
+  <url><loc>https://joshuacervantes.online/blog/as-seen-on-net25-kada-umaga/</loc><lastmod>2026-09-22</lastmod></url>
+  <url><loc>https://joshuacervantes.online/blog/why-i-teach-it/</loc><lastmod>2026-10-06</lastmod></url>
+  <url><loc>https://joshuacervantes.online/research/Keeping-the-Class-Online.pdf</loc></url>
+  <url><loc>https://joshuacervantes.online/research/MSIT632-Research-Proposal-Cervantes.pdf</loc></url>
 </urlset>

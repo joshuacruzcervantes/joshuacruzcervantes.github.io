@@ -24,23 +24,25 @@ const config: Config = {
     extend: {
       colors: {
         // The single brand accent color. Tweak this to re-skin the whole site.
+        // Deep academic teal. The scholarly accent for the whole site.
         brand: {
-          50: "#eef6ff",
-          100: "#d9ebff",
-          200: "#bcdcff",
-          300: "#8ec6ff",
-          400: "#59a5ff",
-          500: "#3182f6", // primary
-          600: "#1f66e0",
-          700: "#1a52b8",
-          800: "#1c4694",
-          900: "#1d3d75",
-          950: "#16264a",
+          50: "#f0faf7",
+          100: "#d6f2ea",
+          200: "#aee4d6",
+          300: "#79cdba",
+          400: "#45ad98",
+          500: "#2b9080", // primary
+          600: "#1f7064",
+          700: "#1c5a51",
+          800: "#1b4842",
+          900: "#193c38",
+          950: "#0a2420",
         },
       },
       fontFamily: {
         // These CSS variables are supplied by next/font in app/layout.tsx.
         sans: ["var(--font-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Georgia", "Times New Roman", "serif"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
       },
       keyframes: {
