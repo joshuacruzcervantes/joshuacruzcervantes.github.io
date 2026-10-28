@@ -132,7 +132,7 @@ export const posts: Post[] = [
     body: [
       { type: "p", text: "I did not start in teaching. I spent six years in enterprise IT, in support and operations, before I stood in front of a class. That order matters to me: I teach the work because I did the work." },
       { type: "img", src: "/teaching/teaching-demo-1.jpg", caption: "In the classroom: slides, whiteboard, and a full section." },
-      { type: "p", text: "Teaching is the career now, not a side job. I am full-time at Richwell Colleges and part-time at ACLC Baliuag, and I am taking my Master of Science in Information Technology at PUP, with a doctorate as the long-term goal." },
+      { type: "p", text: "Teaching is the career now, not a side job. I teach at ACLC Baliuag, and I am taking my Master of Science in Information Technology at PUP, with a doctorate as the long-term goal." },
       { type: "img", src: "/teaching/teaching-demo-2.jpg", caption: "Explaining a concept at the board during a live demo." },
       { type: "p", text: "The free content, the channel, and the reviewers all come from one belief: a lot of capable students struggle in IT not because they cannot do it, but because nobody explained it plainly, or they could not afford the materials. I can fix part of that." },
       { type: "img", src: "/teaching/teaching-demo-3.jpg", caption: "A full class in the computer lab." },

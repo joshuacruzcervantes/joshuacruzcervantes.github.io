@@ -81,7 +81,7 @@ export default function Navbar() {
           </a>
           <a
             href={content.navCta.href}
-            className="hidden rounded-lg bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600 sm:inline-block"
+            className="hidden rounded-lg bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700 sm:inline-block"
           >
             {content.navCta.label}
           </a>
@@ -130,7 +130,7 @@ export default function Navbar() {
               <a
                 href={content.navCta.href}
                 onClick={() => setMenuOpen(false)}
-                className="mt-1 block rounded-md bg-brand-500 px-3 py-3 text-center text-sm font-semibold text-white"
+                className="mt-1 block rounded-md bg-brand-600 px-3 py-3 text-center text-sm font-semibold text-white"
               >
                 {content.navCta.label}
               </a>

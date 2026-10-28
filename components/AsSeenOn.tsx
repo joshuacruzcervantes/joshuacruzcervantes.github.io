@@ -15,7 +15,7 @@ export default function AsSeenOn() {
   return (
     <section className="border-b border-slate-100 bg-white py-5 dark:border-slate-800/60 dark:bg-slate-950">
       <div className="container-page flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
-        <span className="text-xs font-semibold uppercase tracking-wider text-slate-400 dark:text-slate-500">
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {asSeenOn.label}
         </span>
         <span className="text-sm font-semibold text-slate-900 dark:text-white">

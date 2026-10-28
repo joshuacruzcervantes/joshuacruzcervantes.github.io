@@ -63,7 +63,7 @@ export default function GuidePage() {
             <a
               href={g.file}
               download
-              className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-600"
+              className="mt-6 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-brand-700"
             >
               Get the guide <span aria-hidden>↓</span>
             </a>
@@ -108,7 +108,7 @@ export default function GuidePage() {
               download
                   className="absolute inset-x-0 bottom-0 flex items-center justify-center p-4"
                 >
-                  <span className="inline-flex items-center gap-2 rounded-full bg-brand-500 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-brand-600">
+                  <span className="inline-flex items-center gap-2 rounded-full bg-brand-600 px-4 py-2 text-sm font-semibold text-white shadow-lg transition hover:bg-brand-700">
                     {g.peekBadge}
                   </span>
                 </a>
@@ -128,7 +128,7 @@ export default function GuidePage() {
                   <li key={item} className="flex gap-3">
                     <span
                       aria-hidden
-                      className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-brand-500 text-xs font-bold text-white"
+                      className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-brand-600 text-xs font-bold text-white"
                     >
                       ✓
                     </span>

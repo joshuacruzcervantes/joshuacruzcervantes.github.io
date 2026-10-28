@@ -41,7 +41,7 @@ export default function CopyEmail({ value }: { value: string }) {
       type="button"
       onClick={copy}
       aria-label={`Copy email address ${value}`}
-      className="flex-shrink-0 rounded-md bg-brand-500 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-600"
+      className="flex-shrink-0 rounded-md bg-brand-600 px-3 py-1.5 text-xs font-semibold text-white transition hover:bg-brand-700"
     >
       {copied ? "Copied ✓" : "Copy"}
     </button>

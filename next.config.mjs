@@ -19,6 +19,8 @@ const nextConfig = {
   // Adds a trailing slash to routes (e.g. /about/) which makes static hosting
   // on simple servers more reliable.
   trailingSlash: true,
+  // Inline critical CSS into the HTML so it does not block first paint.
+  experimental: { inlineCss: true },
 };
 
 export default nextConfig;

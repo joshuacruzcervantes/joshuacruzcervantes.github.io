@@ -23,9 +23,9 @@ export default function Identities() {
                 </span>
                 <span className="h-px flex-1 bg-slate-200 dark:bg-slate-700" />
               </div>
-              <h3 className="mt-3 text-xl font-semibold text-slate-900 dark:text-white">
+              <h2 className="mt-3 text-xl font-semibold text-slate-900 dark:text-white">
                 {it.title}
-              </h3>
+              </h2>
               <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
                 {it.detail}
               </p>

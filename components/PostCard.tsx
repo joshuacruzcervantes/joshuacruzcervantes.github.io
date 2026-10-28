@@ -58,11 +58,11 @@ function Meta({ post }: { post: Post }) {
     <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
       <span>{post.category}</span>
       <span className="text-slate-300 dark:text-slate-600">·</span>
-      <span className="font-medium normal-case tracking-normal text-slate-400 dark:text-slate-500">{fmtDate(post.date)}</span>
+      <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">{fmtDate(post.date)}</span>
       {post.video ? (
         <>
           <span className="text-slate-300 dark:text-slate-600">·</span>
-          <span className="font-medium normal-case tracking-normal text-slate-400 dark:text-slate-500">
+          <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">
             {post.video.kind === "youtube" ? "Video" : "Clip"}
           </span>
         </>
@@ -130,7 +130,7 @@ export function PostRow({ post }: { post: Post }) {
         <PostCover post={post} compact />
       </div>
       <div className="min-w-0">
-        <p className="text-xs text-slate-400 dark:text-slate-500">{fmtDate(post.date)}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400">{fmtDate(post.date)}</p>
         <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-slate-800 transition group-hover:text-brand-600 dark:text-slate-200 dark:group-hover:text-brand-400">
           {post.title}
         </p>

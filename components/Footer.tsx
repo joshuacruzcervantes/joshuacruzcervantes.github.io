@@ -20,7 +20,7 @@ export default function Footer() {
         {/* Follow / connect — shared social list. */}
         <SocialLinks variant="icons" />
         {/* A last wink at the terminal theme. */}
-        <p className="font-mono text-xs text-slate-400 dark:text-slate-500">
+        <p className="font-mono text-xs text-slate-500 dark:text-slate-400">
           exit 0, session ended cleanly
         </p>
         <a

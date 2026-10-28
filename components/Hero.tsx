@@ -1,5 +1,3 @@
-"use client";
-
 /**
  * Hero
  * ----
@@ -9,7 +7,6 @@
  *   - Right: a framed portrait, so the page leads with a person, not a console.
  *   - Background: a faint dotted grid and a soft teal glow. No motion loop.
  */
-import { motion } from "framer-motion";
 import { content } from "@/lib/content";
 
 export default function Hero() {
@@ -42,59 +39,34 @@ export default function Hero() {
         <div className="grid items-center gap-10 lg:grid-cols-[1.25fr_0.9fr] lg:gap-16">
           {/* Text column */}
           <div className="max-w-2xl">
-            <motion.p
-              initial={{ opacity: 0, y: 12 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
+            <p
               className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/60 px-3 py-1 text-xs font-semibold uppercase tracking-widest text-brand-600 dark:border-slate-700 dark:bg-slate-900/60 dark:text-brand-400"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-brand-500" />
               {hero.eyebrow}
-            </motion.p>
+            </p>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.08 }}
+            <h1
               className="mt-5 text-4xl font-semibold tracking-tight text-slate-900 dark:text-white sm:text-6xl"
             >
               {hero.name}
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.16 }}
+            <p
               className="mt-5 text-lg font-medium leading-relaxed text-slate-700 dark:text-slate-200 sm:text-2xl"
             >
               {hero.tagline}
-            </motion.p>
+            </p>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.24 }}
+            <p
               className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 dark:text-slate-400"
             >
               {hero.subtext}
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.55, delay: 0.32 }}
+            <div
               className="mt-8 flex flex-wrap items-center gap-3"
             >
-              <a
-                href={hero.ctaPrimary.href}
-                download
-                className="inline-flex items-center gap-2 rounded-xl bg-brand-500 px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-500/25 transition hover:bg-brand-600 hover:shadow-brand-500/40"
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
-                </svg>
-                {hero.ctaPrimary.label}
-              </a>
               <a
                 href={hero.ctaSecondary.href}
                 target="_blank"
@@ -117,23 +89,24 @@ export default function Hero() {
                 </svg>
                 {hero.ctaTertiary.label}
               </a>
-            </motion.div>
+            </div>
           </div>
 
           {/* Portrait column */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.96 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
+          <div
             className="relative mx-auto w-full max-w-sm lg:mx-0"
           >
             <div className="absolute -inset-3 rounded-[1.75rem] bg-brand-500/10 blur-xl" aria-hidden="true" />
             <img
               src={hero.photo}
+              width={900}
+              height={1125}
+              fetchPriority="high"
+              decoding="async"
               alt={hero.photoAlt}
               className="relative aspect-[4/5] w-full rounded-2xl object-cover shadow-xl ring-1 ring-slate-200 dark:ring-slate-800"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>

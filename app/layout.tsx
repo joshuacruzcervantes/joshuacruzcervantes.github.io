@@ -58,11 +58,13 @@ export const metadata: Metadata = {
     url: "/",
     siteName: content.site.name,
     type: "website",
+    images: [{ url: "/media/net25-panel.jpg", width: 960, height: 540, alt: content.site.name }],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: content.site.title,
     description: content.site.description,
+    images: ["/media/net25-panel.jpg"],
   },
 };
 
@@ -98,7 +100,6 @@ const personJsonLd = {
     sameAs: "https://bulsu.edu.ph",
   },
   worksFor: [
-    { "@type": "CollegeOrUniversity", name: "Richwell Colleges Incorporated" },
     { "@type": "CollegeOrUniversity", name: "ACLC College of Baliuag" },
   ],
   sameAs: [

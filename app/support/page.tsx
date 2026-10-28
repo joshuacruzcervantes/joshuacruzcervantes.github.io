@@ -85,7 +85,7 @@ function ProductCard({ product }: { product: Product }) {
         <a
           href={product.file}
           download
-          className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-500 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-600"
+          className="mt-5 inline-flex items-center justify-center gap-1.5 rounded-lg bg-brand-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
         >
           {product.cta} <span aria-hidden>↓</span>
         </a>

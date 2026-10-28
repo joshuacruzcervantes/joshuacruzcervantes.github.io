@@ -47,11 +47,10 @@ components to update wording, skills, certs, projects, or links.
 ## 3. Where to put your assets
 
 Everything in the **`public/`** folder is served at the root of your site
-(e.g. `public/cv.pdf` → `https://yoursite.com/cv.pdf`).
+(e.g. `public/profile.jpg` → `https://yoursite.com/profile.jpg`).
 
 | What | Drop it here | Notes |
 |------|--------------|-------|
-| **Your CV** | `public/cv.pdf` | Replace the placeholder. The "View CV" / "Download CV" buttons link to `/cv.pdf`. |
 | **Your photo** | `public/profile.jpg` | A placeholder `profile.svg` ships in `public/`. After adding `profile.jpg`, open `lib/content.ts`, find `about.photo`, and change `"/profile.svg"` to `"/profile.jpg"`. A portrait (4:5) image looks best. |
 | **Project images** | `public/projects/` | Replace `placeholder-1.svg`, `-2`, `-3` with your own screenshots (e.g. `lab.png`). Then update each project's `image` path in `lib/content.ts`. |
 
@@ -90,7 +89,7 @@ sirvanteswebsite/
 ├── lib/
 │   ├── content.ts        # ← ALL YOUR TEXT LIVES HERE
 │   └── useIsDesktop.ts   # Hook that hides the terminal on phones/tablets
-├── public/               # Your assets (cv.pdf, profile, project images)
+├── public/               # Your assets (profile, project images)
 ├── tailwind.config.ts    # Brand color + fonts (change the accent here)
 └── next.config.mjs       # Static-export config
 ```

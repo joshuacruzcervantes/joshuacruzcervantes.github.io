@@ -86,12 +86,6 @@ export default function TeachingRecordPage() {
             <Reveal>
               <div className="flex shrink-0 flex-col items-start gap-3 sm:items-end">
                 <a
-                  href={tr.cvHref}
-                  className="inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-700"
-                >
-                  {tr.cvLabel} <span aria-hidden>↓</span>
-                </a>
-                <a
                   href={content.site.orcidUrl}
                   target="_blank"
                   rel="noopener noreferrer"

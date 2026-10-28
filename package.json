@@ -29,5 +29,11 @@
   "overrides": {
     "postcss": "$postcss",
     "sharp": "^0.35.3"
-  }
+  },
+  "browserslist": [
+    "chrome >= 109",
+    "edge >= 109",
+    "firefox >= 115",
+    "safari >= 16"
+  ]
 }

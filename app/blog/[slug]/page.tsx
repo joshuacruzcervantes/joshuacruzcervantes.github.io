@@ -90,7 +90,7 @@ export default async function BlogPostPage({
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold uppercase tracking-wider text-brand-600 dark:text-brand-400">
               <span>{post.category}</span>
               <span className="text-slate-300 dark:text-slate-600">·</span>
-              <span className="font-medium normal-case tracking-normal text-slate-400 dark:text-slate-500">{fmtDate(post.date)}</span>
+              <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">{fmtDate(post.date)}</span>
               <span className="text-slate-300 dark:text-slate-600">·</span>
               <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">By {content.site.name}</span>
             </div>
@@ -159,7 +159,7 @@ export default async function BlogPostPage({
               {post.cta ? (
                 <a
                   href={post.cta.href}
-                  className="mt-10 inline-flex items-center gap-2 rounded-lg bg-brand-500 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-600"
+                  className="mt-10 inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700"
                 >
                   {post.cta.label} <span aria-hidden>→</span>
                 </a>
@@ -187,7 +187,7 @@ export default async function BlogPostPage({
                     </div>
                   </div>
                   <p className="mt-4 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                    Six years in enterprise IT, now teaching full-time. Free, plain-language IT lessons on TikTok and YouTube.
+                    Six years in enterprise IT, now teaching. Free, plain-language IT lessons on TikTok and YouTube.
                   </p>
                   <div className="mt-5 flex flex-wrap gap-2">
                     {content.socials.slice(0, 2).map((s) => (

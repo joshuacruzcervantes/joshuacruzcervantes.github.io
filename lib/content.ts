@@ -27,7 +27,7 @@ export const content = {
     // Shown in the browser tab and search results.
     title: "Joshua Cervantes | IT Instructor & Industry Practitioner",
     description:
-      "Full-time IT instructor at Richwell Colleges and part-time at ACLC Baliuag, MSIT student at PUP, with 6 years of enterprise IT Support and Operations experience. I teach networking, security, programming, and systems.",
+      "IT instructor at ACLC Baliuag and MSIT student at PUP, with 6 years of enterprise IT Support and Operations experience. I teach networking, security, programming, and systems.",
     // Used by the logo/brand in the navbar. "Sir Vantes" is the teaching brand.
     brandShort: "Sir Vantes",
     url: "https://joshuacervantes.online", // the live site (custom domain on GitHub Pages)
@@ -61,7 +61,7 @@ export const content = {
   ],
 
   // The prominent button in the navbar (was "View CV"). Sends students to the
-  // quiz hub. The hero keeps its own "View CV" CTA for the hiring audience.
+  // quiz hub.
   navCta: { label: "Find Your Path", href: "/quiz/" },
 
   /* ------------------------------------------------------------------ */
@@ -81,7 +81,7 @@ export const content = {
     {
       title: "Instructor",
       detail:
-        "Full-time IT faculty at Richwell Colleges and part-time at ACLC Baliuag. I teach networking, security, programming, and systems, and I write my own courses.",
+        "IT faculty at ACLC Baliuag. I teach networking, security, programming, and systems, and I write my own courses.",
     },
     {
       title: "Researcher",
@@ -466,12 +466,11 @@ export const content = {
       "IT Instructor and Industry Practitioner. I teach networking, security, and systems from 6 years in the field, not from a textbook.",
     // A short supporting sentence under the tagline.
     subtext:
-      "Now teaching full-time at Richwell Colleges and part-time at ACLC Baliuag, while taking my MSIT at PUP. I translate real-world systems into lessons students can actually use.",
+      "Now teaching at ACLC Baliuag while taking my MSIT at PUP. I translate real-world systems into lessons students can actually use.",
     // Call-to-action buttons.
     // Hero portrait (owned photo). Swap to an on-air still once cleared.
     photo: "/media/hero-portrait.jpg",
     photoAlt: "Joshua Cervantes",
-    ctaPrimary: { label: "View CV", href: "/cv.pdf" }, // downloads the PDF in /public
     ctaSecondary: { label: "Follow on TikTok", href: "https://www.tiktok.com/@sir.vantes" },
     ctaTertiary: { label: "Follow me on YouTube", href: "https://www.youtube.com/@ytsirvantes" },
   },
@@ -483,14 +482,14 @@ export const content = {
   terminal: {
     // One-line bio printed by the `whoami` command.
     whoami:
-      "joshua: IT Support & Operations (6 yrs) → full-time IT instructor (Richwell) + part-time (ACLC), MSIT student at PUP. Bilingual EN/Tagalog.",
+      "joshua: IT Support & Operations (6 yrs) → IT instructor (ACLC), MSIT student at PUP. Bilingual EN/Tagalog.",
     // The "files" the terminal exposes. The `name` is what users type after
     // `cat`. Use \n inside body strings to create new lines.
     files: [
       {
         name: "about.txt",
         body:
-          "Joshua Cervantes\n6 years of hands-on enterprise IT (Support + Operations).\nNow full-time IT faculty at Richwell Colleges, part-time at ACLC Baliuag, and an MSIT student at PUP.\nI bring the field into the classroom: real incidents, real fixes, real systems.",
+          "Joshua Cervantes\n6 years of hands-on enterprise IT (Support + Operations).\nNow IT faculty at ACLC Baliuag and an MSIT student at PUP.\nI bring the field into the classroom: real incidents, real fixes, real systems.",
       },
       {
         name: "skills.json",
@@ -526,7 +525,7 @@ export const content = {
     // Each string is a paragraph.
     paragraphs: [
       "I spent six years on the front lines of enterprise IT, doing Support and Operations, keeping systems, networks, and end users running. I've deployed and managed fleets of workstations, defended uptime, and dealt with the kind of messy, real-world problems that never show up in a textbook.",
-      "Now I teach it full-time. I'm a full-time IT instructor at Richwell Colleges and teach part-time at ACLC Baliuag, while taking my Master in Information Technology at PUP. What makes me a strong instructor isn't theory, it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
+      "Now I teach it. I'm an IT instructor at ACLC Baliuag, while taking my Master in Information Technology at PUP. What makes me a strong instructor isn't theory, it's that I've actually done the work. I can show students how a concept plays out in a live environment, why it matters, and where it breaks.",
       "I teach bilingually in English and Tagalog, and I've worked with learners at every level, from absolute beginners touching a command line for the first time to students preparing for industry certifications.",
     ],
     // Small highlight chips shown next to the photo.
@@ -743,8 +742,6 @@ export const content = {
     // Pre-fills the email subject line when someone clicks your address.
     emailSubject: "Hello Joshua: Teaching / IT Opportunity",
     // Social links now live in the shared top-level `socials` list above.
-    cvLabel: "Download CV",
-    cvHref: "/cv.pdf",
   },
 
   /* ------------------------------------------------------------------ */
@@ -756,8 +753,6 @@ export const content = {
     heading: "Teaching Record",
     intro:
       "A reference profile of my appointments, credentials, and the instructional materials I build. I came to teaching after six years in the field, and I prepare my own syllabi, semester programs, laboratory manuals, and examinations.",
-    cvLabel: "Download CV",
-    cvHref: "/cv.pdf",
 
     credentials: [
       {
