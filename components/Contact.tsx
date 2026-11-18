@@ -46,6 +46,19 @@ export default function Contact() {
             {contact.email}
           </a>
 
+          {/* One button per audience, each with its own subject line */}
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+            {contact.subjects.map((s) => (
+              <a
+                key={s.label}
+                href={`mailto:${contact.email}?subject=${encodeURIComponent(s.subject)}`}
+                className="inline-flex items-center rounded-xl border border-slate-300 bg-white px-5 py-2.5 text-sm font-semibold text-slate-800 transition hover:border-brand-400 hover:text-brand-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-brand-500 dark:hover:text-brand-400"
+              >
+                {s.label}
+              </a>
+            ))}
+          </div>
+
           {/* Social links (shared list — see components/SocialLinks.tsx) */}
           <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
             <SocialLinks variant="buttons" />

@@ -24,19 +24,24 @@ const config: Config = {
     extend: {
       colors: {
         // The single brand accent color. Tweak this to re-skin the whole site.
-        // Deep academic teal. The scholarly accent for the whole site.
+        // Electric blue from the SV logo (#3183F7). Matches the logo's "SV".
         brand: {
-          50: "#f0faf7",
-          100: "#d6f2ea",
-          200: "#aee4d6",
-          300: "#79cdba",
-          400: "#45ad98",
-          500: "#2b9080", // primary
-          600: "#1f7064",
-          700: "#1c5a51",
-          800: "#1b4842",
-          900: "#193c38",
-          950: "#0a2420",
+          50: "#eff6ff",
+          100: "#dbeafe",
+          200: "#bfdbfe",
+          300: "#93c5fd",
+          400: "#60a5fa",
+          500: "#3183f7", // primary: the exact SV logo blue
+          600: "#2563eb",
+          700: "#1d4ed8",
+          800: "#1e40af",
+          900: "#1e3a8a",
+          950: "#172554",
+        },
+        // Navy from the SV logo window: page background in dark mode.
+        ink: {
+          DEFAULT: "#0b1322", // logo window
+          bar: "#111c2e", // logo title bar
         },
       },
       fontFamily: {

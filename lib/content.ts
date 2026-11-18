@@ -51,12 +51,11 @@ export const content = {
   /*  NAVIGATION  —  the links in the top bar (anchor to section ids)    */
   /* ------------------------------------------------------------------ */
   nav: [
-    { label: "About", href: "/#about" },
     { label: "Teaching", href: "/#teaching" },
-    { label: "Projects", href: "/#projects" },
+    { label: "Teaching Record", href: "/teaching-record/" },
+    { label: "Automation", href: "/work-with-me/" },
     { label: "Labs", href: "/labs/" },
     { label: "Blog", href: "/blog/" },
-    { label: "Teaching Record", href: "/teaching-record/" },
     { label: "Contact", href: "/#contact" },
   ],
 
@@ -459,20 +458,37 @@ export const content = {
   /* ------------------------------------------------------------------ */
   hero: {
     // Small label above the name.
-    eyebrow: "Instructor · Researcher · Content Creator",
+    eyebrow: "IT Instructor · Researcher · AI Automation",
     name: "Joshua Cervantes",
+    // Nate-style big headline. `headlineAccent` is the word shown in the
+    // brand color, placed after `headline`.
+    headline: "IT, taught from the",
+    headlineAccent: "field",
+    // Proof numbers shown above the headline.
+    stats: [
+      { value: "768K+", label: "views on my top lesson" },
+      { value: "6 yrs", label: "enterprise IT experience" },
+      { value: "NET25", label: "national TV resource person" },
+    ],
     // The one-line positioning statement that speaks to BOTH audiences.
     tagline:
       "IT Instructor and Industry Practitioner. I teach networking, security, and systems from 6 years in the field, not from a textbook.",
-    // A short supporting sentence under the tagline.
+    // One short line under the headline (Nate-style).
     subtext:
-      "Now teaching at ACLC Baliuag while taking my MSIT at PUP. I translate real-world systems into lessons students can actually use.",
+      "I teach networking, security, and systems from 6 years of real enterprise work, and I build AI automations on the side.",
+    // Small credential line above the headline: where you teach and study.
+    credentials: "IT Instructor at ACLC Baliuag · MSIT at PUP",
     // Call-to-action buttons.
-    // Hero portrait (owned photo). Swap to an on-air still once cleared.
-    photo: "/media/hero-portrait.jpg",
-    photoAlt: "Joshua Cervantes",
-    ctaSecondary: { label: "Follow on TikTok", href: "https://www.tiktok.com/@sir.vantes" },
-    ctaTertiary: { label: "Follow me on YouTube", href: "https://www.youtube.com/@ytsirvantes" },
+    // Hero portrait: cutout on an SV-blue studio backdrop, shown in an arch frame.
+    // Formal portrait kept at /media/hero-portrait.jpg (used for SEO + blog avatar).
+    photo: "/media/hero-blue.jpg",
+    photoAlt: "Joshua Cervantes in a suit",
+    // The three "doors": one per audience. The first one is the main button.
+    doors: [
+      { label: "Hire me to teach", href: "/teaching-record/" },
+      { label: "Automate my business", href: "/work-with-me/" },
+      { label: "I'm a student", href: "/labs/" },
+    ],
   },
 
   /* ------------------------------------------------------------------ */
@@ -737,11 +753,54 @@ export const content = {
   contact: {
     heading: "Get in Touch",
     intro:
-      "Hiring for a teaching role, or want to talk shop about IT? I'd love to hear from you.",
+      "Hiring for a teaching role, planning an automation project, or a student with a question? Pick the one that fits and your email opens ready to go.",
     email: "joshuacruzcervantes@gmail.com",
     // Pre-fills the email subject line when someone clicks your address.
     emailSubject: "Hello Joshua: Teaching / IT Opportunity",
+    // One button per audience; each pre-fills its own subject line.
+    subjects: [
+      { label: "Teaching role", subject: "Teaching Opportunity: Joshua Cervantes" },
+      { label: "Automation project", subject: "Automation Project Inquiry" },
+      { label: "Student question", subject: "Question from a Student" },
+    ],
     // Social links now live in the shared top-level `socials` list above.
+  },
+
+  /* ------------------------------------------------------------------ */
+  /*  WORK WITH ME  —  /work-with-me. AI automation services.            */
+  /*  PLACEHOLDER: fill in real services and case studies once built.    */
+  /*  Prices intentionally left out until rates are decided.             */
+  /* ------------------------------------------------------------------ */
+  workWithMe: {
+    kicker: "Work with me",
+    heading: "AI Automation",
+    status: "In development",
+    intro:
+      "I build AI automation workflows that take repetitive work off your plate, using n8n and AI agents. This page is being built: services and case studies are coming soon.",
+    servicesHeading: "Services",
+    services: [
+      {
+        title: "Workflow Automation",
+        detail: "Connect the apps you already use and let routine tasks run on their own. Details coming soon.",
+      },
+      {
+        title: "AI Agents & Assistants",
+        detail: "AI that answers, sorts, and drafts for you, built around your actual process. Details coming soon.",
+      },
+      {
+        title: "Process Audit",
+        detail: "A review of where your time goes and what is worth automating first. Details coming soon.",
+      },
+    ],
+    caseStudiesHeading: "Case studies",
+    caseStudies: [
+      { title: "Case study coming soon", detail: "Problem, the workflow I built, and the result in hours saved." },
+      { title: "Case study coming soon", detail: "Problem, the workflow I built, and the result in hours saved." },
+    ],
+    ctaHeading: "Have a process you want automated?",
+    ctaText: "Send a short description of the task and the tools you use. I will reply with whether it can be automated.",
+    ctaLabel: "Email me about a project",
+    emailSubject: "Automation Project Inquiry",
   },
 
   /* ------------------------------------------------------------------ */

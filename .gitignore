@@ -33,3 +33,7 @@ next-env.d.ts
 
 # Local product source files (PDF build sources, not for the site)
 Shop/
+
+# private site notes (never publish)
+SITE-INFO.md
+design-refs/

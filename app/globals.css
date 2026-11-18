@@ -50,7 +50,7 @@
 
   body {
     @apply bg-white text-slate-800 antialiased;
-    @apply dark:bg-slate-950 dark:text-slate-200;
+    @apply dark:bg-ink dark:text-slate-200;
   }
 
   /* Headings carry the serif display face: the site's academic voice. */

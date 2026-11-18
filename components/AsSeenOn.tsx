@@ -13,7 +13,7 @@ export default function AsSeenOn() {
   if (!asSeenOn) return null;
 
   return (
-    <section className="border-b border-slate-100 bg-white py-5 dark:border-slate-800/60 dark:bg-slate-950">
+    <section className="border-b border-slate-100 bg-white py-5 dark:border-slate-800/60 dark:bg-ink">
       <div className="container-page flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-center">
         <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
           {asSeenOn.label}
