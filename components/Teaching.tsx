@@ -3,11 +3,8 @@
  * --------
  * The section that sells the academe pivot to deans/HR. It shows:
  *   - The subjects/courses you teach (as cards).
- *   - A YouTube call-out for "Sir Vantes" — auto-embeds your latest upload
- *     (via the channel's "uploads" playlist, no manual video IDs needed),
- *     unless you pin a specific demoVideoId in content.ts.
- *   - A TikTok call-out using TikTok's official Creator Profile embed, which
- *     shows your live follower count and 10 most recent videos automatically.
+ *   - A small gallery of live teaching photos.
+ * (The YouTube/TikTok call-outs moved to a slim row in components/Featured.tsx.)
  *
  * It sits on a subtly tinted background to visually separate the "teaching"
  * story from the "technical" sections around it.
@@ -59,18 +56,6 @@ const subjectIcons: Record<string, ReactNode> = {
 
 export default function Teaching() {
   const { teaching } = content;
-
-  // Defensive: a YouTube video ID is 11 characters of [A-Za-z0-9_-]. We strip
-  // anything else from the config value so a malformed/edited entry can never
-  // change the embed URL or inject unexpected query params.
-  const safeVideoId = teaching.youtube.demoVideoId.replace(/[^A-Za-z0-9_-]/g, "");
-  // Same defensive stripping for the channel ID (always starts with "UC").
-  const safeChannelId = teaching.youtube.channelId.replace(/[^A-Za-z0-9_-]/g, "");
-  // A channel's "uploads" playlist is always its channel ID with "UC" swapped
-  // for "UU" — embedding it as a playlist auto-shows the newest video first,
-  // with zero manual updates whenever you upload.
-  const uploadsPlaylistId = safeChannelId.replace(/^UC/, "UU");
-  const safeTiktokHandle = teaching.tiktok.handle.replace(/[^A-Za-z0-9_.]/g, "");
 
   return (
     <section
@@ -127,165 +112,6 @@ export default function Teaching() {
           </div>
         </Reveal>
 
-        {/* YouTube call-out */}
-        <Reveal delay={0.1}>
-          <div className="mt-10 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-            <div className="grid items-center gap-0 md:grid-cols-2">
-              {/* Left: text + CTA */}
-              <div className="p-8">
-                <div className="inline-flex items-center gap-2 rounded-full bg-red-50 px-3 py-1 text-xs font-semibold text-red-600 dark:bg-red-950/40 dark:text-red-400">
-                  {/* YouTube glyph */}
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z" />
-                  </svg>
-                  YouTube · {teaching.youtube.channelName}
-                </div>
-                <h3 className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                  See me teach, live
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  {teaching.youtube.blurb}
-                </p>
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <a
-                    href={teaching.youtube.channelUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-red-700"
-                  >
-                    Visit the channel
-                    <span aria-hidden>→</span>
-                  </a>
-                  {/* Same destination as "Visit the channel" above (YouTube
-                      has no separate one-click subscribe link) — shown as a
-                      plain label rather than a second live link. */}
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex cursor-default select-none items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-400 dark:border-slate-800 dark:text-slate-500"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                      <path d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.5 12 3.5 12 3.5s-7.5 0-9.4.6A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.6 9.4.6 9.4.6s7.5 0 9.4-.6a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8zM9.6 15.6V8.4l6.3 3.6-6.3 3.6z" />
-                    </svg>
-                    Subscribe to YouTube
-                  </span>
-                </div>
-              </div>
-
-              {/* Right: embedded video — either a pinned demoVideoId, or (by
-                  default) the channel's uploads playlist, which always opens
-                  on the newest video with no manual updates required. */}
-              <div className="aspect-video w-full bg-slate-900 md:aspect-auto md:h-full md:min-h-[18rem]">
-                {safeVideoId ? (
-                  // We use youtube-nocookie.com (privacy-enhanced mode) so YouTube
-                  // doesn't set tracking cookies until the visitor actually plays,
-                  // and request only the permissions the player needs.
-                  <iframe
-                    className="h-full w-full"
-                    src={`https://www.youtube-nocookie.com/embed/${safeVideoId}`}
-                    title={`${teaching.youtube.channelName} teaching demo`}
-                    loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : uploadsPlaylistId ? (
-                  <iframe
-                    className="h-full w-full"
-                    src={`https://www.youtube-nocookie.com/embed/videoseries?list=${uploadsPlaylistId}`}
-                    title={`${teaching.youtube.channelName}: latest video`}
-                    loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowFullScreen
-                  />
-                ) : (
-                  // Fallback if no channelId/demoVideoId is configured at all.
-                  <a
-                    href={teaching.youtube.channelUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group flex h-full min-h-[14rem] w-full flex-col items-center justify-center gap-3 bg-gradient-to-br from-slate-800 to-slate-900 text-slate-300 transition"
-                  >
-                    <span className="grid h-16 w-16 place-items-center rounded-full bg-red-600 text-white transition group-hover:scale-110">
-                      <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                    </span>
-                    <span className="text-sm font-medium">Watch on YouTube</span>
-                  </a>
-                )}
-              </div>
-            </div>
-          </div>
-        </Reveal>
-
-        {/* TikTok call-out — official Creator Profile embed (live follower
-            count + 10 most recent videos, refreshed automatically). */}
-        <Reveal delay={0.15}>
-          <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white dark:border-slate-800 dark:bg-slate-900">
-            <div className="grid items-center gap-0 md:grid-cols-2">
-              {/* Left: text + CTA */}
-              <div className="p-8">
-                <div className="inline-flex items-center gap-2 rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-700 dark:bg-slate-800 dark:text-slate-200">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
-                  </svg>
-                  TikTok · @{teaching.tiktok.handle}
-                </div>
-                <h3 className="mt-4 text-2xl font-bold text-slate-900 dark:text-white">
-                  Catch my latest clips
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  {teaching.tiktok.blurb}
-                </p>
-                <div className="mt-6 flex flex-wrap items-center gap-3">
-                  <a
-                    href={teaching.tiktok.profileUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white transition hover:bg-slate-700 dark:bg-white dark:text-slate-900 dark:hover:bg-slate-200"
-                  >
-                    Visit the profile
-                    <span aria-hidden>→</span>
-                  </a>
-                  {/* Same destination as "Visit the profile" above (TikTok
-                      has no separate one-click follow link) — shown as a
-                      plain label rather than a second live link. */}
-                  <span
-                    aria-hidden="true"
-                    className="inline-flex cursor-default select-none items-center gap-2 rounded-xl border border-slate-200 px-5 py-3 text-sm font-semibold text-slate-400 dark:border-slate-800 dark:text-slate-500"
-                  >
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                      <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
-                    </svg>
-                    Follow on TikTok
-                  </span>
-                </div>
-              </div>
-
-              {/* Right: a reliable static TikTok card linking to the profile.
-                  Replaced the live creator-profile embed, which tripped
-                  TikTok's "overload-protect" rate limit. */}
-              <a
-                href={teaching.tiktok.profileUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex min-h-[18rem] w-full flex-col items-center justify-center gap-4 bg-gradient-to-br from-slate-900 to-slate-800 p-8 text-center text-white transition hover:from-slate-800 hover:to-slate-700 md:h-full"
-              >
-                <span className="grid h-16 w-16 place-items-center rounded-2xl bg-white/10">
-                  <svg width="30" height="30" viewBox="0 0 24 24" fill="currentColor" aria-hidden>
-                    <path d="M16.5 3c.3 2.1 1.5 3.5 3.5 3.7v2.6c-1.2.1-2.4-.2-3.5-.8v5.9c0 3.2-2.4 5.6-5.5 5.6a5.4 5.4 0 0 1 0-10.8c.3 0 .6 0 .9.1v2.8a2.7 2.7 0 1 0 1.9 2.6V3h2.7z" />
-                  </svg>
-                </span>
-                <span className="text-lg font-semibold">@{safeTiktokHandle}</span>
-                <span className="text-sm text-slate-300">New clips every week</span>
-                <span className="rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-900">
-                  Watch on TikTok
-                </span>
-              </a>
-            </div>
-          </div>
-        </Reveal>
       </div>
     </section>
   );

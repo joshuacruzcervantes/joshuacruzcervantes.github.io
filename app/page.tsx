@@ -7,15 +7,13 @@
  * just move the lines around.
  *
  * Section order matches the spec:
- *   Hero → About → Teaching → Skills → Projects → Certifications → Contact
+ *   Hero → NET25 feature → About → Teaching → Skills → Projects → Certifications → Contact
  */
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
-import AsSeenOn from "@/components/AsSeenOn";
-import Identities from "@/components/Identities";
+import Featured from "@/components/Featured";
 import About from "@/components/About";
 import Teaching from "@/components/Teaching";
-import Media from "@/components/Media";
 import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
 import Certifications from "@/components/Certifications";
@@ -32,17 +30,11 @@ export default function Home() {
         {/* 1. Hero — loads clean & professional first */}
         <Hero />
 
-        {/* As seen on: NET25 credibility strip */}
-        <AsSeenOn />
-
-        {/* The three hats: instructor, researcher, creator */}
-        <Identities />
+        {/* 2. NET25 Kada Umaga feature: big, always-dark spotlight */}
+        <Featured />
 
         {/* 3. About */}
         <About />
-
-        {/* On camera: TV + viral clip */}
-        <Media />
 
         {/* 4. Teaching — sells the academe pivot */}
         <Teaching />

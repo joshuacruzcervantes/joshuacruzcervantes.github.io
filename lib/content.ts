@@ -95,6 +95,31 @@ export const content = {
   ],
 
   /* ------------------------------------------------------------------ */
+  /*  FEATURED  —  the big NET25 section right under the hero.           */
+  /*  Images are deinterlaced stills from the segment recording.         */
+  /* ------------------------------------------------------------------ */
+  featured: {
+    kicker: "As seen on national TV",
+    outlet: "NET25",
+    show: "Kada Umaga",
+    headline: "Resource person on superintelligent AI, live on national television.",
+    detail:
+      "A twenty-minute live conversation with the three hosts. I explained narrow AI, AGI, and superintelligence for a general audience and ran two live demos of generative AI tools. The hosts invited me back for future segments.",
+    date: "September 22, 2026 · Aired live",
+    facts: [
+      { value: "20 min", label: "live segment" },
+      { value: "2", label: "live AI demos" },
+      { value: "Invited", label: "back on the show" },
+    ],
+    image: "/media/net25-onair-name.jpg",
+    imageAlt: "Joshua Cervantes on NET25 Kada Umaga with his name on screen",
+    imageWide: "/media/net25-onair-wide.jpg",
+    imageWideAlt: "Joshua Cervantes with the three hosts at the Kada Umaga table",
+    href: "https://www.youtube.com/watch?v=8mToSdE6XFU",
+    hrefLabel: "Watch the segment",
+  },
+
+  /* ------------------------------------------------------------------ */
   /*  MEDIA  —  the "On camera" section (TV + channel).                 */
   /* ------------------------------------------------------------------ */
   media: {
