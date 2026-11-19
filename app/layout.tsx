@@ -122,6 +122,9 @@ const personJsonLd = {
 const themeInitScript = `
 (function () {
   try {
+    // Refuse to be shown inside another site's frame (clickjacking guard
+    // for hosts that cannot send X-Frame-Options).
+    if (window.top !== window.self) { window.top.location = window.self.location; }
     var stored = localStorage.getItem('theme');
     if (stored !== 'light') {
       document.documentElement.classList.add('dark');
@@ -129,6 +132,26 @@ const themeInitScript = `
   } catch (e) {}
 })();
 `;
+
+// Security policy as <meta> tags, for hosts that cannot send headers
+// (GitHub Pages). Keep in sync with the CSP in next.config.mjs.
+// frame-ancestors is not allowed in a meta CSP, so the frame check lives in
+// themeInitScript above instead. Production only: the dev server needs eval.
+const metaCsp = [
+  "default-src 'self'",
+  "script-src 'self' 'unsafe-inline'",
+  "style-src 'self' 'unsafe-inline'",
+  "img-src 'self' data: blob:",
+  "font-src 'self' data:",
+  "connect-src 'self'",
+  "frame-src 'self' https://www.youtube-nocookie.com",
+  "media-src 'self'",
+  "object-src 'none'",
+  "base-uri 'self'",
+  "form-action 'self'",
+  "upgrade-insecure-requests",
+].join("; ");
+const isProd = process.env.NODE_ENV === "production";
 
 export default function RootLayout({
   children,
@@ -138,6 +161,8 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
+        {isProd ? <meta httpEquiv="Content-Security-Policy" content={metaCsp} /> : null}
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         {/* Runs before paint to avoid a theme flash. */}
         <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
         {/* Structured data for search engines. JSON.stringify of our own static

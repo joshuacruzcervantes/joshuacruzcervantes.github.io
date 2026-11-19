@@ -10,6 +10,7 @@ import Footer from "@/components/Footer";
 import SectionHeading from "@/components/SectionHeading";
 import Reveal from "@/components/Reveal";
 import { FeaturedPost, PostCard } from "@/components/PostCard";
+import StatRow from "@/components/StatRow";
 import { content } from "@/lib/content";
 import { posts } from "@/lib/posts";
 
@@ -30,6 +31,14 @@ export const metadata: Metadata = {
 export default function BlogPage() {
   const sorted = [...posts].sort((a, b) => b.date.localeCompare(a.date));
   const [latest, ...rest] = sorted;
+  const topics = new Set(posts.map((p) => p.category)).size;
+  const topClip = content.media?.viralClip?.views.replace(" views", "") ?? "";
+  const stats = [
+    { value: String(posts.length), label: "free articles" },
+    { value: String(topics), label: "topics: career, teaching, media" },
+    { value: "₱0", label: "to read, always free" },
+    ...(topClip ? [{ value: topClip, label: "views on my top clip" }] : []),
+  ];
 
   return (
     <>
@@ -37,24 +46,25 @@ export default function BlogPage() {
       <main className="pt-28 pb-24">
         <div className="container-page">
           <SectionHeading
-            title="Blog"
-            kicker="Articles & clips"
-            intro="Plain-language IT career advice, salary guides, and study paths, plus my videos and media. Everything free."
+            title="Plain talk about IT careers."
+            kicker="Blog"
+            intro="Career advice, salary guides, and study paths, plus my videos and media. Everything free."
           />
+          <StatRow stats={stats} />
 
           {latest ? (
-            <Reveal className="mt-12">
+            <Reveal className="mt-14">
               <FeaturedPost post={latest} />
             </Reveal>
           ) : null}
 
           {rest.length ? (
             <>
-              <div className="mt-16 flex items-center gap-3">
-                <h2 className="text-2xl font-semibold tracking-tight text-slate-900 dark:text-white">More posts</h2>
+              <div className="mt-20 flex items-center gap-3">
+                <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl">More posts</h2>
                 <span className="h-px flex-1 bg-slate-200 dark:bg-slate-800" />
               </div>
-              <div className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="mt-8 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
                 {rest.map((post, i) => (
                   <Reveal key={post.slug} delay={(i % 3) * 0.06} className="h-full">
                     <PostCard post={post} />

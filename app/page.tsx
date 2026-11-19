@@ -7,15 +7,15 @@
  * just move the lines around.
  *
  * Section order matches the spec:
- *   Hero → NET25 feature → About → Teaching → Skills → Projects → Certifications → Contact
+ *   Hero → NET25 feature → About (with skills) → Teaching → Projects → Certifications → Contact
  */
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Featured from "@/components/Featured";
 import About from "@/components/About";
 import Teaching from "@/components/Teaching";
-import Skills from "@/components/Skills";
 import Projects from "@/components/Projects";
+import SecondBrain from "@/components/SecondBrain";
 import Certifications from "@/components/Certifications";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
@@ -39,11 +39,11 @@ export default function Home() {
         {/* 4. Teaching — sells the academe pivot */}
         <Teaching />
 
-        {/* 5. Technical skills */}
-        <Skills />
-
         {/* 6. Projects / Labs */}
         <Projects />
+
+        {/* Claude x Obsidian: live graph of the real vault */}
+        <SecondBrain />
 
         {/* 7. Certifications */}
         <Certifications />

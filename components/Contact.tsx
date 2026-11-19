@@ -31,7 +31,10 @@ export default function Contact() {
             <span className="h-px w-8 bg-brand-500" />
           </div>
 
-          <h2 className="mt-4 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+          <h2
+            className="mt-4 font-sans text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
+            style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+          >
             Let&apos;s talk
           </h2>
           <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">

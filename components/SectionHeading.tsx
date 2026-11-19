@@ -28,11 +28,15 @@ export default function SectionHeading({ title, kicker, intro, centered }: Props
           {kicker ?? title}
         </span>
       </div>
-      <h2 className="mt-3 text-3xl font-bold tracking-tight text-slate-900 dark:text-white sm:text-4xl">
+      {/* Same bold sans style as the hero headline */}
+      <h2
+        className="mt-3 font-sans text-4xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-5xl"
+        style={{ fontFamily: "var(--font-sans), system-ui, sans-serif" }}
+      >
         {title}
       </h2>
       {intro ? (
-        <p className="mt-4 text-base leading-relaxed text-slate-600 dark:text-slate-400">
+        <p className="mt-4 text-lg leading-relaxed text-slate-600 dark:text-slate-400">
           {intro}
         </p>
       ) : null}

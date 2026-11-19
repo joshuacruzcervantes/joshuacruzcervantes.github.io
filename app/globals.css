@@ -53,10 +53,11 @@
     @apply dark:bg-ink dark:text-slate-200;
   }
 
-  /* Headings carry the serif display face: the site's academic voice. */
-  h1, h2, h3 {
-    font-family: var(--font-display), Georgia, "Times New Roman", serif;
-    letter-spacing: -0.011em;
+  /* Headings use the bold sans face, same as the hero (was serif before
+     the 2026-11 redesign). */
+  h1, h2, h3, h4 {
+    font-family: var(--font-sans), system-ui, sans-serif;
+    letter-spacing: -0.02em;
   }
 
   /* A nicer text-selection color that matches the brand. */

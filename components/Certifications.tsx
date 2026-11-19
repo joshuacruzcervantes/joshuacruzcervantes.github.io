@@ -1,69 +1,77 @@
 /**
  * Certifications
  * --------------
- * A clean grid of credential cards. Each card shows the cert name, issuer, and
- * a status badge: a green check for completed, or an "In progress" pill.
- *
- * Data comes from content.certifications.items. Set `status` to "done" or
- * "progress" for each item.
+ * Dashboard-style section: a progress ring (industry certs earned out of
+ * total, degrees excluded) next to a clean two-column checklist. Completed
+ * items get a blue check; in-progress items get "In progress".
+ * Data: content.certifications.items (status: "done" | "progress").
  */
 import { content } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
+import { DashCard, Gauge } from "./Charts";
 
 export default function Certifications() {
   const { certifications } = content;
+  // Industry certs only (degrees excluded): done vs total, for the ring.
+  const certs = certifications.items.filter((c) => !/Technology$/.test(c.name));
+  const certsDone = certs.filter((c) => c.status === "done").length;
 
   return (
     <section id="certifications" className="container-page py-20 sm:py-28">
-      <SectionHeading title={certifications.heading} kicker={certifications.kicker} intro={certifications.intro} />
+      <SectionHeading
+        title={certifications.heading}
+        kicker={certifications.kicker}
+        intro={certifications.intro || undefined}
+      />
+      <div className="mt-10 grid items-start gap-10 lg:grid-cols-3">
+        <Reveal>
+          <DashCard title="Industry certifications" note="Network+ (N10-009) in progress. MSIT at PUP in progress.">
+            <Gauge
+              value={certsDone}
+              max={certs.length}
+              display={`${certsDone} of ${certs.length}`}
+              label="certifications earned"
+            />
+          </DashCard>
+        </Reveal>
 
-      <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {certifications.items.map((cert, i) => {
-          const done = cert.status === "done";
-          return (
-            <Reveal key={cert.name} delay={i * 0.06}>
-              <div className="flex h-full items-start gap-4 rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900">
-                {/* Status icon */}
+      <Reveal delay={0.1} className="lg:col-span-2">
+        <ul className="grid gap-x-12 sm:grid-cols-2">
+          {certifications.items.map((cert) => {
+            const done = cert.status === "done";
+            return (
+              <li
+                key={cert.name}
+                className="flex items-start gap-3 border-b border-slate-200 py-4 dark:border-slate-800"
+              >
                 <span
-                  className={`mt-0.5 grid h-9 w-9 shrink-0 place-items-center rounded-lg ${
+                  className={`mt-0.5 grid h-6 w-6 shrink-0 place-items-center rounded-full ${
                     done
-                      ? "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/40 dark:text-emerald-400"
-                      : "bg-amber-50 text-amber-600 dark:bg-amber-950/40 dark:text-amber-400"
+                      ? "bg-brand-500 text-white"
+                      : "border border-dashed border-slate-400 text-slate-400 dark:border-slate-600"
                   }`}
+                  aria-hidden="true"
                 >
                   {done ? (
-                    // checkmark
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                       <path d="M20 6 9 17l-5-5" />
                     </svg>
-                  ) : (
-                    // clock (in progress)
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <circle cx="12" cy="12" r="9" />
-                      <path d="M12 7v5l3 2" />
-                    </svg>
-                  )}
+                  ) : null}
                 </span>
-
                 <div className="min-w-0">
-                  <h3 className="font-semibold leading-snug text-slate-900 dark:text-white">
-                    {cert.name}
-                  </h3>
-                  <p className="mt-0.5 text-sm text-slate-500 dark:text-slate-400">
+                  <p className="font-semibold text-slate-900 dark:text-white">{cert.name}</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">
                     {cert.issuer}
                     {cert.year ? ` · ${cert.year}` : ""}
+                    {!done ? " · In progress" : ""}
                   </p>
-                  {!done ? (
-                    <span className="mt-2 inline-block rounded-full bg-amber-50 px-2 py-0.5 text-xs font-semibold text-amber-700 dark:bg-amber-950/40 dark:text-amber-400">
-                      In progress
-                    </span>
-                  ) : null}
                 </div>
-              </div>
-            </Reveal>
-          );
-        })}
+              </li>
+            );
+          })}
+        </ul>
+      </Reveal>
       </div>
     </section>
   );

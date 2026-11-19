@@ -108,7 +108,7 @@ export default function Featured() {
                   Watch
                 </span>
               </a>
-              {/* Wide shot of the panel, layered bottom-right (keeps the name bar visible) */}
+              {/* Second shot (with a host), layered bottom-right */}
               <img
                 src={f.imageWide}
                 alt={f.imageWideAlt}

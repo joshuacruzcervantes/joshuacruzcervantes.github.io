@@ -13,6 +13,8 @@ import type { ReactNode } from "react";
 import { content } from "@/lib/content";
 import Reveal from "./Reveal";
 import SectionHeading from "./SectionHeading";
+import StatRow from "./StatRow";
+import { BarList, DashCard } from "./Charts";
 
 /**
  * Line icons for the subject cards, drawn in the same stroke style as the rest
@@ -65,35 +67,43 @@ export default function Teaching() {
       <div className="container-page">
         <SectionHeading title={teaching.heading} kicker={teaching.kicker} intro={teaching.intro} />
 
-        {/* Subject cards */}
-        <div className="mt-12 grid gap-5 sm:grid-cols-2">
-          {teaching.subjects.map((subject, i) => (
-            <Reveal key={subject.title} delay={i * 0.08}>
-              <div className="group h-full rounded-2xl border border-slate-200 bg-white p-6 transition hover:-translate-y-1 hover:border-brand-300 hover:shadow-lg dark:border-slate-800 dark:bg-slate-900 dark:hover:border-brand-700">
-                <div className="inline-grid h-12 w-12 place-items-center rounded-xl bg-brand-50 text-brand-600 transition group-hover:bg-brand-100 dark:bg-brand-950/50 dark:text-brand-400 dark:group-hover:bg-brand-950">
-                  {subjectIcons[subject.icon] ?? subjectIcons.network}
+        <StatRow stats={teaching.stats} />
+
+        {/* This term chart + subjects */}
+        <div className="mt-12 grid gap-10 lg:grid-cols-3">
+          <Reveal>
+            <DashCard title="This term at ACLC Baliuag" note="Subjects I handle this term, grouped by area.">
+              <BarList
+                unit="subjects"
+                rows={teaching.termLoad.map((t) => ({
+                  label: t.area,
+                  value: t.subjects.length,
+                  detail: t.subjects.join(" · "),
+                }))}
+              />
+            </DashCard>
+          </Reveal>
+          <div className="grid gap-8 sm:grid-cols-2 lg:col-span-2">
+            {teaching.subjects.map((subject, i) => (
+              <Reveal key={subject.title} delay={i * 0.06}>
+                <div>
+                  <div className="text-brand-600 dark:text-brand-400">
+                    {subjectIcons[subject.icon] ?? subjectIcons.network}
+                  </div>
+                  <h3 className="mt-3 text-lg font-bold text-slate-900 dark:text-white">{subject.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
+                    {subject.detail}
+                  </p>
                 </div>
-                <h3 className="mt-4 text-lg font-semibold text-slate-900 dark:text-white">
-                  {subject.title}
-                </h3>
-                <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-                  {subject.detail}
-                </p>
-              </div>
-            </Reveal>
-          ))}
+              </Reveal>
+            ))}
+          </div>
         </div>
 
-        {/* Teaching demo gallery */}
+        {/* Teaching photos */}
         <Reveal delay={0.1}>
-          <div className="mt-12">
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-              {teaching.gallery.heading}
-            </h3>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-400">
-              {teaching.gallery.caption}
-            </p>
-            <div className="mt-6 grid gap-4 sm:grid-cols-2 md:grid-cols-3">
+          <div className="mt-14">
+            <div className="grid gap-4 sm:grid-cols-3">
               {teaching.gallery.images.map((img) => (
                 <div
                   key={img.src}
@@ -104,7 +114,7 @@ export default function Teaching() {
                     src={img.src}
                     alt={img.alt}
                     loading="lazy"
-                    className="aspect-video w-full object-cover transition duration-500 ease-out group-hover:scale-105"
+                    className="aspect-[16/8] w-full object-cover object-bottom transition duration-500 ease-out group-hover:scale-105"
                   />
                 </div>
               ))}

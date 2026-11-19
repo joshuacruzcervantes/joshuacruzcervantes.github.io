@@ -7,7 +7,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { content } from "@/lib/content";
 import { posts } from "@/lib/posts";
-import { PostRow, fmtDate } from "@/components/PostCard";
+import { PostRow, fmtDate, readMinutes } from "@/components/PostCard";
 
 export function generateStaticParams() {
   return posts.map((p) => ({ slug: p.slug }));
@@ -92,12 +92,14 @@ export default async function BlogPostPage({
               <span className="text-slate-300 dark:text-slate-600">·</span>
               <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">{fmtDate(post.date)}</span>
               <span className="text-slate-300 dark:text-slate-600">·</span>
+              <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">{readMinutes(post)} min read</span>
+              <span className="text-slate-300 dark:text-slate-600">·</span>
               <span className="font-medium normal-case tracking-normal text-slate-500 dark:text-slate-400">By {content.site.name}</span>
             </div>
-            <h1 className="mt-4 text-3xl font-semibold leading-tight tracking-tight text-slate-900 dark:text-white sm:text-4xl lg:text-5xl">
+            <h1 className="mt-4 text-4xl font-extrabold leading-[1.05] tracking-tight text-slate-900 dark:text-white sm:text-5xl lg:text-6xl">
               {post.title}
             </h1>
-            <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600 dark:text-slate-400">{post.excerpt}</p>
+            <p className="mt-6 max-w-3xl text-xl leading-relaxed text-slate-600 dark:text-slate-400">{post.excerpt}</p>
           </header>
 
           <div className="mt-10 lg:grid lg:grid-cols-[minmax(0,1fr)_18rem] lg:gap-14 xl:gap-20">
@@ -137,7 +139,7 @@ export default async function BlogPostPage({
               <div className="mt-10 max-w-[68ch] space-y-6">
                 {post.body.map((block, i) =>
                   block.type === "h" ? (
-                    <h2 key={i} className="pt-4 text-2xl font-semibold text-slate-900 dark:text-white">
+                    <h2 key={i} className="pt-6 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white sm:text-3xl">
                       {block.text}
                     </h2>
                   ) : block.type === "img" ? (
@@ -159,7 +161,7 @@ export default async function BlogPostPage({
               {post.cta ? (
                 <a
                   href={post.cta.href}
-                  className="mt-10 inline-flex items-center gap-2 rounded-lg bg-brand-600 px-5 py-3 text-sm font-semibold text-white transition hover:bg-brand-700"
+                  className="mt-10 inline-flex items-center gap-2 rounded-xl bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-brand-600/20 transition hover:bg-brand-700 dark:bg-brand-500 dark:hover:bg-brand-400"
                 >
                   {post.cta.label} <span aria-hidden>→</span>
                 </a>
@@ -182,7 +184,7 @@ export default async function BlogPostPage({
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src="/media/hero-portrait.jpg" alt={content.site.name} className="h-14 w-14 rounded-full object-cover object-top" />
                     <div>
-                      <p className="font-display text-lg font-semibold text-slate-900 dark:text-white">{content.site.name}</p>
+                      <p className="font-sans text-lg font-bold text-slate-900 dark:text-white">{content.site.name}</p>
                       <p className="text-xs text-slate-500 dark:text-slate-400">IT Instructor · Sir Vantes</p>
                     </div>
                   </div>

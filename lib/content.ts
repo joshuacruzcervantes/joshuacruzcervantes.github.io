@@ -111,10 +111,10 @@ export const content = {
       { value: "2", label: "live AI demos" },
       { value: "Invited", label: "back on the show" },
     ],
-    image: "/media/net25-onair-name.jpg",
-    imageAlt: "Joshua Cervantes on NET25 Kada Umaga with his name on screen",
-    imageWide: "/media/net25-onair-wide.jpg",
-    imageWideAlt: "Joshua Cervantes with the three hosts at the Kada Umaga table",
+    image: "/media/net25-onair-main.jpg",
+    imageAlt: "Joshua Cervantes laughing on the NET25 Kada Umaga set",
+    imageWide: "/media/net25-onair-host.jpg",
+    imageWideAlt: "Joshua Cervantes laughing with a Kada Umaga host",
     href: "https://www.youtube.com/watch?v=8mToSdE6XFU",
     hrefLabel: "Watch the segment",
   },
@@ -557,9 +557,30 @@ export const content = {
   /*  2. ABOUT                                                           */
   /* ------------------------------------------------------------------ */
   about: {
-    heading: "About",
+    heading: "Six years in the field. Now in the classroom.",
     // The small accent label above the big heading (adds variety per section).
-    kicker: "Who I am",
+    kicker: "About",
+    // Big proof numbers under the heading (same style as the hero stats).
+    stats: [
+      { value: "6 yrs", label: "enterprise IT support and ops" },
+      { value: "80+", label: "workstations deployed" },
+      { value: "99.9%", label: "system uptime maintained" },
+      { value: "92%", label: "first-contact resolution" },
+    ],
+    // Career timeline chart. Dates come from the Teaching Record.
+    // "point: true" = only the year is known (drawn as a dot).
+    // end: null = still there today.
+    timeline: [
+      { label: "PLDT", role: "Network OJT", start: "2019", point: true },
+      { label: "Smart Communications", role: "Operational Analyst", start: "2020-06", end: "2023-04" },
+      { label: "Intellicare", role: "IT Support", start: "2023-04", end: "2026-05" },
+      { label: "ACLC Baliuag", role: "IT Instructor", start: "2026-07", end: null },
+    ],
+    // Short bio shown next to the skills list.
+    bio: [
+      "I spent six years keeping enterprise systems, networks, and end users running. Now I teach it, so students learn how a concept plays out in a live environment, why it matters, and where it breaks.",
+      "I teach bilingually in English and Tagalog, from first-timers on the command line to students preparing for industry certifications.",
+    ],
     // Your photo lives at /public/profile.jpg.
     photo: "/profile.jpg",
     photoAlt: "Portrait of Joshua Cervantes",
@@ -582,10 +603,22 @@ export const content = {
   /*  3. TEACHING  —  sells the academe pivot                            */
   /* ------------------------------------------------------------------ */
   teaching: {
-    heading: "Teaching",
-    kicker: "What I teach",
+    heading: "I teach the subjects I've lived.",
+    kicker: "Teaching",
     intro:
-      "I teach the subjects I've lived. Every topic below comes with field stories, live demos, and the context that turns memorization into understanding, delivered bilingually in English and Tagalog.",
+      "Field stories, live demos, and hands-on labs, delivered bilingually in English and Tagalog.",
+    stats: [
+      { value: "4", label: "IT subjects at ACLC Baliuag" },
+      { value: "8", label: "college subjects taught so far" },
+      { value: "100%", label: "own syllabi, labs, and exams" },
+      { value: "EN / TL", label: "bilingual delivery" },
+    ],
+    // "This term" chart: current ACLC subjects grouped by area.
+    termLoad: [
+      { area: "Networking", subjects: ["DCN1", "DCN3"] },
+      { area: "Security", subjects: ["IAS2"] },
+      { area: "Operating systems", subjects: ["POSA"] },
+    ],
     // Photos from a live teaching demo. Drop images in /public/teaching/ and
     // update the src/alt below. Keep alt text descriptive for accessibility.
     gallery: {
@@ -711,10 +744,16 @@ export const content = {
   /*  5. PROJECTS / LABS  —  edit these 3 placeholders with real work    */
   /* ------------------------------------------------------------------ */
   projects: {
-    heading: "Projects & Labs",
-    kicker: "What I build",
+    heading: "Tools I build for my students.",
+    kicker: "Projects & Labs",
     intro:
-      "Hands-on labs and projects, the kind of work I both do and teach.",
+      "Browser labs and classroom systems. No sign-in, no installs, all free.",
+    stats: [
+      { value: "2", label: "interactive browser labs" },
+      { value: "3", label: "career path quizzes" },
+      { value: "45", label: "Network+ concepts drilled" },
+      { value: "₱0", label: "cost to students" },
+    ],
     // Put images at /public/projects/<file> (see README). Set link to "" to
     // hide the link button on a card.
     items: [
@@ -745,7 +784,7 @@ export const content = {
       {
         title: "Instructor Attendance & Grading System",
         description:
-          "The reusable attendance and grading machinery I run across both schools: spreadsheet-based, low-infrastructure by design, and built to produce accreditation evidence as a byproduct of normal teaching.",
+          "The reusable attendance and grading machinery I built and used across two colleges: spreadsheet-based, low-infrastructure by design, and built to produce accreditation evidence as a byproduct of normal teaching.",
         tags: ["Google Sheets", "Automation", "Operations"],
         image: "/projects/grading-system.png",
         link: "",
@@ -754,12 +793,42 @@ export const content = {
   },
 
   /* ------------------------------------------------------------------ */
+  /*  SECOND BRAIN  —  Claude x Obsidian. The graph is generated from the */
+  /*  real vault (public/data/brain-graph.json, numbers only, the private */
+  /*  folder excluded). Update the stats when you regenerate the graph.   */
+  /* ------------------------------------------------------------------ */
+  secondBrain: {
+    kicker: "How I work",
+    heading: "Claude × Obsidian: my second brain.",
+    intro:
+      "Every lesson, lab, research note, and video idea lives in one Obsidian vault. Claude works inside it with me: it reads the notes, drafts from them, links new ideas to old ones, and runs a weekly audit that keeps the whole graph clean.",
+    stats: [
+      { value: "1,762", label: "notes in the vault" },
+      { value: "2,560", label: "links between notes" },
+      { value: "996", label: "connected notes in the graph" },
+      { value: "Weekly", label: "vault audit run by Claude" },
+    ],
+    points: [
+      { title: "Capture", detail: "Lessons, research, and ideas land in the vault as plain Markdown notes." },
+      { title: "Connect", detail: "Claude links each new note to related ones, so ideas build on each other." },
+      { title: "Create", detail: "Syllabi, labs, quizzes, and this website are drafted from the vault with Claude." },
+    ],
+    note: "Live structure of my real vault. Note titles are hidden for privacy.",
+  },
+
+  /* ------------------------------------------------------------------ */
   /*  6. CERTIFICATIONS                                                  */
   /* ------------------------------------------------------------------ */
   certifications: {
-    heading: "Certifications & Education",
+    heading: "Certified, and still learning.",
     kicker: "Credentials",
-    intro: "Credentials that back the experience.",
+    intro: "",
+    stats: [
+      { value: "4", label: "industry certifications" },
+      { value: "+1", label: "Network+ in progress" },
+      { value: "BSIT", label: "Bulacan State University" },
+      { value: "MSIT", label: "PUP, in progress" },
+    ],
     // status: "done" shows a checkmark, "progress" shows an in-progress badge.
     items: [
       { name: "CompTIA A+", issuer: "CompTIA", year: "2025", status: "done" },
@@ -861,21 +930,6 @@ export const content = {
 
     appointments: [
       {
-        role: "Full-Time Instructor",
-        org: "Richwell Colleges, Incorporated, Plaridel, Bulacan",
-        period: "August 2026 to present",
-        summary:
-          "A full-time load of four subjects across nine sections in three degree programs. Class adviser to BSIS 3-2.",
-        subjects: [
-          "Advanced Object-Oriented Programming and Data Structures (IS313C), BS Information Systems",
-          "Usability Engineering (IS313B), BS Information Systems",
-          "IT Audit and Control (ISELECT313A), BS Information Systems",
-          "Living in the IT Era (ELEC 113 and GEC ELECT 1s), BS Tourism Management and BS Civil Engineering",
-        ],
-        note:
-          "I wrote the CHED-aligned syllabus for every offering and rebuilt Advanced OOP around a full-stack track (HTML, CSS, Bootstrap, JavaScript, PHP, MySQL), ending with data structures from first principles. Every graded activity can be completed on paper when the lab or internet is unavailable. Complete courses deployed to Google Classroom, including graded assessments, using Google Apps Script.",
-      },
-      {
         role: "Part-Time Instructor",
         org: "ACLC College of Baliuag, Bulacan",
         period: "July 2026 to present",
@@ -889,6 +943,21 @@ export const content = {
         ],
         note:
           "Prepared the complete course package for each subject: semester program, laboratory manual, and all four major examinations, following the institutional LMS and the prescribed BSIT curriculum outcomes. Networking is delivered through Cisco Packet Tracer and Cisco Networking Academy material; security through live demonstrations. I lecture bilingually for mixed-ability sections.",
+      },
+      {
+        role: "Full-Time Instructor",
+        org: "Richwell Colleges, Incorporated, Plaridel, Bulacan",
+        period: "August to October 2026",
+        summary:
+          "Carried a full-time load of four subjects across nine sections in three degree programs. Class adviser to BSIS 3-2.",
+        subjects: [
+          "Advanced Object-Oriented Programming and Data Structures (IS313C), BS Information Systems",
+          "Usability Engineering (IS313B), BS Information Systems",
+          "IT Audit and Control (ISELECT313A), BS Information Systems",
+          "Living in the IT Era (ELEC 113 and GEC ELECT 1s), BS Tourism Management and BS Civil Engineering",
+        ],
+        note:
+          "I wrote the CHED-aligned syllabus for every offering and rebuilt Advanced OOP around a full-stack track (HTML, CSS, Bootstrap, JavaScript, PHP, MySQL), ending with data structures from first principles. Every graded activity can be completed on paper when the lab or internet is unavailable. Complete courses deployed to Google Classroom, including graded assessments, using Google Apps Script.",
       },
     ],
 
@@ -925,7 +994,7 @@ export const content = {
       "Six student self-study packs with answer keys (330 marks), each producible on paper with no lab and no internet",
       "Network+ N10-009 browser trainer and a Security Teaching Toolkit, both used in class and public on the Labs page",
       "A full-stack classroom reference build (HTML, CSS, JavaScript, PHP, MySQL) with a defect-hunting lab for Advanced OOP",
-      "A reusable attendance and grading system run across both schools, built to produce accreditation evidence as a byproduct",
+      "A reusable attendance and grading system used across two colleges, built to produce accreditation evidence as a byproduct",
       "Complete Google Classroom course deployments, including graded assessments, automated with Google Apps Script",
     ],
 

@@ -76,7 +76,7 @@ export default function TeachingRecordPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(publicationsJsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(publicationsJsonLd).replace(/</g, "\\u003c") }}
       />
       <Navbar />
       <main className="pt-28">
@@ -149,7 +149,7 @@ export default function TeachingRecordPage() {
                       </span>
                       <span className="text-xs font-medium text-slate-500 dark:text-slate-400">{p.year}</span>
                     </div>
-                    <h4 className="mt-3 font-display text-lg font-semibold leading-snug text-slate-900 dark:text-white">
+                    <h4 className="mt-3 font-sans text-lg font-semibold leading-snug text-slate-900 dark:text-white">
                       {p.title}
                     </h4>
                     <p className="mt-1 text-sm font-medium text-brand-700 dark:text-brand-300">{p.venue}</p>
